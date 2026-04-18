@@ -1,0 +1,67 @@
+---
+title: "Composer Mode"
+description: "Generate entire features across multiple files in one prompt — the workflow that changes everything."
+order: 2
+duration: "10 min"
+videoUrl: "https://www.youtube.com/watch?v=GJLuTFAyMts"
+coverImage: "https://images.unsplash.com/photo-1522542550221-31fd19575a2d?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What shortcut opens Composer?"
+    options: ["Cmd+L", "Cmd+K", "Cmd+Shift+I", "Cmd+P"]
+    answer: 2
+  - question: "What does Composer show you before making changes?"
+    options: ["A preview window", "A diff of proposed changes", "A list of affected files", "A confirmation dialog"]
+    answer: 1
+---
+
+Composer is the workflow that separates Cursor from every other AI coding tool. Where Chat answers questions and Cmd+K edits a single block, Composer builds across your entire project — multiple files, new routes, updated types, all from a single prompt.
+
+## Opening Composer
+
+Press Cmd+Shift+I. Composer opens as a full panel. Unlike Chat, it expects you to describe something you want built, not just ask a question.
+
+## Writing an Effective Composer Prompt
+
+The best Composer prompts read like a spec:
+
+**Weak:** "Add a settings page"
+
+**Strong:** "Create a settings page at `/settings` that lets users update their name, email, and notification preferences. Use the existing `UserForm` component pattern from `/components/forms/`. Update the nav to include a link to settings. Store changes via a PATCH request to `/api/users/[id]`."
+
+The more specific you are about the existing patterns, file locations, and expected behavior, the better Composer's output will be.
+
+<Callout type="info">
+Before writing a Composer prompt, do a quick Chat session first: "What components and patterns already exist for forms in this project?" Then reference those patterns in your Composer prompt. This dramatically reduces the amount of cleanup you need to do on the generated code.
+</Callout>
+
+## Reviewing the Diff
+
+After Composer runs, it shows you a diff for every file it wants to touch. You can:
+
+- Accept all changes at once
+- Accept individual files
+- Reject specific files and ask Composer to try a different approach
+- Ask follow-up questions in the same Composer session
+
+Take the time to read the diff. Don't bulk-accept without reviewing — Composer is good but it can miss context that you have.
+
+<Callout type="warning">
+If your Composer prompt is too broad, the output becomes too hard to review and too risky to accept. Start with a focused scope: one feature, one route, one refactor. You can run Composer again for the next piece. This also makes it easier to reject and retry if one part comes back wrong.
+</Callout>
+
+## Iterating in the Same Session
+
+If the first pass isn't right, don't start over. Follow up in the same Composer session:
+
+"The form validation is missing — add Zod schema validation for all fields."
+
+"You created a new Button component but we already have one at `/components/ui/Button`. Use that instead."
+
+Composer maintains context from the previous generation and refines its output.
+
+## When to Use Composer vs. Cmd+K
+
+- **Composer**: building something new, refactoring across multiple files, adding a full feature
+- **Cmd+K**: editing a specific function or block, targeted changes within a single file
+
+<KeyPoint>Composer is for building, Chat is for understanding. When you have something to create, open Composer and write a spec — not a vague request. The quality of your output is directly proportional to the specificity of your prompt.</KeyPoint>

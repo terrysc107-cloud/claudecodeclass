@@ -1,0 +1,79 @@
+---
+title: "Multi-File Edits with Composer"
+description: "Make coordinated changes across multiple files in one Composer session — the workflow that ships features fast."
+order: 3
+duration: "9 min"
+videoUrl: "https://www.youtube.com/watch?v=GJLuTFAyMts"
+coverImage: "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What is the best approach for a complex multi-file change with Composer?"
+    options: ["One broad prompt covering everything", "Start narrow, expand incrementally", "Let Composer decide the scope", "Edit files manually then use Composer to clean up"]
+    answer: 1
+  - question: "What should you do if part of a Composer result is wrong?"
+    options: ["Accept everything and fix manually", "Reject all and start over", "Follow up in the same session with a correction", "Use Cmd+K to fix individual files"]
+    answer: 2
+---
+
+Multi-file editing is where Cursor's value becomes undeniable. A feature that touches an API route, a type definition, a component, and a test file normally requires careful coordination across four files. With Composer, you describe the feature and it proposes changes to all four at once.
+
+## Setting Up the Context
+
+Before opening Composer for a multi-file task, do a Chat session to understand what already exists:
+
+```
+@codebase What files would be involved if I added a
+notification preferences feature for users?
+```
+
+Use that answer to inform your Composer prompt. Reference the specific files:
+
+## Writing the Composer Prompt
+
+Be explicit about scope and patterns:
+
+```
+Add a notification preferences system. 
+- Add a `notificationPreferences` field to the User type in @types/user.ts
+- Create a PATCH endpoint at @app/api/users/[id]/notifications/route.ts
+- Update the settings page at @app/settings/page.tsx to include a preferences form
+- Follow the same form pattern used in the profile settings section
+```
+
+The more you reference existing files and patterns, the more coherent the output.
+
+<Callout type="info">
+Think of your Composer prompt as a spec handed to a developer. A good spec references existing conventions, names the files to touch, and describes the expected behavior. A vague spec produces vague code.
+</Callout>
+
+## Reviewing Multi-File Diffs
+
+Composer presents each changed file as a separate diff. Review them in order:
+
+1. Start with the types/interfaces — they affect everything downstream
+2. Review the API/backend changes
+3. Review the frontend/component changes
+4. Check any test files last
+
+Accept files individually. If a specific file looks wrong, reject it and follow up in the same Composer session.
+
+<Callout type="warning">
+Don't start with a scope that's too large. "Refactor the entire authentication system" will produce a diff that's impossible to review carefully. Break complex changes into focused sessions: first the data model, then the API, then the UI. Each pass is reviewable. The combination produces clean results.
+</Callout>
+
+## When the First Pass Is Incomplete
+
+Composer rarely gets everything perfect in one pass on complex tasks. That's expected. Follow up:
+
+```
+The types look right. But the API endpoint is missing 
+authorization — only the account owner should be able to 
+update their notification preferences. Add that check.
+```
+
+Iterate in the same session until you're satisfied, then accept.
+
+## Commit Early
+
+After accepting a set of Composer changes, commit before continuing. This creates a clean restore point if the next Composer session goes sideways.
+
+<KeyPoint>Start narrow, expand incrementally — a focused Composer prompt beats a vague one. Scope your first session to the data model, review it, commit, then proceed to the next layer.</KeyPoint>

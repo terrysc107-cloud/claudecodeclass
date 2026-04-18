@@ -1,0 +1,97 @@
+---
+title: "Debug With Cursor"
+description: "Paste an error, get a fix, understand why — the debugging workflow that cuts resolution time in half."
+order: 2
+duration: "8 min"
+videoUrl: "https://www.youtube.com/watch?v=kJ96MBiMtCg"
+coverImage: "https://images.unsplash.com/photo-1516110833967-0b5716ca1387?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What should you always ask before applying a bug fix?"
+    options: ["How long will this take?", "What is causing this bug and why?", "Is there a simpler workaround?", "Should I refactor this?"]
+    answer: 1
+  - question: "What is the risk of applying a fix without understanding it?"
+    options: ["None, fixes are always correct", "The fix may solve the symptom but not the cause", "It will break other tests", "Cursor will refuse to continue helping"]
+    answer: 1
+---
+
+Debugging is where developers lose the most time. A 30-second fix takes 45 minutes because finding the root cause is hard. With Cursor, the root cause analysis is instant — and the fix comes with an explanation.
+
+## The Debugging Workflow
+
+**Step 1: Copy the error**
+
+Copy the full error message and stack trace from your terminal, browser console, or test output.
+
+**Step 2: Paste into Chat**
+
+```
+I'm getting this error when submitting the checkout form:
+
+TypeError: Cannot read properties of undefined (reading 'id')
+    at processPayment (lib/stripe.ts:47:28)
+    at POST (app/api/checkout/route.ts:23:18)
+
+@lib/stripe.ts @app/api/checkout/route.ts
+```
+
+**Step 3: Ask for the root cause**
+
+```
+What is causing this error? What is undefined and why?
+```
+
+**Step 4: Understand before fixing**
+
+Read the explanation. Make sure it makes sense. Then ask:
+
+```
+What's the correct fix?
+```
+
+<Callout type="warning">
+Don't skip the "understand" step. Applying a fix you don't understand is how technical debt accumulates and how bugs get fixed in one place only to reappear in another. The explanation takes 30 seconds to read. That's not optional.
+</Callout>
+
+## For Runtime Errors
+
+Include the stack trace, the relevant files, and any relevant state or request data:
+
+```
+@lib/payments.ts This error occurs when a user with no
+saved payment method tries to resubscribe. The error is:
+[paste error]. The `subscription` object at the point of
+the error has shape: [paste relevant object].
+```
+
+The more context you give, the more accurate the diagnosis.
+
+## For Test Failures
+
+Paste the failing test output and the relevant source files:
+
+```
+@app/api/users/__tests__/users.test.ts This test is failing.
+@app/api/users/route.ts Here's the route being tested.
+The error is: [paste output]. What's wrong?
+```
+
+<Callout type="tip">
+When a test fails after a Composer session, don't assume the test is wrong. More often, the implementation missed something the test was designed to catch. Ask Chat to explain what the test is checking before deciding whether to fix the code or update the test.
+</Callout>
+
+## For Type Errors
+
+TypeScript errors are often verbose and hard to parse. Paste the full error and let Chat decode it:
+
+```
+@types/api.ts @app/api/orders/route.ts
+I'm getting this TypeScript error and I don't understand
+what it's telling me: [paste error]. What does it mean
+and how do I fix it?
+```
+
+## The Speed Gain
+
+Most developers spend the majority of debugging time in diagnosis. With Cursor, diagnosis is near-instant. Implementation of the fix is fast too. The time investment shifts almost entirely to understanding and verification — which is exactly where your attention should be.
+
+<KeyPoint>Always ask Cursor to explain the bug before applying the fix. Understanding what was wrong makes you a better developer and prevents the same pattern from appearing elsewhere in your code.</KeyPoint>

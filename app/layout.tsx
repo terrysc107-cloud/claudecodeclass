@@ -5,21 +5,21 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Claude Code Class — Learn AI-Assisted Development",
+  title: "Build With Cursor — Ship Products With AI",
   description:
-    "The complete beginner course to Claude Code. Build faster, debug smarter, and unlock new income streams with AI-assisted development.",
-  metadataBase: new URL("https://claudecodeclass.com"),
+    "The business builder's guide to Cursor AI. Ship products, land clients, and build income streams with AI-first development.",
+  metadataBase: new URL("https://buildwithcursor.com"),
   openGraph: {
-    title: "Claude Code Class — Learn AI-Assisted Development",
-    description: "The complete beginner course to Claude Code. Build faster, debug smarter, and unlock new income streams with AI-assisted development.",
-    url: "https://claudecodeclass.com",
-    siteName: "Claude Code Class",
+    title: "Build With Cursor — Ship Products With AI",
+    description: "The business builder's guide to Cursor AI. Ship products, land clients, and build income streams with AI-first development.",
+    url: "https://buildwithcursor.com",
+    siteName: "Build With Cursor",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Claude Code Class",
-    description: "The complete beginner course to Claude Code. Build 10× faster with AI-assisted development.",
+    title: "Build With Cursor",
+    description: "The business builder's guide to Cursor AI. Ship products, land clients, and build income streams with AI-first development.",
   },
 };
 

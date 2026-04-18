@@ -1,0 +1,75 @@
+---
+title: "Keyboard Shortcuts That Matter"
+description: "The 10 Cursor shortcuts that deliver 80% of your productivity gains — memorize these first."
+order: 2
+duration: "6 min"
+videoUrl: "https://www.youtube.com/watch?v=gqUQbjsYZLQ"
+coverImage: "https://images.unsplash.com/photo-1601882589907-ce1b7efe2a40?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "Which shortcut opens a new Composer session?"
+    options: ["Cmd+L", "Cmd+K", "Cmd+Shift+I", "Cmd+Shift+C"]
+    answer: 2
+  - question: "What does Cmd+Shift+L do?"
+    options: ["Opens a new Chat", "Adds the selected code to the current Chat context", "Launches Composer", "Saves all files"]
+    answer: 1
+---
+
+You don't need to memorize 50 shortcuts. Memorize 10. Use them hundreds of times a day. That's where the speed lives.
+
+## The Core 10
+
+| Shortcut | Action | When to use |
+|----------|--------|-------------|
+| `Cmd+L` | Open Chat | Questions, explanations, debugging |
+| `Cmd+K` | Inline edit | Edit a selected block of code |
+| `Cmd+Shift+I` | Open Composer | Generate code across files |
+| `Tab` | Accept completion | Accept Tab suggestion |
+| `Escape` | Dismiss / Reject | Dismiss suggestion or reject edit |
+| `Cmd+Shift+L` | Add to Chat | Add selected code to current Chat context |
+| `Cmd+P` | File search | Jump to any file by name |
+| `Cmd+Shift+F` | Global search | Search text across all files |
+| `F12` | Go to definition | Jump to where something is defined |
+| `Shift+F12` | Find references | See everywhere something is used |
+
+<Callout type="tip">
+`Cmd+Shift+L` is underused and powerful. When you're in Chat and want to ask about a specific piece of code, select it in the editor and press Cmd+Shift+L. It adds that code to your current Chat context without you having to copy-paste or type out a file reference. Combine it with a question: select the code, Cmd+Shift+L, then type "what does this do?"
+</Callout>
+
+## Accept Partial Suggestions
+
+Within a Tab completion suggestion:
+- `Tab` — accept the entire suggestion
+- `Right arrow` — accept one word at a time
+- `Escape` — dismiss the suggestion
+
+The right arrow acceptance is valuable when the beginning of a suggestion is right but you want to deviate partway through.
+
+## VS Code Shortcuts That Carry Over
+
+These are inherited from VS Code and work identically:
+
+- `Cmd+/` — toggle comment on selected lines
+- `Cmd+D` — select next occurrence of selected text
+- `Cmd+Shift+P` — command palette (access any action)
+- `Opt+Up/Down` — move current line up or down
+- `Cmd+Z` — undo (works on AI edits too)
+
+## Customizing Shortcuts
+
+In Cursor → Preferences → Keyboard Shortcuts (same as VS Code). If you have muscle memory from VS Code keybindings for specific actions, keep them — Cursor won't override them.
+
+<Callout type="info">
+The most important shortcut habit to build is Cmd+K. Every time you catch yourself manually editing a function, stop, select the function, press Cmd+K, and give an instruction. This single habit shift produces more time savings than any other change in your workflow.
+</Callout>
+
+## The Workflow Triggers
+
+Build these keyboard patterns into muscle memory:
+
+- Stuck on what something does → `Cmd+L`, ask Chat
+- Need to change existing code → Select, `Cmd+K`, describe change
+- Building something new → `Cmd+Shift+I`, write spec prompt
+- Saw a good suggestion → `Tab` to accept
+- Suggestion is wrong → `Escape` to dismiss
+
+<KeyPoint>10 shortcuts used 100 times a day beats 50 shortcuts used occasionally. Cmd+K for edits, Cmd+L for questions, Cmd+Shift+I for generation — start there and let the rest follow naturally.</KeyPoint>

@@ -1,0 +1,89 @@
+---
+title: "Build a SaaS Product"
+description: "Build a full SaaS with auth, payments, and a database using Cursor — from zero to deployed."
+order: 2
+duration: "14 min"
+videoUrl: "https://www.youtube.com/watch?v=mFBiCo10lOw"
+coverImage: "https://images.unsplash.com/photo-1537884944318-390069bb8665?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What is the recommended stack for a fast SaaS build with Cursor?"
+    options: ["Django + Stripe + Heroku", "Next.js + Supabase + Stripe + Vercel", "Laravel + MySQL + DigitalOcean", "Rails + PostgreSQL + Fly.io"]
+    answer: 1
+  - question: "What is the biggest remaining bottleneck when building SaaS with AI?'"
+    options: ["Writing the code", "Designing the UI", "Defining clearly what you're building", "Setting up the database"]
+    answer: 2
+---
+
+Building a SaaS product used to require weeks of work before you had anything to show. With Cursor and the right stack, you can go from idea to deployed product in a few days — sometimes less.
+
+## The Stack
+
+This is the fastest proven stack for building SaaS:
+
+- **Next.js 15** (App Router, TypeScript) — full-stack framework
+- **Supabase** — Postgres database + auth + storage, hosted
+- **Stripe** — payments and subscriptions
+- **Vercel** — zero-config deployment
+- **Tailwind CSS** — styling
+
+Each of these has excellent documentation that Cursor can reference. They integrate well together. This specific stack has been validated by thousands of indie SaaS products.
+
+## Start From a Template
+
+Don't start from scratch. Use a template or starter that already has auth and payments wired up. The course platform you're enrolled in right now was built on exactly this stack — you can use it as a reference.
+
+Open the starter project in Cursor and run:
+```
+@codebase Explain how the auth flow works in this project.
+How does a user go from signing up to accessing protected routes?
+```
+
+Understand the existing scaffolding before building on top of it.
+
+## Building the Core Feature
+
+With the foundation in place, use Composer to build your product's core feature. Be specific:
+
+```
+Build a link shortener feature:
+- API: POST /api/links creates a short link, stores in the links table
+  (url, slug, user_id, created_at, click_count)
+- API: GET /api/links returns all links for the current user
+- API: GET /[slug] redirects and increments click_count
+- UI: /dashboard/links page showing all links with stats and a form to create new ones
+- Follow the existing auth pattern — only authenticated users can create links
+```
+
+<Callout type="tip">
+Keep your initial Composer prompts to one feature at a time. The auth system, the Stripe integration, and the core product feature are three separate Composer sessions. Build them in that order — auth first, then payments, then the product. The foundation must exist before you build on it.
+</Callout>
+
+## Adding Stripe Payments
+
+Once the core feature works, add payments. The next lesson covers this in detail, but the high-level flow:
+
+1. Create a Stripe product and price in the Stripe dashboard
+2. Use Composer to build a checkout session API route
+3. Build a pricing page that calls it
+4. Build a webhook handler that grants access on successful payment
+5. Gate your core feature behind the payment check
+
+<Callout type="warning">
+Always test your auth flow manually — sign up, confirm email, sign in, sign out, try to access a protected route while signed out. AI-generated auth code is usually correct, but auth bugs are too consequential to trust without hands-on testing. Catch them before your first customer does.
+</Callout>
+
+## The Deploy
+
+```bash
+vercel deploy --prod
+```
+
+Add your environment variables in the Vercel dashboard. Your app is live.
+
+## The Real Bottleneck
+
+The bottleneck in SaaS development is no longer writing code — it's clarity about what you're building. Cursor can implement anything you can clearly specify. The skill that matters is your ability to define a product clearly enough that the specification is buildable.
+
+Spend time thinking about what the product does before writing a single prompt. That thinking time is the highest-leverage investment.
+
+<KeyPoint>The limiting factor for shipping SaaS is no longer code — it's your ability to define what you're building. A precise spec runs through Cursor and comes back as working software. Vagueness produces vagueness. Clarity produces products.</KeyPoint>

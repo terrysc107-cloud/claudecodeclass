@@ -1,0 +1,73 @@
+---
+title: "Cost Management"
+description: "Understand Cursor Pro vs. free, API costs, and how to keep your AI spend under control."
+order: 4
+duration: "7 min"
+videoUrl: "https://www.youtube.com/watch?v=1CC88QGQiEA"
+coverImage: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "When does it make sense to bring your own API key (BYOK) instead of using Cursor's managed access?"
+    options: ["Always — it's always cheaper", "Never — Cursor's pricing is always better", "When your usage is very high and you can get better rates directly", "When you need a specific model version"]
+    answer: 2
+  - question: "Which model tier should you use for routine tasks like writing comments or simple refactors?"
+    options: ["The most powerful model available", "A faster, cheaper model", "No model — do it manually", "A different tool entirely"]
+    answer: 1
+---
+
+AI tools have real costs. Understanding the pricing structure lets you get maximum value without overspending.
+
+## Cursor Pro: What You Get
+
+Cursor Pro at $20/month includes:
+
+- Unlimited fast completions (Tab)
+- 500 fast premium requests/month (GPT-4o, Claude Sonnet)
+- Unlimited slow premium requests
+- Full Composer access
+
+For most developers building client projects and side projects, Pro covers everything. You'll rarely hit the fast request limit in a normal workday.
+
+## When to Go BYOK
+
+BYOK (Bring Your Own Key) lets you connect your own Anthropic or OpenAI API key to Cursor. This makes sense when:
+
+- You're doing very high-volume work (agency, heavy Composer sessions daily)
+- You want to use a specific model version not offered in the managed plan
+- Your organization has negotiated enterprise pricing with Anthropic or OpenAI
+
+For most solo developers: stick with the managed plan. The economics don't favor BYOK until you're doing significant volume.
+
+<Callout type="tip">
+Track your monthly API usage in the Cursor dashboard if you're on BYOK. Set a budget alert. AI API costs can surprise you — a few days of heavy Composer sessions can add up quickly. The managed Cursor plan is essentially a cost ceiling, which has real value.
+</Callout>
+
+## Model Selection
+
+Not every task needs the most powerful model:
+
+| Task | Appropriate Model |
+|------|------------------|
+| Simple refactor, add a comment | Fast model (GPT-4o mini, Haiku) |
+| Debugging, understanding code | Standard model (GPT-4o, Sonnet) |
+| Complex Composer sessions, architecture | Powerful model (o1, Sonnet 3.7) |
+
+In Cursor's model dropdown, select based on the task. Using a $0.01/request model for tasks that only need a $0.001/request model adds up over a month.
+
+## What Actually Costs Money
+
+- **Tab completions**: essentially free (managed plan covers this)
+- **Chat requests**: moderate — a few cents each at most
+- **Composer sessions**: more expensive, especially long multi-file generations
+- **@codebase searches**: moderate — searches the index, then generates a response
+
+The expensive operations are long Composer sessions with many files. Keep Composer prompts focused and you'll stay well within the managed plan limits.
+
+<Callout type="info">
+The ROI math always works in favor of Cursor Pro. $20/month in AI subscription cost vs. the value of even a single hour of developer time at a reasonable freelance rate — it's not a close comparison. Don't optimize for AI tool costs; optimize for billable output.
+</Callout>
+
+## Team Pricing
+
+Cursor for Teams is $40/user/month. For a small agency with 3–5 developers all using Cursor, this is almost always worth it compared to BYOK setup complexity. The managed plan also means you don't have to manage API keys and billing separately for each team member.
+
+<KeyPoint>Cursor Pro pays for itself the first time it saves you a billable hour. Don't optimize for AI tool costs — optimize for the output they enable. Use faster models for simple tasks and save the powerful models for complex generation.</KeyPoint>

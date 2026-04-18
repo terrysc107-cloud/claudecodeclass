@@ -65,10 +65,10 @@ export default function SignUpPage() {
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 text-white font-bold text-lg mb-6">
             <Zap className="w-5 h-5 text-brand-400" />
-            Claude Code Class
+            Build With Cursor
           </Link>
           <h1 className="text-2xl font-bold text-white">Create your account</h1>
-          <p className="text-slate-400 mt-1 text-sm">Start your Claude Code journey today</p>
+          <p className="text-slate-400 mt-1 text-sm">Start building with Cursor today</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

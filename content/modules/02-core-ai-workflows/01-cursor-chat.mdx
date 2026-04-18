@@ -1,0 +1,63 @@
+---
+title: "Cursor Chat"
+description: "Use Chat to ask questions about your code, understand errors, and get explanations without leaving the editor."
+order: 1
+duration: "8 min"
+videoUrl: "https://www.youtube.com/watch?v=kJ96MBiMtCg"
+coverImage: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What is Chat best used for in Cursor?"
+    options: ["Generating new files", "Asking questions and getting explanations", "Running terminal commands", "Committing code"]
+    answer: 1
+  - question: "How do you add a specific file to your Chat context?"
+    options: ["Drag it into the chat", "Type @filename", "Copy-paste the contents", "Right-click the file"]
+    answer: 1
+---
+
+Chat is your on-demand senior developer. It knows your codebase, reads the files you point it to, and gives answers grounded in your actual code — not generic documentation.
+
+## Opening Chat
+
+Press Cmd+L. The Chat panel opens on the right side of the editor. Your cursor stays in the editor, so you can flip between writing code and asking questions without disrupting your flow.
+
+## The @ Syntax
+
+Chat becomes dramatically more useful when you give it specific context. Type `@` to reference:
+
+- `@filename` — adds a specific file to the conversation
+- `@foldername` — adds all files in a folder
+- `@codebase` — searches across the entire indexed repository
+- `@web` — lets Cursor search the web for current documentation
+
+Example: `@api/routes.ts why is this endpoint returning a 401?`
+
+<Callout type="tip">
+Use `@codebase` when you're not sure which file has the relevant code. Cursor will search your indexed repository and surface the most relevant context. It's slower than a specific file reference but far better than trying to find the file yourself first.
+</Callout>
+
+## What to Ask
+
+Chat is best for questions that require understanding before acting:
+
+- "What does this function do and what are its edge cases?"
+- "Why would this query be slow on large datasets?"
+- "What's the difference between how auth is handled in these two routes?"
+- "If I change this interface, what else would break?"
+
+It's not a search engine — it's a reasoning tool. Ask it to explain, compare, predict consequences, and identify risks.
+
+## Multi-Turn Conversations
+
+Chat maintains context within a session. You can ask a follow-up without re-explaining: "What if the user isn't authenticated?" builds on the previous answer.
+
+When you start a new task, press the New Chat button (or Cmd+L again) to start fresh. Old context can confuse answers if it's no longer relevant.
+
+<Callout type="info">
+Chat doesn't make changes to your files. It only reads and explains. When you're ready to implement something, that's when you switch to Composer or Cmd+K. Use Chat to understand, then act.
+</Callout>
+
+## Before You Google
+
+Make it a habit: before you open a browser tab to search, ask Chat first. It will answer in the context of your actual code, which a generic search result can't do. The answer will be faster and more relevant.
+
+<KeyPoint>Chat is your on-demand senior dev — use it before googling. It reads your actual code, reasons about your specific situation, and gives answers a Stack Overflow result never could.</KeyPoint>

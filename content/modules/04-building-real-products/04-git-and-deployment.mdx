@@ -1,0 +1,92 @@
+---
+title: "Git and Deployment"
+description: "Use Cursor to write commit messages, PR descriptions, and deployment scripts — ship cleaner and faster."
+order: 4
+duration: "8 min"
+videoUrl: "https://www.youtube.com/watch?v=mFBiCo10lOw"
+coverImage: "https://images.unsplash.com/photo-1556075798-4825dfaaf498?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What makes a good AI-generated commit message prompt?"
+    options: ["Just saying 'write a commit message'", "Providing the diff and asking for a semantic, specific message", "Asking for a long detailed message", "Using a template you fill in manually"]
+    answer: 1
+  - question: "What convention prefix indicates a new feature in a commit message?"
+    options: ["add:", "new:", "feat:", "feature:"]
+    answer: 2
+---
+
+Git hygiene matters more when you're working with clients, collaborating with a team, or building a codebase you'll return to. Cursor makes the tedious parts of git — commit messages, PR descriptions, release notes — instant.
+
+## Generating Commit Messages
+
+After staging your changes, instead of writing a vague "update stuff" message, do this in Chat:
+
+```
+Write a concise, semantic commit message for these changes:
+[paste git diff or describe what changed]
+
+Use conventional commits format (feat:, fix:, refactor:, etc.)
+Keep the summary line under 72 characters.
+```
+
+The output will be specific, professional, and accurate. Much better than "fixed bug."
+
+<Callout type="tip">
+Conventional commit prefixes: `feat:` for new features, `fix:` for bug fixes, `refactor:` for non-breaking code improvements, `docs:` for documentation, `test:` for test additions, `chore:` for maintenance. Using these consistently makes your git history scannable and helps automated tooling generate changelogs.
+</Callout>
+
+## PR Descriptions
+
+When creating a pull request, generate the description from your commit history:
+
+```
+Write a pull request description for a branch that:
+- Adds notification preferences to user accounts
+- Creates a PATCH API endpoint for updating preferences
+- Updates the settings UI with a new preferences form
+- Adds tests for the new endpoint
+
+Include: what changed, why, how to test it, and any
+migration steps needed.
+```
+
+A clear PR description is professional and makes code review faster.
+
+## Deployment Scripts
+
+Ask Cursor to write the deployment steps as a script:
+
+```
+Write a shell script that:
+1. Runs the test suite and exits if any fail
+2. Builds the Next.js app
+3. Deploys to Vercel via the Vercel CLI
+4. Runs a smoke test against the production URL
+5. Sends a Slack notification on success or failure
+```
+
+You can run this script as part of a CI pipeline or just save it as `deploy.sh` for manual deploys.
+
+## Release Notes
+
+When shipping a new version to clients or users:
+
+```
+Write user-friendly release notes for version 1.2.0.
+These changes were made: [list commits or describe changes].
+Audience: non-technical business owners. Keep it brief,
+focus on what changed from the user's perspective.
+```
+
+Client-facing release notes should be in plain language, not technical jargon.
+
+<Callout type="info">
+A client who receives clear, professional release notes with each deployment feels confident about the work being done. This small habit — 2 minutes per release — builds trust and reduces the "what did you actually change?" conversations.
+</Callout>
+
+## The Professional Signal
+
+Clean commit history, clear PR descriptions, and documented deployments are signals of professional work. Most freelancers and junior developers neglect them. Most senior developers and agencies don't.
+
+With Cursor, there's no time cost to doing it right.
+
+<KeyPoint>Cursor turns messy commits into professional git history. Clients notice clean documentation. Make AI-generated commit messages and PR descriptions a standard part of every deployment.</KeyPoint>

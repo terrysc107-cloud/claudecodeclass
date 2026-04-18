@@ -1,0 +1,90 @@
+---
+title: "Set Up .cursorrules"
+description: "Write a .cursorrules file that makes Cursor behave exactly the way you want for any project."
+order: 1
+duration: "10 min"
+videoUrl: "https://www.youtube.com/watch?v=LSFpASs8aSI"
+coverImage: "https://images.unsplash.com/photo-1517842645767-c639042777db?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "Where does the .cursorrules file live?"
+    options: ["In your home directory", "In the project root", "In the src folder", "In .cursor/config"]
+    answer: 1
+  - question: "What is the most important thing to include in .cursorrules?"
+    options: ["Your name", "The tech stack and existing conventions", "Your billing preferences", "API keys"]
+    answer: 1
+---
+
+`.cursorrules` is a plain text file in your project root that tells Cursor how to behave for that specific project. It's the difference between Cursor writing generic code and Cursor writing code that matches your stack, your conventions, and your client's requirements.
+
+## What Goes in .cursorrules
+
+The file is a set of instructions in plain language. Cursor reads it before every Chat and Composer session:
+
+```
+You are an expert Next.js developer working on a SaaS application.
+
+## Tech Stack
+- Next.js 15 App Router with TypeScript
+- Supabase for database and auth
+- Stripe for payments
+- Tailwind CSS v4 for styling
+- Vitest for testing
+
+## Conventions
+- All React components use named exports (no default exports)
+- API routes use the pattern in /app/api/example/route.ts
+- Database queries go through /lib/db.ts, never inline
+- Error handling uses the Result type from /lib/result.ts
+- All monetary values are stored and passed in cents (integers)
+
+## Style
+- Prefer early returns over nested if statements
+- Functions should be pure where possible
+- Add JSDoc for all exported functions
+- Keep components under 150 lines — extract if larger
+
+## Do Not
+- Use any 'any' TypeScript types
+- Write raw SQL — use the query helpers in /lib/db.ts
+- Add new dependencies without asking first
+```
+
+<Callout type="tip">
+Start your `.cursorrules` with a brief description of what the project is and who the user is. Context about the business problem helps Cursor make better judgment calls about tradeoffs. "This is a B2B invoicing SaaS for small contractors" leads to different decisions than "this is a consumer entertainment app."
+</Callout>
+
+## Per-Client Rules
+
+For freelance or agency work, customize `.cursorrules` per client project:
+
+```
+## Client Context
+Client: Acme Corp — a mid-size construction company
+This codebase is maintained by a small in-house team of non-experts.
+Write defensive code with extra comments. Avoid clever patterns.
+Prefer verbose clarity over brevity.
+```
+
+This produces code that the client's team can actually maintain after you're done — which is a quality signal that wins referrals.
+
+## Global vs. Project Rules
+
+Cursor also supports global rules (in Settings → Rules for AI) that apply to every project. Use global rules for your personal preferences:
+
+```
+Always explain what you changed and why at the end of each response.
+Prefer functional patterns where appropriate.
+Never use var — always const or let.
+```
+
+Project-level `.cursorrules` override global rules for specific projects.
+
+<Callout type="info">
+Build a library of `.cursorrules` files — one per stack you work with regularly. A Next.js + Supabase rules file, a Python FastAPI rules file, a React Native rules file. When you start a new project, copy in the relevant base rules and customize. This saves setup time and ensures consistency.
+</Callout>
+
+## Iterating the Rules
+
+Add to `.cursorrules` whenever you catch Cursor making a mistake you've corrected before. If you keep telling it "don't do X" in chat, add "Do not X" to the rules file. Over time, your rules file becomes a tuned configuration for how you work.
+
+<KeyPoint>.cursorrules is the difference between a generic AI and one that knows your stack. A well-written rules file eliminates the need to repeat yourself, reduces cleanup time, and makes your output consistent across an entire project.</KeyPoint>

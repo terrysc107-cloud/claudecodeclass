@@ -1,0 +1,70 @@
+---
+title: "Opening an Existing Project"
+description: "How to open any codebase in Cursor and get oriented in under 5 minutes."
+order: 1
+duration: "7 min"
+videoUrl: "https://www.youtube.com/watch?v=i6FdGFNVGgc"
+coverImage: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What does Cursor do when you first open a project?"
+    options: ["Automatically edits files", "Indexes the codebase for context", "Runs tests", "Creates a backup"]
+    answer: 1
+  - question: "What is the best first thing to do after opening a project in Cursor?"
+    options: ["Start editing immediately", "Ask Chat to explain the project structure", "Run the build", "Install extensions"]
+    answer: 1
+---
+
+The first time you open a project in Cursor, it does something VS Code doesn't: it indexes your entire codebase. That index is what allows Chat to answer questions about code it hasn't seen in your current session.
+
+## Opening the Project
+
+File → Open Folder, or drag the folder onto the Cursor icon. Same as VS Code.
+
+On first open, Cursor starts indexing in the background. You'll see a progress indicator in the status bar. For most projects this takes under a minute. For large monorepos it can take a few minutes.
+
+Let it finish before doing heavy Chat work. The index is what makes `@codebase` questions accurate.
+
+## Get Oriented First
+
+Resist the urge to start editing immediately. Spend the first few minutes with Chat:
+
+```
+@codebase Give me a high-level overview of this project.
+What are the main modules and how do they relate to each other?
+```
+
+Then follow up:
+
+```
+Where is the authentication logic handled?
+How does data flow from the API to the UI?
+What's the database schema for user accounts?
+```
+
+<Callout type="info">
+This orientation step takes 5 minutes and saves hours. Developers who skip it often make changes in the wrong place, miss existing utilities, or duplicate logic that already exists. Cursor can map a codebase faster than any manual exploration.
+</Callout>
+
+## Finding What Already Exists
+
+Before adding anything, ask what's already there:
+
+```
+@codebase Is there already a utility for formatting currency?
+@codebase What components exist for displaying error states?
+@codebase How are API errors handled across the app?
+```
+
+You'll avoid creating duplicates and your new code will integrate cleanly with the existing patterns.
+
+## Client Projects
+
+This is especially valuable on client codebases. You can orient yourself in minutes instead of days. Ask Cursor to explain the architecture, identify the main data flows, and flag any areas that look fragile or inconsistent.
+
+<Callout type="tip">
+When taking on a client project, run through these questions in Chat before your first call with the client: "What are the riskiest parts of this codebase?" and "What patterns are used inconsistently?" You'll show up with insight that would normally take a week to develop.
+</Callout>
+
+You're not learning a codebase the slow way anymore. You have a guide.
+
+<KeyPoint>Let Cursor index and then ask Chat to explain the project before you start editing. The 5-minute orientation saves hours of confused exploration and prevents changes in the wrong place.</KeyPoint>

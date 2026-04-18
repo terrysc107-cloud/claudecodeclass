@@ -1,0 +1,95 @@
+---
+title: "Setting Up Cursor for a Team or Client"
+description: "How to configure Cursor for a team with shared rules, consistent settings, and clean handoffs."
+order: 5
+duration: "8 min"
+videoUrl: "https://www.youtube.com/watch?v=LSFpASs8aSI"
+coverImage: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "Where should shared .cursorrules live in a team project?"
+    options: ["Each developer's home directory", "The project root, committed to git", "A shared Notion page", "The team lead's machine only"]
+    answer: 1
+  - question: "What file can you use to document project context specifically for AI agents?"
+    options: [".cursorrules", "AGENTS.md", "README.md", "SETUP.md"]
+    answer: 1
+---
+
+When multiple people use Cursor on the same project, shared configuration ensures everyone gets consistent, high-quality output. A team without shared rules is a team where every developer gets a different version of AI assistance.
+
+## The Shared .cursorrules
+
+The `.cursorrules` file belongs in the project root and should be committed to git. Everyone who opens the project gets the same instructions:
+
+```
+# Project: [Name]
+# Stack: [list]
+# Last updated: [date]
+
+## Architecture
+[describe the project structure and major patterns]
+
+## Conventions
+[document the specific conventions this team follows]
+
+## Do Not
+[list things Cursor should never do in this project]
+
+## When Unsure
+[describe what to do when requirements are ambiguous]
+```
+
+The "When Unsure" section is often the most valuable. It captures decisions the team has already made so Cursor doesn't relitigate them.
+
+<Callout type="tip">
+Treat `.cursorrules` like living documentation. Schedule a brief team review monthly or after any major architectural decision. Stale rules are worse than no rules — they cause Cursor to produce code that contradicts current standards.
+</Callout>
+
+## AGENTS.md for AI Context
+
+Beyond `.cursorrules`, create an `AGENTS.md` file in the root that provides richer context for AI agents:
+
+```markdown
+# Project Context for AI Agents
+
+## What This Is
+[one paragraph on the product and its users]
+
+## Tech Decisions
+[brief explanation of key architectural choices and why]
+
+## Current Development State
+[what's in progress, what's stable, what's fragile]
+
+## Team Conventions
+[communication patterns, review process, deployment cadence]
+```
+
+Agents.md is specifically for context that helps AI understand *why* things are the way they are — not just what they are.
+
+## Handing Off to Clients
+
+When delivering a project to a client who uses Cursor:
+
+1. Include a polished `.cursorrules` in the repo
+2. Write it from the perspective of a new developer onboarding
+3. Include the client's specific conventions and anything they care about
+4. Add a brief note: "This file configures AI assistants for this project — don't delete it"
+
+A client who opens your delivered codebase in Cursor and immediately gets well-configured AI assistance will think you're exceptional — and they'll be right.
+
+<Callout type="info">
+When you hand off a project with a great .cursorrules and AGENTS.md, you're also protecting your own work. Clear context makes it harder for the next developer to unknowingly break conventions or introduce inconsistencies. Your code stays clean even after you're gone.
+</Callout>
+
+## Onboarding New Team Members
+
+New developer joining the team? Their first day workflow:
+
+1. Clone the repo
+2. Open in Cursor
+3. Let it index
+4. Ask Chat: "@codebase Walk me through this project. I'm a new developer starting today."
+
+With good `.cursorrules` and `AGENTS.md`, Cursor will give them a coherent, accurate onboarding briefing. What used to take a day of pairing with a senior developer now takes 30 minutes.
+
+<KeyPoint>A team with shared .cursorrules produces more consistent code than a team without them. Commit it to git, keep it updated, and treat it as the authoritative source of project conventions for both humans and AI.</KeyPoint>

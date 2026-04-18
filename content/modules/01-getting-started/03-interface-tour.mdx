@@ -1,0 +1,59 @@
+---
+title: "Cursor Interface Tour"
+description: "A focused walkthrough of every panel, mode, and key area you'll use every day."
+order: 3
+duration: "6 min"
+videoUrl: "https://www.youtube.com/watch?v=gqUQbjsYZLQ"
+coverImage: "https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "Which shortcut opens Cursor Chat?"
+    options: ["Cmd+K", "Cmd+L", "Cmd+Shift+I", "Cmd+P"]
+    answer: 1
+  - question: "What is Composer used for?"
+    options: ["Asking questions about code", "Generating code across multiple files", "Running terminal commands", "Managing git branches"]
+    answer: 1
+---
+
+Cursor's interface is nearly identical to VS Code. The only new elements are the three AI panels. Learn those three, and you know the whole tool.
+
+## The Three AI Panels
+
+**Chat (Cmd+L)**
+
+Opens a conversation panel on the right side. Use Chat for questions: "What does this function do?", "Why is this test failing?", "How would I add pagination here?" Chat reads the files you point it to but doesn't make changes.
+
+**Composer (Cmd+Shift+I)**
+
+Opens a full-screen generation mode. Use Composer for building: "Create a settings page with these fields", "Add Stripe checkout to this route", "Refactor this module to use the repository pattern." Composer proposes changes across multiple files and shows you a diff before applying anything.
+
+**Inline Edit (Cmd+K)**
+
+Activates at your cursor position. Select some code, press Cmd+K, type an instruction. Cursor rewrites just that block — and shows you what changed before you accept.
+
+<Callout type="tip">
+The mental model: Chat is for understanding, Composer is for building, Cmd+K is for editing. Once that distinction is clear, you'll instinctively reach for the right tool without thinking about it.
+</Callout>
+
+## The Editor Pane
+
+Standard VS Code: tabs, split views, the minimap. The only addition is a thin AI status bar at the bottom showing which model is active. You can click it to switch models mid-session.
+
+## The Sidebar
+
+File explorer, search, git, and extensions — exactly as in VS Code. You can also use the sidebar to add files to your Chat context by right-clicking and selecting "Add to Chat."
+
+## The Terminal
+
+Same integrated terminal as VS Code. Cursor doesn't add anything here — you run your dev server, tests, and CLI tools the same way.
+
+<Callout type="info">
+Cursor can read your terminal output. If a build error appears in the terminal, you can reference it in Chat by asking "why is this build failing?" — Cursor picks up the context automatically.
+</Callout>
+
+## The Status Bar
+
+At the very bottom: active branch, line/column position, language mode, and the Cursor model indicator. The model indicator is useful — it tells you whether you're using a fast model (good for quick edits) or a more capable one (better for complex generation).
+
+That's the whole interface. Nothing to memorize beyond the three shortcuts: Cmd+L, Cmd+Shift+I, Cmd+K.
+
+<KeyPoint>Learn Chat for questions, Composer for generation, and Cmd+K for targeted edits. Those three tools cover 95% of everything you'll do in Cursor.</KeyPoint>

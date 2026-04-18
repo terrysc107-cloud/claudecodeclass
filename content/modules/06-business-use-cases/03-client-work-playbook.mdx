@@ -1,0 +1,94 @@
+---
+title: "The Client Work Playbook"
+description: "How to scope, quote, and deliver client projects using Cursor — and charge 2–3× what you used to."
+order: 3
+duration: "10 min"
+videoUrl: "https://www.youtube.com/watch?v=LSFpASs8aSI"
+coverImage: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What is value-based pricing?"
+    options: ["Charging based on hours worked", "Charging based on the value delivered to the client", "Charging below market rate to win projects", "Charging a fixed rate regardless of scope"]
+    answer: 1
+  - question: "Why should you create a per-client .cursorrules file?"
+    options: ["Cursor requires it", "So the code matches the client's existing conventions and preferences", "It makes builds faster", "For billing purposes"]
+    answer: 1
+---
+
+Cursor doesn't just make you faster — it changes your economics. When you can deliver in days what used to take weeks, you face a choice: lower your prices or raise your rates. The right answer is obvious.
+
+## Scoping With Cursor in Mind
+
+When scoping a project, estimate delivery time with AI assistance — not without. If a feature would take you 8 hours without AI, with Cursor it might take 2-3 hours.
+
+Your rate should increase to reflect this, not decrease. Clients pay for the outcome. A working product in 3 days is worth the same to them as a working product in 3 weeks — or more, because it's faster.
+
+## The Discovery Session
+
+Before quoting, do a discovery session with the client. Then use Cursor to analyze the scope:
+
+```
+A client wants to add a customer portal to their SaaS.
+Features: customers can view invoices, update billing info,
+manage their subscription, and download usage reports.
+They use Stripe already. The backend is a Next.js API.
+
+What's the scope of this work? What are the major pieces
+and what dependencies need to exist first?
+```
+
+Use Cursor's analysis to ask the right questions, catch scope creep before it starts, and build a realistic timeline.
+
+<Callout type="info">
+Scope creep is the #1 killer of profitable client projects. Use Cursor to document exactly what's in and out of scope in writing before you start. A simple Google Doc with a feature list and explicit exclusions ("does not include mobile app", "does not include data migration") protects you and sets clear expectations.
+</Callout>
+
+## Per-Client .cursorrules
+
+For every client engagement, create a `.cursorrules` file that captures:
+
+```
+## Client: Acme Corp
+## Project: Customer portal addition to their SaaS
+
+## Existing Stack
+- Next.js 14 (not 15 — do not use new APIs)
+- PostgreSQL via Prisma ORM
+- Stripe for payments
+
+## Their Conventions
+- All components use class components (legacy codebase)
+- API responses use the format: { data: {}, error: null }
+- All monetary amounts in cents
+
+## Be Extra Careful About
+- The auth system is custom (not NextAuth) — ask before touching
+- Never modify the Prisma schema without explicit discussion
+```
+
+This produces code that fits their codebase instead of code they have to adapt.
+
+<Callout type="tip">
+When you hand off code that matches the client's patterns and conventions, they trust you. When you hand off code that works but looks foreign, they worry. The .cursorrules file costs 10 minutes but earns referrals.
+</Callout>
+
+## Delivering and Handing Off
+
+On delivery, provide:
+
+1. A working demo with the features tested
+2. A brief summary of what was built and any decisions made
+3. Clear documentation of environment variables and setup steps
+4. A "how to maintain this" note if they'll be doing updates themselves
+
+Use Cursor to generate documentation:
+```
+Write a brief handoff document for this feature.
+Include: what it does, how it works at a high level,
+environment variables required, and common issues and fixes.
+```
+
+## The Rate Conversation
+
+When clients balk at your rate after learning you use AI tools: "AI makes me faster and more consistent, which means you get a better result in less calendar time. The alternative is paying me less for slower work with more risk. That's the wrong trade."
+
+<KeyPoint>Cursor compresses delivery time — your job is to price based on value delivered, not hours spent. A client who waits 3 days instead of 3 weeks for a working product is getting more, not less.</KeyPoint>

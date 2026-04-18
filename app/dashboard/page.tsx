@@ -35,7 +35,7 @@ export default async function DashboardPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <Link href="/dashboard" className="flex items-center gap-2 text-white font-bold">
             <Zap className="w-5 h-5 text-brand-400" />
-            Claude Code Class
+            Build With Cursor
           </Link>
           <SignOutButton />
         </div>
