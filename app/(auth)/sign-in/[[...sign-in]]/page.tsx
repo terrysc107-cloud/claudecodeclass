@@ -9,7 +9,8 @@ import { Zap } from "lucide-react";
 export default function SignInPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") || "/dashboard";
+  const rawRedirect = searchParams.get("redirect") || "/dashboard";
+  const redirect = rawRedirect.startsWith("/") && !rawRedirect.startsWith("//") ? rawRedirect : "/dashboard";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -52,24 +53,28 @@ export default function SignInPage() {
             </div>
           )}
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-1.5">Email</label>
             <input
+              id="email"
               type="email"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors"
+              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
               placeholder="you@example.com"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">Password</label>
+            <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-1.5">Password</label>
             <input
+              id="password"
               type="password"
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors"
+              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
               placeholder="••••••••"
             />
           </div>

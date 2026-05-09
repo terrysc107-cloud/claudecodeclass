@@ -14,8 +14,19 @@ export async function POST(request: NextRequest) {
 
   const { moduleSlug, lessonSlug, answers } = await request.json();
 
-  if (!moduleSlug || !lessonSlug || !Array.isArray(answers)) {
+  if (
+    typeof moduleSlug !== "string" ||
+    typeof lessonSlug !== "string" ||
+    !Array.isArray(answers) ||
+    answers.length > 20 ||
+    !answers.every((a) => Number.isInteger(a))
+  ) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+  }
+
+  // Prevent path traversal
+  if (!/^[a-z0-9-]+$/.test(moduleSlug) || !/^[a-z0-9-]+$/.test(lessonSlug)) {
+    return NextResponse.json({ error: "Invalid slug" }, { status: 400 });
   }
 
   const lesson = getLesson(moduleSlug, lessonSlug);
@@ -24,6 +35,10 @@ export async function POST(request: NextRequest) {
   }
 
   const questions = lesson.frontmatter.quiz ?? [];
+  if (answers.length !== questions.length) {
+    return NextResponse.json({ error: "Answer count mismatch" }, { status: 400 });
+  }
+
   const correct = questions.map((q, i) => answers[i] === q.answer);
   const score = questions.length > 0
     ? Math.round((correct.filter(Boolean).length / questions.length) * 100)
@@ -61,5 +76,5 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  return NextResponse.json({ score, passed, correct });
+  return NextResponse.json({ score, passed });
 }

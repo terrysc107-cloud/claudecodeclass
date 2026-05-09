@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, Suspense } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
   Zap, CheckCircle2, BookOpen, DollarSign, Code2, Briefcase,
-  ChevronRight, Star, Lock, Clock, Trophy
+  ChevronRight, Star, Lock, Clock, Trophy, Loader2
 } from "lucide-react";
 
 const MODULES = [
@@ -37,14 +37,24 @@ function UpgradeScroller() {
 }
 
 export default function LandingPage() {
+  const [buying, setBuying] = useState(false);
+  const [buyError, setBuyError] = useState("");
+
   async function handleBuyNow() {
-    const res = await fetch("/api/stripe/checkout", { method: "POST" });
-    if (res.status === 401) {
-      window.location.href = "/sign-up";
-      return;
+    setBuying(true);
+    setBuyError("");
+    try {
+      const res = await fetch("/api/stripe/checkout", { method: "POST" });
+      if (res.status === 401) {
+        window.location.href = "/sign-up";
+        return;
+      }
+      const { url } = await res.json();
+      if (url) window.location.href = url;
+    } catch {
+      setBuyError("Something went wrong. Please try again.");
+      setBuying(false);
     }
-    const { url } = await res.json();
-    if (url) window.location.href = url;
   }
 
   return (
@@ -64,8 +74,10 @@ export default function LandingPage() {
             </Link>
             <button
               onClick={handleBuyNow}
-              className="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
+              disabled={buying}
+              className="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors disabled:opacity-60 disabled:cursor-not-allowed inline-flex items-center gap-2"
             >
+              {buying && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               Get Access — $97
             </button>
           </div>
@@ -86,11 +98,16 @@ export default function LandingPage() {
           Skip the learning curve. Go from idea to deployed product with the AI editor
           that writes, edits, and explains code alongside you.
         </p>
+        {buyError && (
+          <p className="text-red-400 text-sm mt-2 mb-4">{buyError}</p>
+        )}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button
             onClick={handleBuyNow}
-            className="inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-xl text-lg font-bold transition-colors"
+            disabled={buying}
+            className="inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-xl text-lg font-bold transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           >
+            {buying ? <Loader2 className="w-5 h-5 animate-spin" /> : null}
             Start Building — $97 <ChevronRight className="w-5 h-5" />
           </button>
           <Link
@@ -103,7 +120,7 @@ export default function LandingPage() {
         <p className="text-slate-600 text-sm mt-4">One-time payment · Lifetime access · No subscription</p>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-6 max-w-xl mx-auto mt-14">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-xl mx-auto mt-14">
           {[
             { icon: BookOpen, val: "35+", label: "Lessons" },
             { icon: Clock, val: "8", label: "Modules" },
@@ -249,10 +266,11 @@ export default function LandingPage() {
           </ul>
           <button
             onClick={handleBuyNow}
-            className="w-full bg-brand-600 hover:bg-brand-700 text-white py-4 rounded-xl text-lg font-bold transition-colors flex items-center justify-center gap-2"
+            disabled={buying}
+            className="w-full bg-brand-600 hover:bg-brand-700 text-white py-4 rounded-xl text-lg font-bold transition-colors flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            <Lock className="w-5 h-5" />
-            Get Instant Access
+            {buying ? <Loader2 className="w-5 h-5 animate-spin" /> : <Lock className="w-5 h-5" />}
+            {buying ? "Redirecting to checkout…" : "Get Instant Access"}
           </button>
           <p className="text-slate-600 text-xs mt-4">Secure checkout powered by Stripe</p>
         </div>

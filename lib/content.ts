@@ -89,7 +89,10 @@ export function getAllModules(): Module[] {
 }
 
 export function getLesson(moduleSlug: string, lessonSlug: string): Lesson | null {
+  if (!/^[a-z0-9-]+$/.test(moduleSlug) || !/^[a-z0-9-]+$/.test(lessonSlug)) return null;
   const folder = path.join(MODULES_DIR, moduleSlug);
+  const resolved = path.resolve(folder);
+  if (!resolved.startsWith(MODULES_DIR + path.sep)) return null;
   if (!fs.existsSync(folder)) return null;
 
   const files = getLessonFiles(moduleSlug);

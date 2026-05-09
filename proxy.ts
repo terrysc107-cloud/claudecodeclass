@@ -23,7 +23,7 @@ function isProtected(pathname: string) {
   );
 }
 
-export async function proxy(request: NextRequest) {
+export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (isPublic(pathname)) {
