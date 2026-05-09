@@ -1,0 +1,102 @@
+---
+title: "File Editing and Code Generation"
+description: "How Claude Code reads and writes files, how to ask for targeted code changes, and how to iterate on generated output."
+order: 3
+duration: "7 min"
+videoUrl: "https://www.youtube.com/watch?v=dKSNSCl0KgU"
+coverImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "How does Claude Code write changes to your files?"
+    options: ["It suggests changes you must copy-paste", "It writes directly to disk using the file edit tool", "It requires you to open a diff viewer first", "It only works in the terminal, not on real files"]
+    answer: 1
+  - question: "What's the best way to get a targeted edit to a specific function?"
+    options: ["Ask vaguely and let Claude decide", "Name the file and function and describe exactly what you want changed", "Paste the whole codebase", "Use a template command"]
+    answer: 1
+---
+
+Claude Code's file editing capability is direct — it reads files, reasons about them, and writes changes to disk. There's no copy-paste step, no diff to manually apply. You describe what you want, it makes the change, and you verify the result.
+
+## How File Editing Works
+
+When you ask Claude Code to change a file, it uses its file editing tool to:
+
+1. Read the current contents of the file
+2. Reason about the change needed in context
+3. Write the updated version back to disk
+
+The change is visible immediately in your editor. Claude Code describes what it changed and why as part of its response, giving you the information you need to decide whether to keep or revert.
+
+```
+> Add a rate limiting check to the POST /api/messages endpoint in
+  routes/messages.ts. Use the existing rateLimiter middleware from
+  middleware/rate-limit.ts.
+```
+
+Claude Code reads both files, understands how the existing middleware is applied elsewhere, and adds the check consistently with the existing pattern.
+
+## Targeted Edits vs. Full Rewrites
+
+For most changes, you want targeted edits — changes confined to the relevant function or section, leaving everything else intact.
+
+Be specific about the scope:
+
+**Too broad:** "Improve the authentication module"
+
+**Targeted:** "In middleware/auth.ts, update the verifyToken function to return a specific error code for expired tokens versus invalid tokens, rather than a generic 401 for both."
+
+Targeted instructions produce cleaner diffs that are easier to verify. They also reduce the chance of unintended changes to code you didn't mean to touch.
+
+<Callout type="tip">
+Before asking for a change, read the function yourself first. Even a 30-second scan gives you the context to write a more specific instruction — and to quickly verify that what came back is correct.
+</Callout>
+
+## Generating New Code
+
+For new files or new functions, describe what you want in terms of the surrounding context:
+
+```
+> Create a new file at lib/email/templates.ts that exports a function
+  renderPasswordReset(email: string, resetUrl: string): string.
+  It should return an HTML string. Follow the same pattern as the
+  existing templates in lib/email/.
+```
+
+Pointing Claude Code at existing patterns in your codebase ensures the generated code looks like it belongs — same formatting conventions, same import style, same naming patterns.
+
+## Reviewing the Output
+
+After any file edit or generation, review the actual code before moving on. Open the file in your editor and read what was written.
+
+Check for:
+- Is the logic correct for your use case?
+- Does it handle edge cases and error states?
+- Is it consistent with the surrounding code?
+- Did it change anything you didn't ask about?
+
+<Callout type="info">
+Claude Code sometimes makes small opportunistic improvements while making the change you asked for — cleaning up a type annotation, removing an unused import. These are usually fine, but worth a quick check to make sure nothing important was removed along the way.
+</Callout>
+
+## Iterating
+
+If the first pass isn't exactly right, iterate directly:
+
+```
+> Good, but the error for expired tokens should use a 401 status code,
+  not 403. Update that and also add a specific error message string.
+```
+
+Claude Code re-reads the file in its current state — including the change it just made — and applies the correction. Each iteration is grounded in the actual current state of the code, not a stale version in memory.
+
+## The Speed Pattern
+
+Once this becomes natural, your editing rhythm shifts:
+
+- You describe the intent and constraints
+- Claude Code handles the implementation details
+- You read and verify the result
+- You iterate on specifics, not structure
+
+You write the high-signal parts — what the code should do, what patterns to follow, what edge cases to handle — and let Claude Code handle the mechanical implementation. That shift is where the time savings compound.
+
+<KeyPoint>Name the file, describe the change precisely, and review the output before moving on. Specific instructions plus careful review is the combination that produces reliable, clean output from Claude Code.</KeyPoint>

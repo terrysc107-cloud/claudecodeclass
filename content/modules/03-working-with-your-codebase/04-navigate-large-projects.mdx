@@ -1,0 +1,135 @@
+---
+title: "Navigating Large Codebases"
+description: "Stay productive in large or complex codebases using Claude Code's search and bash capabilities."
+order: 4
+duration: "8 min"
+videoUrl: "https://www.youtube.com/watch?v=i6FdGFNVGgc"
+coverImage: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "How can you ask Claude Code to search for all usages of a function across a large codebase?"
+    options: ["You can't — Claude only reads files you specify", "Ask Claude to run grep or find commands via the bash tool", "Use a separate search tool", "Claude automatically finds all usages"]
+    answer: 1
+  - question: "What is the purpose of CLAUDE.md in a large project?"
+    options: ["It replaces the README", "It gives Claude persistent context about the project structure and conventions", "It configures git settings", "It defines environment variables"]
+    answer: 1
+---
+
+Large codebases are where AI assistance has the highest leverage — and where it's also easiest to get lost. A few navigation strategies keep you productive regardless of project size.
+
+## Search via Bash
+
+Claude Code can run any bash command, which makes it a powerful search tool. Instead of manually scanning files, ask Claude to search for you:
+
+```
+Run `grep -r "processPayment" src/` and show me every place
+this function is called. Then explain what each call site is doing.
+```
+
+```
+Find all TypeScript files in the app/ directory that import
+from lib/supabase and list what they use.
+```
+
+```
+Run `find . -name "*.test.ts" -path "*/api/*"` to list all
+API test files.
+```
+
+Claude executes the search, reads the results, and gives you a meaningful summary — not just raw output.
+
+<Callout type="tip">
+You can chain commands. Ask Claude to search for a function, read the files that come up, and summarize what each one does. You get the result of a manual investigation in seconds rather than minutes.
+</Callout>
+
+## Direct File Reads
+
+When you know roughly where something lives, tell Claude to read it:
+
+```
+Read the files in src/payments/ and explain how the
+billing module is structured.
+```
+
+```
+Read lib/auth.ts and explain how session tokens are validated.
+```
+
+Claude reads the actual file contents — not a summarized version or a cached index. You get accurate answers grounded in the real code.
+
+## Ask What's Related
+
+When starting work on a feature, ask Claude to map the territory:
+
+```
+What files are most likely to be affected if I add a
+subscription tier system to this app? Search the codebase
+and give me a list with a brief explanation for each.
+```
+
+```
+What other parts of the codebase depend on the User model?
+Search for imports and usages.
+```
+
+<Callout type="info">
+For client projects specifically, this "blast radius" mapping is worth doing before every significant change. It takes 30 seconds and prevents the "I didn't know that was connected to this" conversations with clients after something breaks.
+</Callout>
+
+## Keep CLAUDE.md Current
+
+For large projects, a well-maintained `CLAUDE.md` is your most valuable navigation aid. Document the project layout explicitly:
+
+```markdown
+## Project Structure
+- `app/` — Next.js app router pages and API routes
+- `src/lib/` — shared utilities (auth, database, email, payments)
+- `src/components/` — reusable UI components
+- `src/types/` — TypeScript interfaces and type definitions
+- `workers/` — background job processors
+
+## Key Files
+- `lib/supabase/server.ts` — all server-side database access goes here
+- `lib/auth.ts` — session management
+- `lib/stripe.ts` — payment processing
+```
+
+When Claude reads this at session start, it can navigate the project with much less back-and-forth.
+
+## Scoping Your Questions
+
+You don't need to ask about the entire codebase every time. Scope your questions to the area you're working in:
+
+```
+Look at everything in src/billing/ and explain
+how invoices are generated and stored.
+```
+
+```
+Read the components in components/forms/ and tell me
+what shared form utilities are available.
+```
+
+Narrower scope means faster, more accurate answers and less noise from unrelated parts of the project.
+
+<Callout type="warning">
+Claude Code works from your current directory. Always run `claude` from the project root so it has access to the full project tree. If you start from a subdirectory, Claude won't be able to read parent-level config files or cross-directory dependencies.
+</Callout>
+
+## Finding Patterns at Scale
+
+For larger consistency questions — "how is X done throughout this codebase?" — let Claude do the legwork:
+
+```
+Search for all places where we handle API errors and
+summarize the patterns you find. Are they consistent?
+```
+
+```
+Find all database queries in the codebase and check
+whether they all use the approved lib/supabase/server.ts
+approach or if some are making direct calls.
+```
+
+This kind of audit is tedious to do manually. Claude can do it in seconds by running searches and reading files.
+
+<KeyPoint>Claude Code's bash tool turns it into a search engine for your entire codebase. Ask it to run grep, find files, and read them — then explain what it found. Pair this with a well-maintained CLAUDE.md and you can navigate any project size confidently.</KeyPoint>

@@ -1,0 +1,100 @@
+---
+title: "Your First AI Edit with Claude Code"
+description: "Open a project, ask Claude to make a change, review the diff, and understand exactly what happened."
+order: 4
+duration: "7 min"
+videoUrl: "https://www.youtube.com/watch?v=Bs3gO5IuMIU"
+coverImage: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "How does Claude Code show you what it changed before applying edits?"
+    options: ["It opens a GUI diff viewer", "It describes the changes in natural language and shows a text diff", "It emails you a patch", "It opens VS Code automatically"]
+    answer: 1
+  - question: "What should you always do before accepting an AI-generated edit?"
+    options: ["Save the file", "Run the tests", "Read the diff", "Open a new tab"]
+    answer: 2
+---
+
+The fastest way to understand Claude Code is to use it on a real file. Open any project you're working on and follow along.
+
+## Opening a Project
+
+Navigate to your project directory and start Claude Code:
+
+```bash
+cd my-project
+claude
+```
+
+Claude Code reads your project structure immediately. You can confirm it has the right context by asking:
+
+```
+> What's this project and how is it structured?
+```
+
+It will describe the stack, key directories, and what it found. If the answer is accurate, you're ready to make your first edit.
+
+## Asking for a Change
+
+Find a function in your codebase that could use improvement — missing error handling, a missing edge case, or unclear variable names. Ask Claude Code to improve it by name or by describing the file:
+
+```
+> In utils/validation.ts, add input validation to the createUser function.
+  It should throw a descriptive error if email is missing or name is empty.
+```
+
+Claude Code will read the file, reason about the existing code, and propose changes. It describes what it's going to do before writing, so you can redirect before it starts if the approach is wrong.
+
+<Callout type="tip">
+The more specific you are about the desired outcome, the better. "Add validation" is fine. "Throw a ValidationError with the field name if email is missing or not a valid format, and if name is an empty string" is better. Specificity reduces the need to iterate.
+</Callout>
+
+## Reading the Diff
+
+After Claude Code makes changes, it shows you what it wrote. Read the actual code — don't just accept because the description sounded right.
+
+Check for:
+- Did it change only what you asked, or did it touch other things?
+- Are the variable names and types consistent with the rest of the file?
+- Did it handle the edge cases you care about?
+- Is anything missing that you expected?
+
+<Callout type="warning">
+Don't accept edits without reading them. This is the most important habit to build early. AI-generated code can be subtly wrong — it might add validation but use the wrong field names, or handle one case and miss another. Read every diff before confirming.
+</Callout>
+
+## Accepting or Iterating
+
+If the change looks right, it's already been written to disk — Claude Code writes changes directly to your files. Open the file in your editor to see the update.
+
+If something's off, say so in the next message:
+
+```
+> The error message should include the field name. Update it to say
+  "Validation failed: email is required" rather than just "Validation failed".
+```
+
+Claude Code will re-read the file, make the adjustment, and show you the updated result. This loop — describe, review, refine — is the core interaction pattern for everything in the course.
+
+## Run Your Tests
+
+After any edit, run your test suite:
+
+```bash
+npm test
+```
+
+Or ask Claude Code to do it for you:
+
+```
+> Run the tests for the validation module and tell me if they pass.
+```
+
+Claude Code can execute bash commands including test runners, and will report back what passed, what failed, and what the error output says.
+
+## What Just Happened
+
+Claude Code read your file, understood the existing code structure, made a targeted edit based on your instruction, and wrote the result back to disk. It didn't find-and-replace — it reasoned about the code.
+
+This is the core interaction: you describe the outcome, Claude Code implements it, you review and decide.
+
+<KeyPoint>Always read the diff before confirming. Claude Code is fast but you're still the decision-maker. The habit of reviewing before accepting is what separates developers who get great results from those who introduce subtle bugs.</KeyPoint>

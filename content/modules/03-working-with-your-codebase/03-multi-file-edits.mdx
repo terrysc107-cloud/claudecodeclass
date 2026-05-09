@@ -1,0 +1,106 @@
+---
+title: "Multi-File Edits and Refactoring"
+description: "Make coordinated changes across multiple files in one Claude Code session — the workflow that ships features fast."
+order: 3
+duration: "9 min"
+videoUrl: "https://www.youtube.com/watch?v=GJLuTFAyMts"
+coverImage: "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What is the best approach for a complex multi-file change with Claude Code?"
+    options: ["One broad prompt covering everything", "Start narrow, expand incrementally", "Let Claude decide the scope", "Edit files manually then use Claude to clean up"]
+    answer: 1
+  - question: "What should you do after Claude completes a multi-file change?"
+    options: ["Immediately start the next change", "Review each changed file then commit a checkpoint", "Run a full redeploy", "Ask Claude to revert and start over"]
+    answer: 1
+---
+
+Multi-file editing is where Claude Code's value becomes undeniable. A feature that touches an API route, a type definition, a component, and a test file normally requires careful coordination across four files. With Claude Code, you describe the feature and it reads all the relevant files, proposes the changes, and writes them — one by one — while keeping everything consistent.
+
+## Setting Up the Context
+
+Before asking Claude to make multi-file changes, spend a moment orienting it:
+
+```
+What files would be involved if I added a
+notification preferences feature for users?
+Read the existing user settings code and give me a summary.
+```
+
+Use that answer to inform your next prompt. The more Claude knows about what already exists, the more coherent its changes will be.
+
+## Writing a Clear Instruction
+
+Be explicit about scope and patterns:
+
+```
+Add a notification preferences system.
+- Add a `notificationPreferences` field to the User type in types/user.ts
+- Create a PATCH endpoint at app/api/users/[id]/notifications/route.ts
+- Update the settings page at app/settings/page.tsx to include a preferences form
+- Follow the same form pattern used in the profile settings section
+```
+
+The more you reference existing files and patterns, the more coherent the output. Claude will read each referenced file before writing changes to it.
+
+<Callout type="info">
+Think of your prompt as a spec handed to a developer. A good spec references existing conventions, names the files to touch, and describes the expected behavior. A vague spec produces vague code.
+</Callout>
+
+## Reviewing Multi-File Changes
+
+Claude Code makes changes to files directly on your filesystem. Before accepting the session as complete, review the diff:
+
+```bash
+git diff
+```
+
+Review the changes in a logical order:
+
+1. Start with the types and interfaces — they affect everything downstream
+2. Review the API and backend changes
+3. Review the frontend and component changes
+4. Check any test files last
+
+If a specific file looks wrong, tell Claude in the same session:
+
+```
+The types look right. But the API endpoint is missing
+authorization — only the account owner should be able to
+update their notification preferences. Add that check.
+```
+
+<Callout type="warning">
+Don't start with a scope that's too large. "Refactor the entire authentication system" will produce changes that are impossible to review carefully. Break complex changes into focused sessions: first the data model, then the API, then the UI. Each pass is reviewable. The combination produces clean results.
+</Callout>
+
+## Refactoring Across Files
+
+Claude Code handles refactors that would otherwise require careful find-and-replace work:
+
+```
+Rename the `processPayment` function to `chargeCustomer` everywhere
+it appears. Update the function definition, all call sites,
+and any relevant type definitions or tests.
+```
+
+Claude will search for all usages, update them consistently, and explain what it changed. After reviewing the diff, commit before moving on.
+
+## Commit After Each Pass
+
+After accepting a set of changes, commit before continuing:
+
+```bash
+git add -A && git commit -m "feat: add notification preferences (WIP)"
+```
+
+This is your restore point. If the next session goes sideways, you can return here cleanly. Claude can also help you write the commit message — covered in the Git and Deployment lesson.
+
+<Callout type="tip">
+Committing after each significant Claude session is one of the most underrated habits in AI-assisted development. You get clean, reviewable history and a safe bailout point — which matters more when you're moving fast.
+</Callout>
+
+## When the First Pass Is Incomplete
+
+Claude rarely gets everything perfect in one pass on complex tasks. That's expected. Follow up in the same session with specific corrections rather than starting over. You'll typically converge on a clean result within two or three exchanges.
+
+<KeyPoint>Start narrow, expand incrementally — a focused prompt beats a vague one. Scope your first session to the data model, review it, commit, then proceed to the next layer. Use `git diff` to review every multi-file change before moving on.</KeyPoint>

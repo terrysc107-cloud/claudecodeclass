@@ -1,0 +1,110 @@
+---
+title: "Context Management in Claude Code"
+description: "Control what Claude Code sees so you get better, more accurate responses every time."
+order: 2
+duration: "9 min"
+videoUrl: "https://www.youtube.com/watch?v=kJ96MBiMtCg"
+coverImage: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "Why should you use /clear when switching to a new task?"
+    options: ["It uses less tokens", "Old context can confuse responses for the new task", "It loads faster", "Claude Code requires it"]
+    answer: 1
+  - question: "What does the /compact command do?"
+    options: ["Deletes the conversation history", "Compresses the conversation into a summary to free up context space", "Speeds up Claude's responses", "Removes all file references"]
+    answer: 1
+---
+
+The quality of Claude Code's output is directly proportional to the quality of the context it has. Most developers who get mediocre results from AI tools are giving it poor context — not because they're doing anything wrong, but because they haven't thought deliberately about what Claude actually needs to see.
+
+## How the Context Window Works
+
+Claude Code operates within a context window — a fixed amount of text it can hold in memory at once. This window includes:
+
+1. Your `CLAUDE.md` instructions file (always loaded first)
+2. The current conversation history
+3. File contents that Claude has read during the session
+4. Any output from tools and commands it has run
+
+As a session grows longer, older parts of the conversation get pushed out. When the window fills up, Claude may lose access to decisions and context from earlier in the session. Managing this window deliberately is a core skill.
+
+## The /compact Command
+
+When a session is getting long but the work isn't finished, use `/compact`:
+
+```
+/compact
+```
+
+This compresses the conversation history into a dense summary, freeing up context space while preserving the most important information. Use it when:
+
+- You've been working for a while and responses start feeling less accurate
+- You've completed one phase of a task and are starting the next
+- You want to continue a long session without starting completely fresh
+
+<Callout type="tip">
+Run `/compact` proactively — before you notice degradation, not after. A good rule of thumb: if you've had more than 20–30 back-and-forth exchanges, consider compacting. It takes a few seconds and often noticeably improves the quality of subsequent responses.
+</Callout>
+
+## The /clear Command
+
+Use `/clear` to wipe the conversation history completely and start a fresh session:
+
+```
+/clear
+```
+
+This is the right choice when:
+
+- You've finished one task and are starting something unrelated
+- You're debugging a specific issue and want a clean slate
+- The session has drifted and Claude is making assumptions based on stale context
+
+Old context can become noise. If you've been building a feature and now want to refactor something different, start fresh. Stale context leads to answers that are subtly colored by the previous task.
+
+## Precise Context Beats Broad Context
+
+Be explicit about what files you want Claude to look at:
+
+```
+Look at src/lib/auth.ts and app/api/auth/route.ts.
+Why would a user with a valid password get a 401 response?
+```
+
+This is better than:
+
+```
+Why would a user get a 401?
+```
+
+The first gives Claude exactly what it needs. The second requires Claude to guess what's relevant, and it may guess wrong.
+
+<Callout type="tip">
+When you're stuck and don't know which files are relevant, ask Claude to help you find them first: "Which files are most likely involved in the authentication flow?" Then start a new session referencing those specific files. You get better answers with explicit references than with repeated broad searches.
+</Callout>
+
+## What to Include in a Context-Rich Request
+
+For best results, include:
+
+- **What you're trying to do** (the outcome)
+- **What you've already tried** (if debugging)
+- **The relevant files** (named explicitly)
+- **Any constraints** ("without changing the database schema" / "must work in Node 18")
+- **The error or unexpected behavior** (exact text, not paraphrase)
+
+<Callout type="warning">
+Don't paste entire files as text into the conversation when you can just ask Claude to read the file directly. Use file paths and let Claude read them — it handles this more efficiently and doesn't unnecessarily fill the context window with content it already has access to.
+</Callout>
+
+## Structuring Long Work Sessions
+
+For complex, multi-hour tasks, structure your sessions deliberately:
+
+- Start with a clear goal statement that Claude can refer back to
+- Use `/compact` at natural breakpoints (between phases, after completing a subtask)
+- Re-state key constraints at the start of each new phase
+- Use `/clear` when you move to a genuinely different task
+
+For very large projects, consider splitting work across multiple sessions with clear handoff notes. At the end of a session, ask Claude to summarize what was completed and what remains — then paste that summary at the start of the next session.
+
+<KeyPoint>The quality of your output is proportional to the quality of your context. Use /compact to extend sessions without losing coherence, /clear to start fresh when switching tasks, and explicit file references over vague descriptions. This is the single highest-leverage habit in Claude Code.</KeyPoint>

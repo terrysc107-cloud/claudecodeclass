@@ -1,0 +1,119 @@
+---
+title: "Add Stripe Payments with Claude Code"
+description: "Integrate Stripe payments into any app in under an hour using Claude Code."
+order: 4
+duration: "10 min"
+videoUrl: "https://www.youtube.com/watch?v=9fg4nCKrpJg"
+coverImage: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "Why should you never trust payment status from the checkout success URL?"
+    options: ["It's too slow", "The URL can be manipulated — use webhooks instead", "Stripe doesn't support it", "It requires extra setup"]
+    answer: 1
+  - question: "What event should your webhook handler listen for to grant access?"
+    options: ["payment.created", "checkout.session.completed", "customer.created", "invoice.paid"]
+    answer: 1
+---
+
+Every product you build should have a way to charge for it. Adding Stripe to a Next.js app follows the same pattern every time — learn it once with Claude Code, apply it everywhere.
+
+## The Pattern
+
+1. Create a product and price in the Stripe dashboard
+2. Build a checkout session API route
+3. Build success/cancel redirect handling
+4. Build a webhook handler that grants access
+5. Gate your features behind the access check
+
+## Step 1: Install and Configure Stripe
+
+```bash
+npm install stripe @stripe/stripe-js
+```
+
+Ask Claude Code to set up the Stripe client:
+
+```
+Create lib/stripe.ts — a Stripe server-side client using the
+STRIPE_SECRET_KEY environment variable. Export it as a singleton.
+Use the latest Stripe Node.js SDK patterns.
+```
+
+## Step 2: Checkout Session API
+
+```
+Create app/api/stripe/checkout/route.ts — a POST endpoint that:
+- Gets the current user from the Supabase session
+- Returns 401 if not authenticated
+- Creates a Stripe checkout session for price ID: [your price ID]
+- Sets success_url to /dashboard and cancel_url to /pricing
+- Passes the user ID in the session metadata
+- Returns the session URL as JSON
+```
+
+Review the output. Make sure the user ID is being passed in the session metadata — you'll need it in the webhook.
+
+## Step 3: The Webhook
+
+This is where payment confirmation happens. Never trust the redirect URL.
+
+```
+Create app/api/stripe/webhook/route.ts — a webhook handler that:
+- Verifies the Stripe signature using STRIPE_WEBHOOK_SECRET
+- Handles the checkout.session.completed event
+- Extracts the user_id from session metadata
+- Inserts a record into the user_purchases table
+  (user_id, stripe_session_id, amount, created_at)
+- Uses the Supabase service role client for the database insert
+- Returns 200 on success, 400 on signature failure
+
+Reference lib/supabase/server.ts for the client setup pattern.
+```
+
+<Callout type="warning">
+The webhook signature verification is non-optional. Without it, anyone can send a fake webhook to your endpoint and grant themselves access. Claude Code will generate it correctly if you ask — just make sure the `STRIPE_WEBHOOK_SECRET` environment variable is set in both your local `.env.local` and in Vercel.
+</Callout>
+
+## Step 4: Access Gating
+
+Check purchases in your middleware or page:
+
+```
+Read middleware.ts and lib/auth.ts.
+
+Add a check that redirects to /pricing?upgrade=true if the user
+visits /dashboard/* but has no record in user_purchases.
+
+Also create lib/access.ts with a hasAccess(userId: string): Promise<boolean>
+function that queries user_purchases for a matching userId.
+```
+
+## Testing Locally
+
+Use Stripe CLI to forward webhooks to localhost:
+
+```bash
+stripe listen --forward-to localhost:3000/api/stripe/webhook
+```
+
+Use Stripe's test card numbers (4242 4242 4242 4242) for test purchases.
+
+<Callout type="tip">
+Always test the full checkout flow before deploying: click the buy button, complete checkout with a test card, verify the webhook fires, verify the database record is created, verify the user can access the gated content. This 5-minute test prevents the worst possible outcome: customers paying and not getting access.
+</Callout>
+
+## Letting Claude Handle the Boilerplate
+
+The Stripe integration has a lot of required boilerplate — signature verification, error handling, event type narrowing, metadata extraction. This is exactly where Claude Code pays for itself: the boilerplate is tedious to write manually, easy to get wrong, and well-documented enough that Claude generates it accurately.
+
+Your job is to review the generated code with the right questions:
+
+- Is the webhook signature being verified before anything else?
+- Is the user ID being passed through the metadata correctly?
+- Is the database insert using the service role client (not the anon client)?
+- Are error cases returning the right status codes?
+
+## The Same Pattern Every Time
+
+Once you've built this once, it's a template. Every subsequent product gets Stripe integration in under 30 minutes. Store the working `app/api/stripe/` directory and bring it into new projects — then ask Claude Code to adapt it to the new project's patterns.
+
+<KeyPoint>Every product you build should have a way to charge for it. The Stripe + webhook pattern is the same every time — learn it once and apply it to everything. Never trust redirect URLs for payment confirmation; webhooks are the source of truth.</KeyPoint>

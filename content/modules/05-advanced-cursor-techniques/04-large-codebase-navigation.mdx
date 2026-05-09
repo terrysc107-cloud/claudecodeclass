@@ -1,0 +1,127 @@
+---
+title: "Working with Large Codebases"
+description: "Stay productive in enterprise-scale or complex client codebases using Claude Code's context tools and search-first strategies."
+order: 4
+duration: "8 min"
+videoUrl: "https://www.youtube.com/watch?v=i6FdGFNVGgc"
+coverImage: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What is a search-first approach in large codebases?"
+    options: ["Using grep before asking Claude anything", "Locating relevant files first, then building a focused context around them", "Searching for bugs before writing features", "Running Claude on every file sequentially"]
+    answer: 1
+  - question: "As a codebase grows larger, how does Claude Code's value change?"
+    options: ["Decreases — less context available", "Stays the same", "Increases — more complexity for AI to help with", "Depends on the programming language"]
+    answer: 2
+---
+
+The larger the codebase, the more valuable Claude Code becomes. Understanding a 200-file project manually takes days. With Claude Code and a deliberate strategy, you can be productive in hours.
+
+## The Core Challenge: Context Is Finite
+
+Claude Code's context window is large but not unlimited. A large codebase has far more code than fits in any single context window, which means you cannot simply point Claude at the whole repository and ask questions. The skill is curating the right subset of code for each task.
+
+The rule: **find first, then ask**. Use search tools to locate the relevant files before bringing them into a Claude session.
+
+## Search-First Approaches
+
+Use your terminal to locate relevant code before starting a Claude session:
+
+```bash
+# Find files that mention a concept
+grep -r "stripe" src/ --include="*.ts" -l
+
+# Find where a function is defined
+grep -r "function handleCheckout" src/
+
+# Find files modified recently (likely the ones you're working on)
+git log --oneline -10 --name-only
+```
+
+Once you know which files matter, open a focused Claude session:
+
+```
+I need to understand how Stripe checkout works in this project.
+The relevant files are: app/api/checkout/route.ts, lib/stripe.ts,
+and components/PricingCard.tsx. Read all three and explain
+how a purchase flows from button click to confirmation.
+```
+
+<Callout type="tip">
+Think of `/compact` as your friend in large codebase work. After Claude has helped you understand one module, compact the session before moving to the next. This keeps the context window fresh for each new area of the codebase rather than letting it fill up with context from areas you've already finished with.
+</Callout>
+
+## Navigation Patterns for Large Projects
+
+**Module-level orientation:**
+```
+Read the files in src/modules/billing/.
+What are the main files and what does each one do?
+What's the entry point and how do they connect?
+```
+
+**Dependency tracing:**
+```
+Read src/models/User.ts.
+What would break or need updating if I added a new required
+field to the User type?
+```
+
+**Change impact analysis:**
+```
+Read src/lib/database.ts.
+If I change the query() function signature here,
+what else in this codebase would need to be updated?
+```
+
+**Finding patterns:**
+```
+Read src/app/dashboard/, src/app/reports/, and src/app/settings/.
+How is data fetching handled across these three sections?
+Are the patterns consistent or are there discrepancies?
+```
+
+## The "Expert in a Day" Pattern
+
+For client onboarding or taking over a legacy project, use this sequence:
+
+1. Start a fresh Claude session
+2. Ask for a high-level architecture overview by reading key entry points and config files
+3. Ask for the riskiest or most complex areas ("Which files have the most complex logic or most potential for bugs?")
+4. Ask for the data model by reading the schema files
+5. Trace a key user flow (auth, payment, core feature) by reading the relevant files together
+
+<Callout type="info">
+This sequence takes 20–30 minutes. At the end of it, you'll have more context about the project than most developers who've been on it for weeks. That's the leverage. You can walk into a client kickoff or a new job with an understanding that normally takes months to develop organically.
+</Callout>
+
+## Using CLAUDE.md for Large Projects
+
+In a large codebase, your `CLAUDE.md` should include a project map — a brief guide to where things live:
+
+```
+## Project Structure
+- src/modules/ — feature modules, each self-contained
+- src/lib/ — shared utilities and service clients
+- src/models/ — data types and database schemas
+- app/api/ — API routes (Next.js App Router pattern)
+- All database access goes through src/lib/db.ts — never direct queries
+
+## Key Files to Know
+- src/lib/auth.ts — session handling
+- src/lib/db.ts — all database queries
+- src/middleware.ts — route protection
+```
+
+This lets Claude orient itself quickly in any session without you having to re-explain the project layout every time.
+
+## Targeted Context Over Broad Context
+
+For large codebases, resist the temptation to ask broad questions. Targeted questions with explicit file references produce far better results:
+
+Instead of: "How does auth work in this app?"
+
+Use: "Read src/lib/auth.ts and src/middleware.ts. Explain how a request is authenticated from the middleware check through to the session validation."
+
+The first question forces Claude to guess what's relevant. The second gives it exactly what it needs.
+
+<KeyPoint>Claude Code's value scales with codebase size. The strategy: search first to find relevant files, then build focused context around exactly what you need. Use /compact between distinct areas of work to keep the context window fresh. A large codebase understood in hours is the leverage you charge premium rates for.</KeyPoint>

@@ -1,0 +1,85 @@
+---
+title: "Install and Set Up Claude Code"
+description: "Get Claude Code installed, authenticated, and running your first command in under 10 minutes."
+order: 1
+duration: "7 min"
+videoUrl: "https://www.youtube.com/watch?v=yk9lXobkmgU"
+coverImage: "https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What is Claude Code built on?"
+    options: ["VS Code", "Node.js CLI / npm", "Electron", "JetBrains platform"]
+    answer: 1
+  - question: "Where do you configure Claude Code authentication?"
+    options: ["A GUI settings panel", "Via the ANTHROPIC_API_KEY environment variable or first-run prompt", "A web dashboard", "The Extensions panel"]
+    answer: 1
+---
+
+Claude Code is Anthropic's official CLI tool for AI-assisted development. It runs entirely in your terminal — no GUI, no editor plugin required. It reads and writes files, runs bash commands, and searches your codebase, all through natural language conversation.
+
+## Install Claude Code
+
+Claude Code is distributed as an npm package. Install it globally:
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+Once installed, the `claude` command is available everywhere in your terminal. Verify the install:
+
+```bash
+claude --version
+```
+
+## Authenticate with Your Anthropic API Key
+
+Claude Code authenticates against the Anthropic API. On first run, it will prompt you for your API key. You can also set it as an environment variable before launching:
+
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...
+claude
+```
+
+To make the key permanent, add the export line to your shell profile (`~/.zshrc`, `~/.bashrc`, or equivalent) so it's available in every new terminal session.
+
+<Callout type="tip">
+Your API key is available at console.anthropic.com. If you're evaluating Claude Code for a team, Anthropic also offers an Anthropic Console with usage controls and shared billing — worth setting up before rolling it out to multiple developers.
+</Callout>
+
+## Choose Your Model
+
+Claude Code supports multiple Claude models. The default is Claude Sonnet, which balances speed and capability well for most coding tasks. You can switch models per session or set a default:
+
+```bash
+claude --model claude-opus-4-5   # most capable, slower
+claude --model claude-sonnet-4-5  # default, best balance
+claude --model claude-haiku-3-5   # fastest, lighter tasks
+```
+
+For the work in this course — building real features, debugging production issues — Sonnet is the right starting point.
+
+## Your First Command
+
+Navigate to any project directory and launch Claude Code:
+
+```bash
+cd my-project
+claude
+```
+
+You're now in an interactive REPL. Try a simple question to confirm everything is working:
+
+```
+> What files are in this project?
+```
+
+Claude Code will list and describe the files it finds. That's it — you're set up.
+
+<Callout type="info">
+Claude Code runs in your terminal but understands your project like an IDE would. It indexes your files, reads your dependencies, and builds context about your codebase before answering. The first query in a new project may take a moment as it reads the structure.
+</Callout>
+
+## No Editor Required
+
+Unlike editor plugins, Claude Code works with any editor — Vim, VS Code, Zed, Emacs, or none at all. You run it in a terminal alongside whatever tools you already use. It reads and writes files directly on disk; your editor picks up the changes automatically.
+
+<KeyPoint>Claude Code is a terminal tool, not an editor plugin. Install it once with npm, authenticate with your Anthropic API key, and it works alongside any editor you already use — no configuration needed to get started.</KeyPoint>

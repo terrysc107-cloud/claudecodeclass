@@ -1,0 +1,114 @@
+---
+title: "Build a Feature End to End with Claude Code"
+description: "Go from a written spec to working, tested code in a single Claude Code session."
+order: 1
+duration: "12 min"
+videoUrl: "https://www.youtube.com/watch?v=GJLuTFAyMts"
+coverImage: "https://images.unsplash.com/photo-1537884944318-390069bb8665?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What is the first step in the spec-first workflow with Claude Code?"
+    options: ["Start the claude session", "Write a detailed spec describing the feature", "Run the existing tests", "Create a new branch"]
+    answer: 1
+  - question: "Why should you commit after Claude completes a significant implementation?"
+    options: ["To share the code with teammates", "To create a restore point before continuing", "Because Claude Code requires it", "To trigger CI"]
+    answer: 1
+---
+
+The spec-first workflow is the highest-leverage pattern in Claude Code. Instead of asking Claude to help as you write code, you write a detailed spec and let Claude implement it. You review, test, and refine.
+
+## Step 1: Write the Spec
+
+Before starting a Claude session, write a spec. This forces you to think through the feature completely and gives Claude the context it needs to produce coherent output:
+
+```
+FEATURE: User email notification preferences
+- Users can opt in/out of three notification types:
+  marketing, product updates, security alerts
+- Preferences stored in the user_preferences table
+  (already exists, just needs new columns)
+- Settings accessible from account page
+- API: PATCH /api/users/[id]/notifications
+- Email sent via the existing Resend integration at lib/email.ts
+- Follow the same form pattern as the profile settings page
+```
+
+<Callout type="tip">
+Write the spec before opening a Claude session. This does two things: it forces you to think through the feature completely before implementation, and it gives Claude the context it needs to produce coherent output. Vague prompts produce code you'll spend an hour cleaning up.
+</Callout>
+
+## Step 2: Orient Claude Before Building
+
+Start the session with a quick exploration pass:
+
+```
+Read lib/email.ts and explain how the email integration works.
+Read app/settings/page.tsx and describe the form pattern used there.
+```
+
+Use what Claude tells you to refine your spec prompt if needed. Now Claude has the context required to write code that fits.
+
+## Step 3: Implement the Feature
+
+Paste your spec and ask Claude to implement it:
+
+```
+Implement the notification preferences feature described below.
+Read the relevant existing files first, then make the changes.
+
+[paste spec]
+```
+
+Claude will read the referenced files, write the database migration if needed, implement the API endpoint, and update the UI — making real changes to your files. Watch the output and give feedback as it works.
+
+## Step 4: Commit a Checkpoint
+
+After Claude completes the implementation, review the changes with `git diff` and commit:
+
+```bash
+git add -A && git commit -m "feat: add notification preferences (WIP)"
+```
+
+This is your restore point. If subsequent edits go sideways, you can return here.
+
+<Callout type="info">
+Committing after each significant Claude session is one of the most underrated habits in AI-assisted development. You get clean, reviewable history. You also get a safe bailout point — which matters more when you're moving fast.
+</Callout>
+
+## Step 5: Run Tests and Fix Failures
+
+Ask Claude to run your test suite:
+
+```
+Run the tests with `npm test` and fix any failures.
+```
+
+Claude will run the tests, read the error output, trace the failures back to the relevant code, and make corrections — iterating until the suite is green.
+
+## Step 6: Handle Edge Cases
+
+After the main implementation is working, ask Claude to review for gaps:
+
+```
+Review the notification preferences implementation.
+What edge cases might I have missed? Are there any security concerns?
+Check the API endpoint for authorization — should any of these
+operations be restricted?
+```
+
+<Callout type="tip">
+This review step catches the things a spec doesn't think of: what happens when the database write fails, what happens if a user sends an invalid preference value, whether the endpoint properly rejects unauthenticated requests. Ask explicitly.
+</Callout>
+
+## Step 7: Clean Up and Ship
+
+After passing tests and addressing edge cases, do a final pass:
+
+```
+Are there any console.log statements or debug code left in
+the files we changed? Clean those up.
+Write a summary of what was implemented for the commit message.
+```
+
+The feature is ready to review, merge, and deploy.
+
+<KeyPoint>The best Claude Code prompt is a spec — describe the outcome and the constraints, not the implementation. A spec-first approach produces better code, cleaner git history, and features you can explain to clients and teammates.</KeyPoint>

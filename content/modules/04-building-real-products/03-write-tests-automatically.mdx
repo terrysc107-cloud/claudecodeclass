@@ -1,0 +1,135 @@
+---
+title: "Write Tests Automatically with Claude"
+description: "Generate unit and integration tests from existing code — and make them actually pass."
+order: 3
+duration: "9 min"
+videoUrl: "https://www.youtube.com/watch?v=9fg4nCKrpJg"
+coverImage: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What should you ask for beyond basic test cases?"
+    options: ["More tests", "Edge cases and error conditions", "Mock data", "Code coverage metrics"]
+    answer: 1
+  - question: "When a Claude-generated test fails, what should you do first?"
+    options: ["Delete the test", "Immediately ask for a fix", "Ask Claude to explain what the test is checking", "Update the source code to match"]
+    answer: 2
+---
+
+Tests are the thing developers know they should write more of and rarely do. With Claude Code, writing a test suite for a function takes 30 seconds. There's no longer a time-cost excuse.
+
+## Basic Test Generation
+
+Reference the file and ask Claude to write tests for it:
+
+```
+Read src/lib/pricing.ts and write a comprehensive test suite
+for the calculateDiscount function. Use Vitest. Cover:
+- Standard discount calculation
+- Zero-value inputs
+- Maximum discount cap
+- Invalid input types
+```
+
+Claude reads the actual function, understands what it does, and generates tests based on the real implementation — not a generic template.
+
+<Callout type="tip">
+Always ask specifically for edge cases. Default test generation covers the happy path. The valuable tests — the ones that catch real bugs — cover empty inputs, null values, boundary conditions, and error states. Ask for those explicitly.
+</Callout>
+
+## Running Tests Immediately
+
+After generating tests, ask Claude to run them:
+
+```
+Write the tests to src/lib/pricing.test.ts and then run
+`npm test` to verify they pass.
+```
+
+Claude writes the file, runs the tests, reads the output, and fixes any failures — all in one session. You end up with a passing test suite without copying code back and forth.
+
+## Integration Tests
+
+For API routes and more complex flows, give Claude the full context:
+
+```
+Read app/api/orders/route.ts, lib/stripe.ts, and lib/supabase/server.ts.
+Write integration tests for the POST /api/orders route. Test:
+- Successful order creation with valid payment
+- Failed payment (Stripe error)
+- Missing required fields
+- Unauthenticated request
+- Database write failure
+
+Mock Stripe and Supabase. Use Vitest.
+```
+
+The key is providing all the relevant files so Claude understands the dependencies before writing the tests.
+
+## When Tests Fail
+
+Generated tests sometimes fail, especially integration tests where the mocking setup is complex. Don't immediately ask for a fix. First ask Claude to explain the failure:
+
+```
+This test is failing: [paste output].
+Can you explain what the test is checking and what
+specifically is going wrong?
+```
+
+Understanding the failure tells you whether the test is wrong (needs updating) or the source code is wrong (needs fixing). They're different problems with different solutions.
+
+<Callout type="info">
+Sometimes a Claude-generated test reveals a real bug in your code. The test is correct, and it's correctly identifying a case your code doesn't handle. Before updating the test to pass, verify that the test expectation is actually what you want.
+</Callout>
+
+## Test-Driven Development with Claude
+
+An advanced workflow: write the tests before the implementation.
+
+Describe the function you want and ask Claude to write tests for it first:
+
+```
+Write tests for a validateOrderTotal function that:
+- Accepts an order object with items array and total
+- Verifies the total matches the sum of item prices
+- Throws if total is negative
+- Throws if items array is empty
+
+Use Vitest. Don't implement the function yet — just the tests.
+```
+
+Then ask Claude to implement the function:
+
+```
+Now implement validateOrderTotal in src/lib/orders.ts
+so that all these tests pass.
+```
+
+This test-first approach produces tighter, more reliable code and gives you confidence that the implementation matches the spec.
+
+<Callout type="tip">
+TDD with Claude is faster than traditional TDD because Claude writes the tests as quickly as it writes the implementation. The discipline of writing tests first — which most developers skip because it's slow — becomes essentially free.
+</Callout>
+
+## Retrofitting Tests
+
+For existing code without tests, attack it module by module:
+
+```
+Read src/lib/utils.ts and write tests for all exported functions.
+Focus on functions that handle data transformation or have
+conditional logic. Write the tests to src/lib/utils.test.ts
+and run them.
+```
+
+Work through your codebase systematically: utilities, API routes, service classes. Each module takes a few minutes. A module that previously had no tests is now covered.
+
+## Checking Coverage
+
+After writing tests, ask Claude to check what's missing:
+
+```
+Run `npm test -- --coverage` and tell me which functions
+in src/lib/pricing.ts have low coverage. Then write
+additional tests to cover the gaps.
+```
+
+<KeyPoint>Tests you'd skip writing manually take 30 seconds with Claude Code. Lack of test coverage is no longer a time problem — it's a habit problem. Make test generation a standard part of every feature delivery.</KeyPoint>

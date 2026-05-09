@@ -1,0 +1,110 @@
+---
+title: "Understanding Unfamiliar Code with Claude"
+description: "Use Claude Code to understand any codebase quickly — the skill that makes you valuable on client projects."
+order: 2
+duration: "8 min"
+videoUrl: "https://www.youtube.com/watch?v=KhJSKpHxFoU"
+coverImage: "https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What should you ask before making a change in unfamiliar code?"
+    options: ["Nothing, just start editing", "What would break if I changed this?", "How long will this take?", "What language is this?"]
+    answer: 1
+  - question: "How does Claude Code read files in your project?"
+    options: ["You must paste code into the chat", "It reads files directly from your filesystem", "It only reads files you explicitly upload", "It uses a separate indexing server"]
+    answer: 1
+---
+
+Understanding code you didn't write is one of the most time-consuming parts of development. With Claude Code, it's also one of the most leveraged — a few well-chosen questions can replace hours of manual reading.
+
+## Start at the Top Level
+
+Ask for a structural overview before looking at individual files:
+
+```
+Explain the overall structure of the src/api folder.
+What pattern is used for routing? How is authentication applied?
+```
+
+Then drill down:
+
+```
+Walk me through src/api/users/route.ts.
+What does each function do and when is it called?
+```
+
+Go from general to specific. Don't start at the line level — start at the architecture level. Claude can read the actual files and give you a grounded explanation, not a guess.
+
+## Map the Data Flow
+
+For most codebases, understanding the data flow is the key:
+
+```
+Trace the data flow for creating a new order.
+From the API request to the database write — what files are involved?
+```
+
+```
+How does the session token get from the auth response
+to being available in API route handlers?
+```
+
+<Callout type="tip">
+Ask Claude to explain the flow in plain language. "What touches what" is often more valuable than understanding any individual file. Once you see the flow, individual files make sense in context.
+</Callout>
+
+## Identify the Risky Parts
+
+Before making changes, understand the blast radius:
+
+```
+Read src/lib/payments.ts. What would break if I changed
+the charge() function signature?
+```
+
+```
+Which parts of the app depend on this shared utility function?
+Search the codebase for all call sites.
+```
+
+Claude can run `grep` and search commands on your behalf to find every place a function is used — something that would take significant manual effort to do accurately across a large codebase.
+
+<Callout type="warning">
+This "blast radius" check prevents the "I changed one thing and broke three others" problem that plagues work on unfamiliar codebases. Ask it before every significant change to code you didn't write.
+</Callout>
+
+## Understand the Patterns
+
+Every codebase has conventions: how errors are handled, how data is validated, how components receive props. Learn them before you write a single line:
+
+```
+How are form validation errors handled and displayed
+throughout this app? Read a few examples and summarize the pattern.
+```
+
+```
+What pattern is used for loading and error states
+in async data fetching components?
+```
+
+<Callout type="info">
+When you follow existing patterns, your code looks like it belongs. When you don't, you create inconsistencies that the next developer — or you in six months — will have to resolve. Claude makes it trivially easy to understand the patterns before you start writing.
+</Callout>
+
+## Tracing Dependencies
+
+Claude can run bash commands to trace dependencies you'd otherwise track manually:
+
+```
+Run `grep -r "import.*UserService" src/` to find everywhere
+UserService is imported. Then explain how it's used in each location.
+```
+
+This gives you a complete picture of what depends on what, grounded in the actual code rather than your assumptions about the code.
+
+## On Client Projects
+
+This skill is what makes you effective on client work. You can take on a complex existing codebase, orient quickly, and make changes confidently — instead of spending days reading before you can do anything useful.
+
+A client won't see the difference between you spending three days understanding their codebase manually and spending three hours with Claude Code. But your invoice will reflect the difference.
+
+<KeyPoint>Understanding before editing saves hours of debugging. Ask Claude "what would break if I changed this?" before touching anything in an unfamiliar codebase. It's the question that prevents expensive mistakes.</KeyPoint>

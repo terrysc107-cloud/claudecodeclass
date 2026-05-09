@@ -1,0 +1,102 @@
+---
+title: "Claude Code Interface Tour"
+description: "A focused walkthrough of the terminal interface, slash commands, and every interaction mode you'll use every day."
+order: 3
+duration: "6 min"
+videoUrl: "https://www.youtube.com/watch?v=gqUQbjsYZLQ"
+coverImage: "https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "How do you start a Claude Code session?"
+    options: ["Double-click an icon", "Run `claude` in your terminal", "Open a browser tab", "Press Cmd+Shift+C"]
+    answer: 1
+  - question: "What file configures project-level context for Claude Code?"
+    options: [".env", "CLAUDE.md", ".clauderc", "claude.config.json"]
+    answer: 1
+---
+
+Claude Code's interface is a terminal REPL. There are no panels to click through, no toolbars, and no mouse required. Once you understand the interaction model and the key slash commands, you know the whole tool.
+
+## Starting a Session
+
+Navigate to your project root and run:
+
+```bash
+claude
+```
+
+You land in an interactive prompt. Claude Code reads your working directory immediately — it knows your file structure, package.json, README, and any CLAUDE.md context file before you type your first message.
+
+## The REPL
+
+The REPL (Read-Eval-Print Loop) is where all interaction happens. You type a message, Claude responds, and the conversation continues. Unlike a one-shot CLI tool, Claude Code maintains full context across turns in a session — you can refer back to earlier exchanges, ask follow-up questions, and iteratively refine.
+
+```
+> Add a validation function for email addresses to utils/validation.ts
+> Now add a test for it in the corresponding test file
+> Make the regex stricter — it should reject addresses without a TLD
+```
+
+Each message builds on the last. Claude Code tracks what it has read and written during the session.
+
+<Callout type="tip">
+The mental model: this is a conversation with a developer who has read your entire codebase and has terminal access to your machine. Talk to it accordingly — give it the same context you'd give a senior engineer joining your project.
+</Callout>
+
+## Slash Commands
+
+Slash commands control the session itself. The most useful ones:
+
+- `/help` — list all available commands
+- `/clear` — clear the conversation history and start fresh
+- `/compact` — compress the conversation to save context window space on long sessions
+- `/model` — switch the active Claude model mid-session
+- `/cost` — show token usage and estimated cost for the current session
+- `/quit` — exit Claude Code
+
+Type `/help` at any point to see the full list. These commands are consistent across every project.
+
+## CLAUDE.md — Your Project Context File
+
+CLAUDE.md is a Markdown file you place at your project root (or in subdirectories). Claude Code reads it automatically at session start. Use it to establish:
+
+- Project description and tech stack
+- Coding conventions and style rules
+- Commands to run tests or lint
+- Architectural decisions and constraints
+- Things Claude should never do (e.g., "never edit generated files in /dist")
+
+```markdown
+# My Project
+
+Next.js 14 app with a Supabase backend.
+
+## Commands
+- `npm run dev` — start dev server
+- `npm test` — run Jest suite
+
+## Conventions
+- Use server components by default
+- Never edit files in /generated
+```
+
+<Callout type="info">
+CLAUDE.md is the Claude Code equivalent of a .cursorrules or .editorconfig file. The more specific it is, the less you need to repeat yourself in conversation. Write it once, benefit every session.
+</Callout>
+
+## Context Window Awareness
+
+Claude Code has a large but finite context window. On very long sessions with many files touched, the context can fill up. The `/compact` command compresses the conversation history to a summary, freeing up space while preserving the key decisions made so far.
+
+For most sessions — a feature, a debugging run, a refactor — you'll never need to think about context limits. But for very long agentic sessions spanning dozens of files, keep `/compact` in mind.
+
+## Non-Interactive Mode
+
+Claude Code also works without the REPL for scripting:
+
+```bash
+claude -p "What does the auth module do?" --output-format json
+```
+
+The `-p` flag runs a single prompt and exits — useful for CI pipelines, shell scripts, or tooling that wraps Claude Code.
+
+<KeyPoint>Learn the REPL, the slash commands, and CLAUDE.md. Those three things cover everything you'll do in Claude Code. The interface is intentionally minimal — power comes from how you write your prompts and configure your project context.</KeyPoint>

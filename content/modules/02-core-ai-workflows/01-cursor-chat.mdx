@@ -1,0 +1,102 @@
+---
+title: "Conversational Coding with Claude"
+description: "Use Claude's conversation mode to ask questions about your code, understand errors, and get explanations grounded in your actual codebase."
+order: 1
+duration: "8 min"
+videoUrl: "https://www.youtube.com/watch?v=kJ96MBiCo10lOw"
+coverImage: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What is conversational mode in Claude Code best used for?"
+    options: ["Generating new files", "Asking questions and getting explanations", "Running terminal commands", "Committing code"]
+    answer: 1
+  - question: "How do you give Claude Code context about a specific file?"
+    options: ["Drag it into the terminal", "Mention the file path in your message", "Copy-paste the contents", "Right-click the file"]
+    answer: 1
+---
+
+Claude Code is your on-demand senior developer. It knows your codebase, reads the files you point it to, and gives answers grounded in your actual code — not generic documentation.
+
+## Starting a Conversation
+
+Launch Claude Code in your project root:
+
+```bash
+claude
+```
+
+Every message you send is part of an ongoing conversation. Claude Code maintains context across turns, so you can ask follow-up questions, request clarifications, and build on previous answers without re-explaining the situation.
+
+## Pointing Claude at Specific Files
+
+Conversations become much more useful when you reference the exact file or function in question. Just mention the path in your message:
+
+```
+> Look at src/api/routes/users.ts — why would this endpoint return a 401
+  even when a valid token is passed in the Authorization header?
+```
+
+Claude Code will read the file and reason about the specific code, not give a generic answer about JWT validation.
+
+You can reference multiple files in a single message:
+
+```
+> Compare how auth is handled in routes/admin.ts versus routes/public.ts.
+  Are there any inconsistencies I should fix?
+```
+
+<Callout type="tip">
+Be specific about which file and function you're asking about. The more precise your question, the more actionable the answer. "Why is auth failing?" is harder to answer well than "In middleware/auth.ts, why would the verifyToken call on line 34 return null for a valid token?"
+</Callout>
+
+## What to Ask
+
+Claude Code's conversation mode is best for questions that require understanding before acting:
+
+- "What does this function do and what are its edge cases?"
+- "Why would this query be slow on large datasets?"
+- "What's the difference between how auth is handled in these two routes?"
+- "If I change this interface, what else would break?"
+- "What would happen if this promise rejects and there's no catch?"
+
+It's not a search engine — it's a reasoning tool. Ask it to explain, compare, predict consequences, and identify risks.
+
+## Multi-Turn Conversations
+
+Claude Code maintains context within a session. You can ask a follow-up without re-explaining:
+
+```
+> What does the processPayment function do?
+
+> What happens if the Stripe API call times out?
+
+> Is there anywhere else in the codebase that calls processPayment without
+  handling that timeout case?
+```
+
+Each message builds on the last. Claude Code tracks what it has read and said.
+
+When you're done with one topic and starting a new one, use `/clear` to reset the conversation. Stale context from a previous debugging session can influence — and occasionally skew — answers on an unrelated topic.
+
+<Callout type="info">
+Claude Code's conversation mode does not make changes to your files unless you explicitly ask it to. It only reads and explains. When you're ready to implement something, ask it to make the change. Use conversation to understand first, then act.
+</Callout>
+
+## Debugging via Conversation
+
+When you hit an error, paste the full stack trace and ask:
+
+```
+> I'm getting this error when I run the tests:
+  TypeError: Cannot read properties of undefined (reading 'userId')
+  at validateSession (middleware/session.ts:42:18)
+  
+  What's causing it and how should I fix it?
+```
+
+Claude Code reads the referenced file and traces the logic from the error back to the root cause. It will often identify not just the immediate fix but also why the situation can arise — which helps you prevent the same class of error elsewhere.
+
+## Before You Search
+
+Make it a habit: before you open a browser tab to search for something, ask Claude Code first. It will answer in the context of your actual code, which a generic search result can't do. The answer will be faster, more specific, and already adapted to your tech stack.
+
+<KeyPoint>Claude Code's conversation mode is your on-demand senior dev — use it before searching the web. It reads your actual code, reasons about your specific situation, and gives answers a Stack Overflow result never could.</KeyPoint>

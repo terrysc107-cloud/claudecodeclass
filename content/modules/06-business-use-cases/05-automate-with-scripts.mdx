@@ -1,0 +1,115 @@
+---
+title: "Automate with Scripts and Claude Code"
+description: "Build Python and Node scripts that solve real business problems — and charge for them as standalone deliverables."
+order: 5
+duration: "9 min"
+videoUrl: "https://www.youtube.com/watch?v=kJ96MBiMtCg"
+coverImage: "https://images.unsplash.com/photo-1518186285589-2f7649de83e0?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "How should you price a script that saves a client 5 hours per week?"
+    options: ["$50 — it was fast to build", "Based on the time it saves the client, not how long it took to build", "$500 per hour of your time", "Free, as part of a larger project"]
+    answer: 1
+  - question: "What is a high-value automation niche mentioned in this lesson?"
+    options: ["Building games", "Spreadsheet and data pipeline automation", "Mobile apps", "Browser themes"]
+    answer: 1
+---
+
+Scripts are one of the most underrated revenue streams for developers. A 50-line Python script that saves a client 5 hours per week is worth $500–$2,000 as a one-time delivery — and the same client will pay you again when they need updates or a new automation.
+
+## The Prompt Pattern for Scripts
+
+Describe the business problem in plain language:
+
+```
+Build a Python script that:
+- Reads from a Google Sheets spreadsheet (via the Sheets API)
+  containing customer orders (columns: order_id, customer_email,
+  product, quantity, ship_date)
+- Filters for orders where ship_date is today
+- Sends a shipping notification email to each customer
+  via SendGrid with their order details
+- Logs which emails were sent to a CSV file with timestamp
+- Runs without manual intervention (suitable for a cron job)
+
+Use environment variables for all API keys.
+Include a requirements.txt.
+Add comprehensive error handling and logging — this runs unattended.
+```
+
+<Callout type="tip">
+The most valuable automations are the ones that touch spreadsheets, emails, and reports — because those are the manual tasks that eat the most time at small and mid-size businesses. If a business has a person whose job involves a lot of copy-paste between systems, that's a $500–$2,000 automation waiting to be built.
+</Callout>
+
+## High-Value Automation Niches
+
+**Data pipelines:**
+- Pulling data from one system, transforming it, writing to another
+- CSV → database imports on a schedule
+- Syncing records between two SaaS tools via API
+
+**Report generation:**
+- Weekly PDF reports generated from database queries
+- Automatically emailed to stakeholders every Monday morning
+- Formatted with charts and tables
+
+**Notification systems:**
+- Alert when inventory drops below a threshold
+- Notify a team when a payment is overdue
+- Daily summary of key metrics via Slack or email
+
+**Spreadsheet automation:**
+- Clean and validate data from form submissions
+- Merge multiple spreadsheets on a schedule
+- Auto-calculate formulas and update a master sheet
+
+## Claude Code's Script Workflow
+
+1. **Describe the input and output** in your prompt (what does the script read? what does it produce?)
+2. **Ask Claude to include error handling and logging** explicitly — don't assume it will
+3. **Review the generated script** — read every line, especially the API calls and error handling
+4. **Test with real data** — small sample first, full dataset after
+5. **Ask Claude to add a dry-run mode** so you can verify behavior without side effects
+
+For scripts that call external APIs, ask Claude to also write a brief README with setup instructions — clients need to know how to configure credentials and run it.
+
+<Callout type="info">
+Ask Claude Code to include comprehensive error handling and logging in every script. Scripts that run on a schedule at 2am without anyone watching need to fail loudly: write to a log file, send a failure email, or both. A silent failure in an automation is worse than no automation at all.
+</Callout>
+
+## Building CLI Tools
+
+Claude Code is also well-suited to building CLI tools — scripts with flags and subcommands that developers or power users run manually:
+
+```
+Build a Node.js CLI tool that:
+- Takes a CSV file path as input
+- Validates each row against a schema (email format, required fields)
+- Outputs a report of validation errors with row numbers
+- Has a --fix flag that attempts to clean common issues (trim whitespace,
+  normalize phone numbers)
+- Exits with code 1 if there are unfixable errors, 0 if clean
+
+Use commander.js for argument parsing. Include a bin entry in package.json.
+```
+
+Claude Code can generate the argument parsing, help text, error messages, and exit codes — the boilerplate that makes CLI tools feel polished.
+
+## Pricing Scripts
+
+Anchor your price to the value saved, not the time spent:
+
+- Script saves 5 hrs/week at $30/hr labor cost = $150/week saved = $7,800/year
+- Charging $1,000–$2,000 for that script is a 4–8x ROI for the client in the first year alone
+
+Most clients will see that math and say yes immediately.
+
+## Recurring Revenue from Scripts
+
+After delivery, offer a support/maintenance package:
+
+- $100–$300/month to keep the script running, handle API changes, and make small adjustments
+- Position it as "we monitor and maintain so you don't have to"
+
+One automation with a maintenance retainer is $1,200–$3,600/year of recurring revenue. Claude Code makes the maintenance fast enough that it's nearly pure margin.
+
+<KeyPoint>A 50-line script that saves a client 5 hours/week is worth $500–$2,000. Price on ROI, not time spent. Then offer a maintenance retainer and turn a one-time project into recurring income.</KeyPoint>

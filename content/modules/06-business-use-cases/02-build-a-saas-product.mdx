@@ -1,0 +1,121 @@
+---
+title: "Build a SaaS Product with Claude Code"
+description: "Build a full SaaS with auth, payments, and a database using Claude Code — from zero to deployed."
+order: 2
+duration: "14 min"
+videoUrl: "https://www.youtube.com/watch?v=mFBiCo10lOw"
+coverImage: "https://images.unsplash.com/photo-1537884944318-390069bb8665?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What is the recommended stack for a fast SaaS build with Claude Code?"
+    options: ["Django + Stripe + Heroku", "Next.js + Supabase + Stripe + Vercel", "Laravel + MySQL + DigitalOcean", "Rails + PostgreSQL + Fly.io"]
+    answer: 1
+  - question: "What is the biggest remaining bottleneck when building SaaS with AI?"
+    options: ["Writing the code", "Designing the UI", "Defining clearly what you're building", "Setting up the database"]
+    answer: 2
+---
+
+Building a SaaS product used to require weeks of work before you had anything to show. With Claude Code and the right stack, you can go from idea to deployed product in a few days — sometimes less.
+
+## The Stack
+
+This is the fastest proven stack for building SaaS:
+
+- **Next.js 15** (App Router, TypeScript) — full-stack framework
+- **Supabase** — Postgres database + auth + storage, hosted
+- **Stripe** — payments and subscriptions
+- **Vercel** — zero-config deployment
+- **Tailwind CSS** — styling
+
+Each of these has excellent documentation that Claude can reference. They integrate well together. This specific stack has been validated by thousands of indie SaaS products.
+
+## The CLAUDE.md for SaaS
+
+Before writing a single line of code, set up your `CLAUDE.md`:
+
+```
+You are building a SaaS application.
+
+## Stack
+- Next.js 15 App Router with TypeScript
+- Supabase for auth and database (Postgres)
+- Stripe for payments
+- Tailwind CSS for styling
+
+## Architecture Rules
+- All database access through lib/db.ts — never inline queries
+- All auth checks through lib/auth.ts
+- API routes follow the pattern in app/api/example/route.ts
+- Monetary values always in cents (integers)
+- Use the service role Supabase client only in webhook handlers
+
+## Do Not
+- Use any TypeScript 'any' types
+- Bypass Row Level Security without an explicit comment explaining why
+- Add npm packages without asking first
+```
+
+## Start From a Template
+
+Don't start from scratch. Use a starter that already has auth and payments wired up. Open the starter project with Claude Code and begin by understanding the existing scaffolding:
+
+```
+Read the following files and explain how the auth flow works:
+middleware.ts, lib/auth.ts, app/api/auth/route.ts, app/(auth)/login/page.tsx.
+How does a user go from signing up to accessing a protected route?
+```
+
+Understand the existing patterns before building on top of them — this prevents the most common class of mistakes where new code doesn't fit the existing structure.
+
+## Building the Core Feature
+
+With the foundation in place, use Claude Code to build your product's core feature. Be specific:
+
+```
+Build a link shortener feature:
+- API: POST /api/links creates a short link, stores in the links table
+  (url, slug, user_id, created_at, click_count)
+- API: GET /api/links returns all links for the current user
+- API: GET /[slug] redirects and increments click_count
+- UI: /dashboard/links page showing all links with stats and a form to create new ones
+- Follow the existing auth pattern — only authenticated users can create links
+```
+
+<Callout type="tip">
+Keep each Claude session focused on one feature at a time. The auth system, the Stripe integration, and the core product feature are three separate work sessions. Build them in that order — auth first, then payments, then the product. The foundation must exist before you build on it. Use `/clear` between sessions to start each one fresh.
+</Callout>
+
+## Adding Stripe Payments
+
+Once the core feature works, add payments. The next lesson covers this in detail, but the high-level flow:
+
+1. Create a Stripe product and price in the Stripe dashboard
+2. Ask Claude to build a checkout session API route
+3. Build a pricing page that calls it
+4. Build a webhook handler that grants access on successful payment
+5. Gate your core feature behind the payment check
+
+<Callout type="warning">
+Always test your auth flow manually — sign up, confirm email, sign in, sign out, try to access a protected route while signed out. AI-generated auth code is usually correct, but auth bugs are too consequential to trust without hands-on testing. Catch them before your first customer does.
+</Callout>
+
+## The Deploy
+
+```bash
+vercel deploy --prod
+```
+
+Add your environment variables in the Vercel dashboard. Your app is live. Claude Code can help you write the environment variable documentation so you don't forget anything:
+
+```
+List all environment variables this project requires,
+what each one is for, and where to find the value.
+Format it as a setup checklist.
+```
+
+## The Real Bottleneck
+
+The bottleneck in SaaS development is no longer writing code — it's clarity about what you're building. Claude Code can implement anything you can clearly specify. The skill that matters is your ability to define a product clearly enough that the specification is buildable.
+
+Spend time thinking about what the product does before writing a single prompt. That thinking time is the highest-leverage investment.
+
+<KeyPoint>The limiting factor for shipping SaaS is no longer code — it's your ability to define what you're building. A precise spec runs through Claude Code and comes back as working software. Vagueness produces vagueness. Clarity produces products.</KeyPoint>

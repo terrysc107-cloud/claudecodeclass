@@ -1,0 +1,198 @@
+---
+title: "Reusable Templates and CLAUDE.md Starters"
+description: "Build a library of CLAUDE.md templates for different project types and reusable prompt patterns that make every new project faster."
+order: 3
+duration: "9 min"
+videoUrl: "https://www.youtube.com/watch?v=mFBiCo10lOw"
+coverImage: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "Where should client-specific configuration in a template be stored?"
+    options: ["Hardcoded throughout the codebase", "In environment variables and a clearly marked config file", "In the README", "In a separate private repo"]
+    answer: 1
+  - question: "What should you include in a project template to make it immediately useful with Claude Code?"
+    options: ["Just the code", "The code, a CLAUDE.md, setup docs, and example prompts", "Only documentation", "A video walkthrough"]
+    answer: 1
+---
+
+Every project you build with Claude Code is also an asset. Extract the pattern — especially the `CLAUDE.md` — into a reusable template and you can start every future project with Claude already oriented, already knowing the conventions, already ready to contribute.
+
+## What Goes in a CLAUDE.md
+
+A good `CLAUDE.md` gives Claude everything it needs to work productively on the project without you having to explain it every session:
+
+```markdown
+# Project: [Name]
+# Stack: [list the key technologies]
+# Last updated: [date]
+
+## What This Is
+[One paragraph: what the product does and who it's for]
+
+## Architecture
+[Describe the project structure and major patterns]
+
+## Conventions
+[The specific conventions this project follows — naming, file structure, patterns]
+
+## Tech Decisions
+[Brief explanation of key choices and why — helps Claude understand the intent]
+
+## Do Not
+[Things Claude should never do in this project — e.g., "don't add new dependencies without asking"]
+
+## Current State
+[What's working, what's in progress, what's fragile or incomplete]
+
+## When Unsure
+[What to do when requirements are ambiguous — e.g., "ask before creating new files"]
+```
+
+The "When Unsure" and "Do Not" sections are often the most valuable. They encode the decisions you've already made so Claude doesn't relitigate them.
+
+<Callout type="tip">
+After finishing any project, spend 30 minutes cleaning it into a template: remove client-specific data, extract hard-coded values to environment variables, polish the CLAUDE.md to be generic and reusable. That 30 minutes can save you hours on every future project of the same type.
+</Callout>
+
+## CLAUDE.md Templates by Project Type
+
+### Next.js SaaS Starter
+
+```markdown
+# Project: [SaaS Name]
+# Stack: Next.js 14, TypeScript, Supabase, Stripe, Tailwind CSS
+# Last updated: [date]
+
+## What This Is
+A SaaS application with user authentication, subscription billing, and a
+protected dashboard. Users sign up, choose a plan, and access features
+gated by their subscription tier.
+
+## Architecture
+- /app — Next.js App Router pages and layouts
+- /components — Shared UI components
+- /lib — Utility functions, Supabase client, Stripe helpers
+- /types — TypeScript type definitions
+
+## Conventions
+- Use Server Components by default; add "use client" only when necessary
+- Supabase queries go in /lib/db — never inline in components
+- All Stripe operations happen server-side only
+- Form validation with Zod schemas
+
+## Do Not
+- Do not expose Stripe secret keys or Supabase service role key to the client
+- Do not bypass Row Level Security in Supabase
+- Do not add new npm packages without checking if we already have something that does it
+```
+
+### Python Script/Automation
+
+```markdown
+# Project: [Script Name]
+# Stack: Python 3.11+, [key libraries]
+# Last updated: [date]
+
+## What This Does
+[One clear sentence about what this script automates]
+
+## How to Run
+[The exact command to run it]
+
+## Key Files
+- main.py — entry point
+- config.py — all configuration constants
+- [other key files]
+
+## Conventions
+- All configuration goes in config.py or .env — never hardcoded
+- Functions should be short and single-purpose
+- Log meaningful output at INFO level; debug detail at DEBUG level
+
+## Do Not
+- Do not swallow exceptions silently
+- Do not write to files without checking if they exist first
+```
+
+### REST API (Node.js/Express or FastAPI)
+
+```markdown
+# Project: [API Name]
+# Stack: [Node/Express or Python/FastAPI], [database], [auth method]
+# Last updated: [date]
+
+## What This Is
+A REST API for [describe what it serves].
+
+## Route Structure
+[Brief description of the main route groups and what they do]
+
+## Conventions
+- All routes return { data, error } shape
+- Authentication via [method] — middleware in /middleware/auth
+- Input validation happens at the route handler before any business logic
+- Database queries are isolated in /repositories
+
+## Error Handling
+- Use the centralized error handler in /middleware/error
+- Always return appropriate HTTP status codes
+- Never expose stack traces in production responses
+```
+
+## Building a Prompt Library
+
+Beyond `CLAUDE.md`, build a personal library of reusable prompts for common development tasks. Store them as text files or snippets:
+
+**Code review prompt:**
+```
+Review the changes in my current branch.
+Focus on: correctness, edge cases, and security.
+Flag anything that looks like it could fail in production.
+Don't comment on style unless it's genuinely confusing.
+```
+
+**Refactor prompt:**
+```
+Refactor [file/function] with these goals:
+1. Improve readability
+2. Reduce duplication
+3. Maintain identical behavior — this is not a feature change
+Show me the refactored version and explain any non-obvious decisions.
+```
+
+**Debug prompt:**
+```
+I'm seeing this error: [paste error]
+It happens when: [describe the trigger]
+Here's the relevant code: [paste or reference file]
+What's causing it and how do I fix it?
+```
+
+<Callout type="info">
+A prompt library might feel like overkill until the third time you've typed the same debugging prompt from scratch. Five minutes spent writing a good reusable prompt pays off every time you use it. Store them in a `~/.claude-prompts/` directory and paste them in when needed.
+</Callout>
+
+## GitHub Template Repos
+
+For code templates, mark your GitHub repo as a "Template repository" in Settings. This adds a "Use this template" button that creates a clean copy with a single click — no fork, no git history clutter. Include a polished `CLAUDE.md` in the repo so anyone who uses the template gets Claude oriented immediately.
+
+Structure your template repo for the next developer (including future you):
+
+```
+my-saas-template/
+  CLAUDE.md          ← The most important file
+  .env.example       ← All required variables documented
+  README.md          ← Setup guide from clone to deployed
+  src/               ← Clean, documented source code
+```
+
+## Maintaining Your Template Library
+
+Templates need maintenance. Every time you start a new project from a template and immediately change something, that change should probably go back into the template. Build the habit:
+
+1. Start project from template
+2. Note any immediate changes you have to make
+3. After the project is done, fold those improvements back into the template
+
+Over a year of this, your templates become significantly more polished and your project startup time drops to almost nothing.
+
+<KeyPoint>A library of well-crafted CLAUDE.md templates is one of the highest-leverage investments you can make in your development workflow. Every new project starts with Claude already oriented to the stack, the conventions, and the constraints — instead of you explaining it from scratch every time.</KeyPoint>

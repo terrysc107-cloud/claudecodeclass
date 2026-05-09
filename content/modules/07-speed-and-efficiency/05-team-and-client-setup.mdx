@@ -1,0 +1,118 @@
+---
+title: "Setting Up Teams and Clients with Claude Code"
+description: "How to share CLAUDE.md with teams, onboard clients to Claude Code workflows, and establish conventions that everyone benefits from."
+order: 5
+duration: "8 min"
+videoUrl: "https://www.youtube.com/watch?v=LSFpASs8aSI"
+coverImage: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "Where should the shared CLAUDE.md live in a team project?"
+    options: ["Each developer's home directory", "The project root, committed to git", "A shared Notion page", "The team lead's machine only"]
+    answer: 1
+  - question: "What file provides rich context about why architectural decisions were made, specifically for AI agents?"
+    options: ["CLAUDE.md", "AGENTS.md", "README.md", "SETUP.md"]
+    answer: 1
+---
+
+When multiple people use Claude Code on the same project, shared configuration ensures everyone gets consistent, high-quality output. A team without shared context is a team where every developer gets a different version of AI assistance — and produces code in different styles.
+
+## The Shared CLAUDE.md
+
+The `CLAUDE.md` file belongs in the project root and should be committed to git. Everyone who opens the project gets the same instructions:
+
+```markdown
+# Project: [Name]
+# Stack: [list]
+# Last updated: [date]
+
+## Architecture
+[Describe the project structure and major patterns]
+
+## Conventions
+[Document the specific conventions this team follows]
+
+## Do Not
+[List things Claude should never do in this project]
+
+## When Unsure
+[Describe what to do when requirements are ambiguous]
+```
+
+The "When Unsure" section is often the most valuable. It captures decisions the team has already made so Claude doesn't relitigate them on every developer's machine.
+
+<Callout type="tip">
+Treat CLAUDE.md like living documentation. Schedule a brief team review monthly or after any major architectural decision. Stale context is worse than no context — it causes Claude to produce code that contradicts current standards. The most recent architectural decisions should always be reflected.
+</Callout>
+
+## AGENTS.md for Richer AI Context
+
+Beyond `CLAUDE.md`, create an `AGENTS.md` file in the root that provides context for AI agents about the *why* behind the project:
+
+```markdown
+# Project Context for AI Agents
+
+## What This Is
+[One paragraph on the product and its users]
+
+## Tech Decisions
+[Brief explanation of key architectural choices and why they were made]
+
+## Current Development State
+[What's in progress, what's stable, what's fragile or needs care]
+
+## Team Conventions
+[Communication patterns, review process, deployment cadence]
+
+## Things to Know
+[Domain knowledge, business logic nuances, gotchas that aren't obvious from the code]
+```
+
+`AGENTS.md` is specifically for context that helps AI understand *why* things are the way they are — not just what they are. The code tells Claude what exists; `AGENTS.md` tells it why it exists that way.
+
+## Team Onboarding with Claude Code
+
+New developer joining the team? Their first day workflow:
+
+1. Clone the repo
+2. `cd` into the project directory
+3. Run `claude`
+4. Ask: "Walk me through this project. I'm a new developer starting today."
+
+With a good `CLAUDE.md` and `AGENTS.md`, Claude will give them a coherent, accurate onboarding briefing. It explains the architecture, the conventions, the current state of development, and the things to be careful about.
+
+What used to take a day of pairing with a senior developer now takes 30 minutes. And unlike a senior developer's verbal explanation, it's available at any hour and can be asked again with follow-up questions.
+
+## Establishing Team Conventions
+
+Before the first team member opens the project, the team should agree on a few things and commit them to `CLAUDE.md`:
+
+**Model usage** — which model tier does the team use by default? Consistent model selection produces more consistent output across the team.
+
+**Prompt patterns** — create a shared `/docs/claude-prompts.md` with the team's go-to prompts for common tasks. Everyone uses the same prompts for code review, debugging, and documentation generation.
+
+**Review process** — does AI-generated code get the same review as human-written code? (It should.) Document this in `CLAUDE.md` under conventions.
+
+**Context updates** — who is responsible for keeping `CLAUDE.md` current? Assign it explicitly or it won't happen.
+
+<Callout type="info">
+When Claude Code is new to the team, it helps to run a short workshop: everyone reads CLAUDE.md together, proposes improvements, and uses Claude Code to solve one real problem. This builds shared vocabulary and surfaces assumptions before they become inconsistencies in the codebase.
+</Callout>
+
+## Handing Off to Clients
+
+When delivering a project to a client who will continue development:
+
+1. Include a polished `CLAUDE.md` in the repo
+2. Write it from the perspective of a new developer onboarding to this specific codebase
+3. Include the client's conventions and anything specific to their requirements
+4. Add a brief note in the README: "This CLAUDE.md file configures AI coding assistants for this project — keep it updated as the project evolves"
+
+A client who opens your delivered codebase, runs `claude`, and immediately gets well-configured AI assistance will see it as exceptional work — and they'll be right. It signals that you thought about the maintainability of the project, not just shipping the features.
+
+## Protecting Your Work After Handoff
+
+When you hand off a project with a great `CLAUDE.md` and `AGENTS.md`, you're also protecting your own work. Clear context makes it harder for the next developer to unknowingly break conventions or introduce inconsistencies. Your code stays clean even after you're gone.
+
+A developer working on an undocumented codebase with Claude Code will have Claude make educated guesses about conventions. Some of those guesses will be wrong. A well-maintained `CLAUDE.md` eliminates the guesswork entirely.
+
+<KeyPoint>A team with a shared, committed CLAUDE.md produces more consistent code than a team without one. Treat it as the authoritative source of project conventions for both humans and AI — keep it updated, review it regularly, and make updating it part of the definition of "done" for any significant change.</KeyPoint>
