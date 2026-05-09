@@ -1,6 +1,6 @@
 ---
-title: "Build Reusable Templates"
-description: "Package your Cursor workflows into project starters you can reuse — and sell."
+title: "Reusable Templates and CLAUDE.md Starters"
+description: "Build a library of CLAUDE.md templates for different project types and reusable prompt patterns that make every new project faster."
 order: 3
 duration: "9 min"
 videoUrl: "https://www.youtube.com/watch?v=mFBiCo10lOw"
@@ -9,67 +9,190 @@ quiz:
   - question: "Where should client-specific configuration in a template be stored?"
     options: ["Hardcoded throughout the codebase", "In environment variables and a clearly marked config file", "In the README", "In a separate private repo"]
     answer: 1
-  - question: "What should you include in a template to make it valuable to other developers?"
-    options: ["Just the code", "The code, .cursorrules, setup docs, and a demo", "Only documentation", "A video walkthrough"]
+  - question: "What should you include in a project template to make it immediately useful with Claude Code?"
+    options: ["Just the code", "The code, a CLAUDE.md, setup docs, and example prompts", "Only documentation", "A video walkthrough"]
     answer: 1
 ---
 
-Every project you build with Cursor is also an asset. Extract the pattern into a reusable template and you can sell it, speed up future projects, and build a catalog of sellable products from work you're already doing.
+Every project you build with Claude Code is also an asset. Extract the pattern — especially the `CLAUDE.md` — into a reusable template and you can start every future project with Claude already oriented, already knowing the conventions, already ready to contribute.
 
-## What Makes a Good Template
+## What Goes in a CLAUDE.md
 
-A template is not just "the code." A good template includes:
+A good `CLAUDE.md` gives Claude everything it needs to work productively on the project without you having to explain it every session:
 
-- **The working codebase** — clean, documented, production-ready
-- **A `.cursorrules` file** — so any developer who uses it can get productive immediately
-- **Environment variable documentation** — what each variable does and where to get it
-- **A setup guide** — step-by-step from clone to deployed
-- **A demo or screenshots** — so buyers can see what they're getting
+```markdown
+# Project: [Name]
+# Stack: [list the key technologies]
+# Last updated: [date]
 
-The `.cursorrules` file is what separates a professional template from a raw code dump. It tells Cursor what the project is, how it's structured, and how to add to it — making the template immediately useful for AI-assisted development.
+## What This Is
+[One paragraph: what the product does and who it's for]
+
+## Architecture
+[Describe the project structure and major patterns]
+
+## Conventions
+[The specific conventions this project follows — naming, file structure, patterns]
+
+## Tech Decisions
+[Brief explanation of key choices and why — helps Claude understand the intent]
+
+## Do Not
+[Things Claude should never do in this project — e.g., "don't add new dependencies without asking"]
+
+## Current State
+[What's working, what's in progress, what's fragile or incomplete]
+
+## When Unsure
+[What to do when requirements are ambiguous — e.g., "ask before creating new files"]
+```
+
+The "When Unsure" and "Do Not" sections are often the most valuable. They encode the decisions you've already made so Claude doesn't relitigate them.
 
 <Callout type="tip">
-After finishing any project, take 30 minutes to turn it into a template: remove client-specific data, extract hard-coded values to environment variables, write a setup guide, add a .cursorrules file. That 30 minutes can generate passive income for months or years.
+After finishing any project, spend 30 minutes cleaning it into a template: remove client-specific data, extract hard-coded values to environment variables, polish the CLAUDE.md to be generic and reusable. That 30 minutes can save you hours on every future project of the same type.
 </Callout>
 
-## Where to Sell Templates
+## CLAUDE.md Templates by Project Type
 
-**Gumroad** — simple, no monthly fee, 10% transaction fee. Good for getting started.
+### Next.js SaaS Starter
 
-**LemonSqueezy** — more features, similar simplicity, lower fees as you grow.
+```markdown
+# Project: [SaaS Name]
+# Stack: Next.js 14, TypeScript, Supabase, Stripe, Tailwind CSS
+# Last updated: [date]
 
-**GitHub Marketplace** — for developer tools, though less discovery than Gumroad.
+## What This Is
+A SaaS application with user authentication, subscription billing, and a
+protected dashboard. Users sign up, choose a plan, and access features
+gated by their subscription tier.
 
-**Your own site** — once you have an audience, sell direct. Higher margins, no platform dependency.
+## Architecture
+- /app — Next.js App Router pages and layouts
+- /components — Shared UI components
+- /lib — Utility functions, Supabase client, Stripe helpers
+- /types — TypeScript type definitions
 
-## Pricing Templates
+## Conventions
+- Use Server Components by default; add "use client" only when necessary
+- Supabase queries go in /lib/db — never inline in components
+- All Stripe operations happen server-side only
+- Form validation with Zod schemas
 
-- **Starter template** (basic setup, documented): $29–$49
-- **Full-stack template** (complete SaaS scaffolding): $97–$197
-- **Template + video walkthrough**: $147–$297
-- **Template + personal support session**: $297–$497
+## Do Not
+- Do not expose Stripe secret keys or Supabase service role key to the client
+- Do not bypass Row Level Security in Supabase
+- Do not add new npm packages without checking if we already have something that does it
+```
 
-Price up over time as you add reviews and refine the product.
+### Python Script/Automation
 
-## The Template Catalog Strategy
+```markdown
+# Project: [Script Name]
+# Stack: Python 3.11+, [key libraries]
+# Last updated: [date]
 
-Build templates systematically:
+## What This Does
+[One clear sentence about what this script automates]
 
-1. Next.js SaaS starter (auth + payments + Supabase)
-2. Landing page template (multiple sections, easy to customize)
-3. API wrapper service (Next.js + third-party API integration)
-4. Dashboard template (data tables, charts, navigation)
+## How to Run
+[The exact command to run it]
 
-Each new client project that fits a pattern becomes a template. Your catalog grows automatically from client work, and each product generates passive income.
+## Key Files
+- main.py — entry point
+- config.py — all configuration constants
+- [other key files]
+
+## Conventions
+- All configuration goes in config.py or .env — never hardcoded
+- Functions should be short and single-purpose
+- Log meaningful output at INFO level; debug detail at DEBUG level
+
+## Do Not
+- Do not swallow exceptions silently
+- Do not write to files without checking if they exist first
+```
+
+### REST API (Node.js/Express or FastAPI)
+
+```markdown
+# Project: [API Name]
+# Stack: [Node/Express or Python/FastAPI], [database], [auth method]
+# Last updated: [date]
+
+## What This Is
+A REST API for [describe what it serves].
+
+## Route Structure
+[Brief description of the main route groups and what they do]
+
+## Conventions
+- All routes return { data, error } shape
+- Authentication via [method] — middleware in /middleware/auth
+- Input validation happens at the route handler before any business logic
+- Database queries are isolated in /repositories
+
+## Error Handling
+- Use the centralized error handler in /middleware/error
+- Always return appropriate HTTP status codes
+- Never expose stack traces in production responses
+```
+
+## Building a Prompt Library
+
+Beyond `CLAUDE.md`, build a personal library of reusable prompts for common development tasks. Store them as text files or snippets:
+
+**Code review prompt:**
+```
+Review the changes in my current branch.
+Focus on: correctness, edge cases, and security.
+Flag anything that looks like it could fail in production.
+Don't comment on style unless it's genuinely confusing.
+```
+
+**Refactor prompt:**
+```
+Refactor [file/function] with these goals:
+1. Improve readability
+2. Reduce duplication
+3. Maintain identical behavior — this is not a feature change
+Show me the refactored version and explain any non-obvious decisions.
+```
+
+**Debug prompt:**
+```
+I'm seeing this error: [paste error]
+It happens when: [describe the trigger]
+Here's the relevant code: [paste or reference file]
+What's causing it and how do I fix it?
+```
 
 <Callout type="info">
-A template that earns $200/month in passive sales might seem small. But 5 templates at $200/month = $1,000/month with zero active work after the initial build. That's 12+ hours of client work you don't have to do to maintain that income. The leverage compounds.
+A prompt library might feel like overkill until the third time you've typed the same debugging prompt from scratch. Five minutes spent writing a good reusable prompt pays off every time you use it. Store them in a `~/.claude-prompts/` directory and paste them in when needed.
 </Callout>
 
 ## GitHub Template Repos
 
-For developer-focused templates, mark your GitHub repo as a "Template repository" in Settings. This adds a "Use this template" button that creates a clean copy with a single click — no fork, no git history clutter.
+For code templates, mark your GitHub repo as a "Template repository" in Settings. This adds a "Use this template" button that creates a clean copy with a single click — no fork, no git history clutter. Include a polished `CLAUDE.md` in the repo so anyone who uses the template gets Claude oriented immediately.
 
-This is exactly how the course platform you're using was built. It's already a template repo that anyone can clone and deploy for their own course.
+Structure your template repo for the next developer (including future you):
 
-<KeyPoint>Every SaaS you build is also a starter template you can sell. A 30-minute cleanup session after any project creates an asset that generates income while you sleep. Build the catalog systematically and it becomes a meaningful passive revenue stream.</KeyPoint>
+```
+my-saas-template/
+  CLAUDE.md          ← The most important file
+  .env.example       ← All required variables documented
+  README.md          ← Setup guide from clone to deployed
+  src/               ← Clean, documented source code
+```
+
+## Maintaining Your Template Library
+
+Templates need maintenance. Every time you start a new project from a template and immediately change something, that change should probably go back into the template. Build the habit:
+
+1. Start project from template
+2. Note any immediate changes you have to make
+3. After the project is done, fold those improvements back into the template
+
+Over a year of this, your templates become significantly more polished and your project startup time drops to almost nothing.
+
+<KeyPoint>A library of well-crafted CLAUDE.md templates is one of the highest-leverage investments you can make in your development workflow. Every new project starts with Claude already oriented to the stack, the conventions, and the constraints — instead of you explaining it from scratch every time.</KeyPoint>

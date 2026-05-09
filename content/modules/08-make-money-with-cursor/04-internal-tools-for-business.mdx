@@ -1,6 +1,6 @@
 ---
-title: "Build Internal Tools for Businesses"
-description: "Create dashboards, automations, and admin tools that businesses pay $3,000–$15,000 for."
+title: "Build Internal Tools for Business"
+description: "Create dashboards, automations, and admin tools that businesses pay $3,000–$15,000 for — and build them in a fraction of the time with Claude Code."
 order: 4
 duration: "10 min"
 videoUrl: "https://www.youtube.com/watch?v=9fg4nCKrpJg"
@@ -35,26 +35,55 @@ A business paying $5,000 for a custom reporting dashboard that saves their team 
 
 **Client portals** — branded portals where clients can view project status, approve work, download deliverables, or submit requests. High perceived value for the client's clients.
 
-**Data processing tools** — scripts or apps that transform raw data exports into useful reports, summaries, or alerts.
+**Data processing scripts** — tools that transform raw data exports into useful reports, summaries, or alerts. Often Python scripts that run on a schedule.
 
 <Callout type="tip">
-When scoping an internal tool project, ask: "What does someone do manually today that this tool will automate?" Then price the tool based on how much of that manual time it eliminates. A tool that eliminates 4 hours per week at $30/hour labor cost saves $6,240 per year. Charging $3,000–$5,000 for it is an obvious yes.
+When scoping an internal tool project, ask: "What does someone do manually today that this tool will automate?" Then price the tool based on how much of that manual time it eliminates. A tool that eliminates 4 hours per week at $30/hour labor cost saves $6,240 per year. Charging $3,000–$5,000 for it is an obvious yes for any business owner who understands the math.
 </Callout>
 
-## Building Internal Tools With Cursor
+## Building Internal Tools with Claude Code
 
-The build process follows the same pattern as any other product:
+The build process follows the same pattern every time, and Claude Code handles the repetitive parts efficiently:
 
-1. Document the business process (what does the tool need to do?)
-2. Design the data schema (what data exists, where does it live, what do you need to store?)
-3. Use Composer to scaffold the core views and data connections
-4. Use Chat to handle edge cases and integration specifics
-5. Test with real data from the business
-6. Deploy and hand off with documentation
+1. **Document the business process** — what does the tool need to do? Write it in plain language and put it in your `CLAUDE.md`.
+2. **Design the data schema** — ask Claude: "Here's the business process: [describe]. What database schema would support this? What are the key entities and relationships?"
+3. **Scaffold the core views** — Claude Code handles the boilerplate UI, table views, forms, and navigation quickly.
+4. **Handle the integrations** — use Claude Code to write the data connection code: database queries, API calls, webhook handlers.
+5. **Test with real data** — get sample data from the business early and test with it.
+6. **Deploy and document** — write a handoff doc explaining what the tool does and how to maintain it.
 
 <Callout type="info">
-For data-intensive tools, ask Cursor to help design the schema before writing any application code: "Here's the business process: [describe]. What database schema would support this? What are the key entities and relationships?" A well-designed schema makes everything downstream faster and more reliable.
+For data-intensive tools, get the schema right before any application code. Ask Claude: "Here's the business process: [describe]. What database schema would support this? What are the key entities and relationships?" A well-designed schema makes everything downstream faster. A bad schema means rebuilding core parts of the application.
 </Callout>
+
+## Setting Up for Internal Tool Projects
+
+Create a `CLAUDE.md` template specifically for internal tool engagements:
+
+```markdown
+# Project: [Client Name] — [Tool Name]
+# Stack: Next.js, Supabase, [any third-party APIs]
+
+## What This Does
+[One paragraph: what the tool does, who uses it, what problem it solves]
+
+## Business Process Being Automated
+[Step-by-step description of the manual process this replaces]
+
+## Key Entities
+[The main data objects: e.g., Customer, Order, Invoice, Staff Member]
+
+## Integrations
+[Any external systems this connects to and what data flows between them]
+
+## Users
+[Who uses this tool and what level of access they have]
+
+## Constraints
+[Anything the tool must not do, performance requirements, data sensitivity]
+```
+
+This `CLAUDE.md` keeps Claude oriented to the business context, not just the code, which produces much more relevant suggestions on domain-specific logic.
 
 ## The Retainer Model
 
@@ -66,10 +95,12 @@ Internal tools don't stay static. The business grows, requirements change, integ
 
 A business that depends on an internal tool will pay for this without question. And 3–5 retainers at $500/month is $1,500–$2,500/month in stable recurring revenue from existing clients.
 
+Claude Code makes retainer work efficient: you can jump back into any project quickly because the `CLAUDE.md` re-establishes context, and small changes that would take hours without AI assistance take minutes with it.
+
 ## Finding Internal Tool Clients
 
-Talk to small and mid-size business owners (not startups). Ask: "What do you do manually that you wish happened automatically?" or "If you could press a button and have one report appear, what would it show?"
+Talk to small and mid-size business owners — not startups. Ask: "What do you do manually that you wish happened automatically?" or "If you could press a button and have one report appear, what would it show?"
 
-Their answers are your project pipeline.
+Their answers are your project pipeline. Every business owner has at least one answer to these questions. Most have three or four. The constraint has always been the cost and time of custom development — Claude Code changes that equation, and you're the one who benefits.
 
-<KeyPoint>Internal tools are invisible to the public but essential to the business — that's exactly why they pay premium prices. Find the manual process, automate it, charge for the value delivered. Then offer a retainer so the relationship continues.</KeyPoint>
+<KeyPoint>Internal tools are invisible to the public but essential to the business — that's exactly why they command premium prices. Find the manual process, price based on the value of automating it, build it fast with Claude Code, and lock in recurring retainer revenue to keep the relationship going.</KeyPoint>

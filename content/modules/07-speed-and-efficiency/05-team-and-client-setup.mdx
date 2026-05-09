@@ -1,95 +1,118 @@
 ---
-title: "Setting Up Cursor for a Team or Client"
-description: "How to configure Cursor for a team with shared rules, consistent settings, and clean handoffs."
+title: "Setting Up Teams and Clients with Claude Code"
+description: "How to share CLAUDE.md with teams, onboard clients to Claude Code workflows, and establish conventions that everyone benefits from."
 order: 5
 duration: "8 min"
 videoUrl: "https://www.youtube.com/watch?v=LSFpASs8aSI"
 coverImage: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&auto=format&fit=crop&q=80"
 quiz:
-  - question: "Where should shared .cursorrules live in a team project?"
+  - question: "Where should the shared CLAUDE.md live in a team project?"
     options: ["Each developer's home directory", "The project root, committed to git", "A shared Notion page", "The team lead's machine only"]
     answer: 1
-  - question: "What file can you use to document project context specifically for AI agents?"
-    options: [".cursorrules", "AGENTS.md", "README.md", "SETUP.md"]
+  - question: "What file provides rich context about why architectural decisions were made, specifically for AI agents?"
+    options: ["CLAUDE.md", "AGENTS.md", "README.md", "SETUP.md"]
     answer: 1
 ---
 
-When multiple people use Cursor on the same project, shared configuration ensures everyone gets consistent, high-quality output. A team without shared rules is a team where every developer gets a different version of AI assistance.
+When multiple people use Claude Code on the same project, shared configuration ensures everyone gets consistent, high-quality output. A team without shared context is a team where every developer gets a different version of AI assistance — and produces code in different styles.
 
-## The Shared .cursorrules
+## The Shared CLAUDE.md
 
-The `.cursorrules` file belongs in the project root and should be committed to git. Everyone who opens the project gets the same instructions:
+The `CLAUDE.md` file belongs in the project root and should be committed to git. Everyone who opens the project gets the same instructions:
 
-```
+```markdown
 # Project: [Name]
 # Stack: [list]
 # Last updated: [date]
 
 ## Architecture
-[describe the project structure and major patterns]
+[Describe the project structure and major patterns]
 
 ## Conventions
-[document the specific conventions this team follows]
+[Document the specific conventions this team follows]
 
 ## Do Not
-[list things Cursor should never do in this project]
+[List things Claude should never do in this project]
 
 ## When Unsure
-[describe what to do when requirements are ambiguous]
+[Describe what to do when requirements are ambiguous]
 ```
 
-The "When Unsure" section is often the most valuable. It captures decisions the team has already made so Cursor doesn't relitigate them.
+The "When Unsure" section is often the most valuable. It captures decisions the team has already made so Claude doesn't relitigate them on every developer's machine.
 
 <Callout type="tip">
-Treat `.cursorrules` like living documentation. Schedule a brief team review monthly or after any major architectural decision. Stale rules are worse than no rules — they cause Cursor to produce code that contradicts current standards.
+Treat CLAUDE.md like living documentation. Schedule a brief team review monthly or after any major architectural decision. Stale context is worse than no context — it causes Claude to produce code that contradicts current standards. The most recent architectural decisions should always be reflected.
 </Callout>
 
-## AGENTS.md for AI Context
+## AGENTS.md for Richer AI Context
 
-Beyond `.cursorrules`, create an `AGENTS.md` file in the root that provides richer context for AI agents:
+Beyond `CLAUDE.md`, create an `AGENTS.md` file in the root that provides context for AI agents about the *why* behind the project:
 
 ```markdown
 # Project Context for AI Agents
 
 ## What This Is
-[one paragraph on the product and its users]
+[One paragraph on the product and its users]
 
 ## Tech Decisions
-[brief explanation of key architectural choices and why]
+[Brief explanation of key architectural choices and why they were made]
 
 ## Current Development State
-[what's in progress, what's stable, what's fragile]
+[What's in progress, what's stable, what's fragile or needs care]
 
 ## Team Conventions
-[communication patterns, review process, deployment cadence]
+[Communication patterns, review process, deployment cadence]
+
+## Things to Know
+[Domain knowledge, business logic nuances, gotchas that aren't obvious from the code]
 ```
 
-Agents.md is specifically for context that helps AI understand *why* things are the way they are — not just what they are.
+`AGENTS.md` is specifically for context that helps AI understand *why* things are the way they are — not just what they are. The code tells Claude what exists; `AGENTS.md` tells it why it exists that way.
 
-## Handing Off to Clients
-
-When delivering a project to a client who uses Cursor:
-
-1. Include a polished `.cursorrules` in the repo
-2. Write it from the perspective of a new developer onboarding
-3. Include the client's specific conventions and anything they care about
-4. Add a brief note: "This file configures AI assistants for this project — don't delete it"
-
-A client who opens your delivered codebase in Cursor and immediately gets well-configured AI assistance will think you're exceptional — and they'll be right.
-
-<Callout type="info">
-When you hand off a project with a great .cursorrules and AGENTS.md, you're also protecting your own work. Clear context makes it harder for the next developer to unknowingly break conventions or introduce inconsistencies. Your code stays clean even after you're gone.
-</Callout>
-
-## Onboarding New Team Members
+## Team Onboarding with Claude Code
 
 New developer joining the team? Their first day workflow:
 
 1. Clone the repo
-2. Open in Cursor
-3. Let it index
-4. Ask Chat: "@codebase Walk me through this project. I'm a new developer starting today."
+2. `cd` into the project directory
+3. Run `claude`
+4. Ask: "Walk me through this project. I'm a new developer starting today."
 
-With good `.cursorrules` and `AGENTS.md`, Cursor will give them a coherent, accurate onboarding briefing. What used to take a day of pairing with a senior developer now takes 30 minutes.
+With a good `CLAUDE.md` and `AGENTS.md`, Claude will give them a coherent, accurate onboarding briefing. It explains the architecture, the conventions, the current state of development, and the things to be careful about.
 
-<KeyPoint>A team with shared .cursorrules produces more consistent code than a team without them. Commit it to git, keep it updated, and treat it as the authoritative source of project conventions for both humans and AI.</KeyPoint>
+What used to take a day of pairing with a senior developer now takes 30 minutes. And unlike a senior developer's verbal explanation, it's available at any hour and can be asked again with follow-up questions.
+
+## Establishing Team Conventions
+
+Before the first team member opens the project, the team should agree on a few things and commit them to `CLAUDE.md`:
+
+**Model usage** — which model tier does the team use by default? Consistent model selection produces more consistent output across the team.
+
+**Prompt patterns** — create a shared `/docs/claude-prompts.md` with the team's go-to prompts for common tasks. Everyone uses the same prompts for code review, debugging, and documentation generation.
+
+**Review process** — does AI-generated code get the same review as human-written code? (It should.) Document this in `CLAUDE.md` under conventions.
+
+**Context updates** — who is responsible for keeping `CLAUDE.md` current? Assign it explicitly or it won't happen.
+
+<Callout type="info">
+When Claude Code is new to the team, it helps to run a short workshop: everyone reads CLAUDE.md together, proposes improvements, and uses Claude Code to solve one real problem. This builds shared vocabulary and surfaces assumptions before they become inconsistencies in the codebase.
+</Callout>
+
+## Handing Off to Clients
+
+When delivering a project to a client who will continue development:
+
+1. Include a polished `CLAUDE.md` in the repo
+2. Write it from the perspective of a new developer onboarding to this specific codebase
+3. Include the client's conventions and anything specific to their requirements
+4. Add a brief note in the README: "This CLAUDE.md file configures AI coding assistants for this project — keep it updated as the project evolves"
+
+A client who opens your delivered codebase, runs `claude`, and immediately gets well-configured AI assistance will see it as exceptional work — and they'll be right. It signals that you thought about the maintainability of the project, not just shipping the features.
+
+## Protecting Your Work After Handoff
+
+When you hand off a project with a great `CLAUDE.md` and `AGENTS.md`, you're also protecting your own work. Clear context makes it harder for the next developer to unknowingly break conventions or introduce inconsistencies. Your code stays clean even after you're gone.
+
+A developer working on an undocumented codebase with Claude Code will have Claude make educated guesses about conventions. Some of those guesses will be wrong. A well-maintained `CLAUDE.md` eliminates the guesswork entirely.
+
+<KeyPoint>A team with a shared, committed CLAUDE.md produces more consistent code than a team without one. Treat it as the authoritative source of project conventions for both humans and AI — keep it updated, review it regularly, and make updating it part of the definition of "done" for any significant change.</KeyPoint>

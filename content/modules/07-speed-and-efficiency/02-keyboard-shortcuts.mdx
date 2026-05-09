@@ -1,75 +1,130 @@
 ---
-title: "Keyboard Shortcuts That Matter"
-description: "The 10 Cursor shortcuts that deliver 80% of your productivity gains — memorize these first."
+title: "Slash Commands and Keyboard Shortcuts"
+description: "The Claude Code slash commands and terminal shortcuts that deliver 80% of your productivity gains — learn these first."
 order: 2
 duration: "6 min"
 videoUrl: "https://www.youtube.com/watch?v=gqUQbjsYZLQ"
 coverImage: "https://images.unsplash.com/photo-1601882589907-ce1b7efe2a40?w=1200&auto=format&fit=crop&q=80"
 quiz:
-  - question: "Which shortcut opens a new Composer session?"
-    options: ["Cmd+L", "Cmd+K", "Cmd+Shift+I", "Cmd+Shift+C"]
-    answer: 2
-  - question: "What does Cmd+Shift+L do?"
-    options: ["Opens a new Chat", "Adds the selected code to the current Chat context", "Launches Composer", "Saves all files"]
+  - question: "What does the /compact command do?"
+    options: ["Compresses your source files", "Summarizes the conversation to save context tokens without losing the thread", "Clears the session completely", "Formats your code"]
+    answer: 1
+  - question: "What is the purpose of /clear in a Claude Code session?"
+    options: ["Clears your terminal screen", "Resets the conversation context entirely for a fresh start", "Deletes your CLAUDE.md", "Removes all staged git changes"]
     answer: 1
 ---
 
-You don't need to memorize 50 shortcuts. Memorize 10. Use them hundreds of times a day. That's where the speed lives.
+Claude Code lives in your terminal, which means your speed tools are slash commands, shell aliases, and keyboard shortcuts native to your terminal emulator. Learn these and you'll move significantly faster.
 
-## The Core 10
+## The Core Slash Commands
 
-| Shortcut | Action | When to use |
-|----------|--------|-------------|
-| `Cmd+L` | Open Chat | Questions, explanations, debugging |
-| `Cmd+K` | Inline edit | Edit a selected block of code |
-| `Cmd+Shift+I` | Open Composer | Generate code across files |
-| `Tab` | Accept completion | Accept Tab suggestion |
-| `Escape` | Dismiss / Reject | Dismiss suggestion or reject edit |
-| `Cmd+Shift+L` | Add to Chat | Add selected code to current Chat context |
-| `Cmd+P` | File search | Jump to any file by name |
-| `Cmd+Shift+F` | Global search | Search text across all files |
-| `F12` | Go to definition | Jump to where something is defined |
-| `Shift+F12` | Find references | See everywhere something is used |
+| Command | What it does | When to use it |
+|---------|-------------|----------------|
+| `/help` | Show all available commands | When you forget something |
+| `/clear` | Reset the conversation entirely | Starting a new task, switching context |
+| `/compact` | Summarize conversation to save tokens | When context grows long mid-task |
+| `/status` | Show current session info | Check what Claude knows about the project |
+| `/memory` | View and edit memory/CLAUDE.md | Update persistent project context |
+| `/model` | Switch the active model | Change between Sonnet, Haiku, Opus |
+| `/cost` | Show token usage for this session | Monitor spend during a long session |
 
 <Callout type="tip">
-`Cmd+Shift+L` is underused and powerful. When you're in Chat and want to ask about a specific piece of code, select it in the editor and press Cmd+Shift+L. It adds that code to your current Chat context without you having to copy-paste or type out a file reference. Combine it with a question: select the code, Cmd+Shift+L, then type "what does this do?"
+`/compact` is one of the most valuable commands in your arsenal. When you're deep in a long debugging or feature session, token count climbs fast. `/compact` compresses the conversation into a summary, preserving what matters and shedding the noise. Use it before the context window becomes a bottleneck, not after.
 </Callout>
 
-## Accept Partial Suggestions
+## /clear vs /compact: Know the Difference
 
-Within a Tab completion suggestion:
-- `Tab` — accept the entire suggestion
-- `Right arrow` — accept one word at a time
-- `Escape` — dismiss the suggestion
+These two commands are easy to confuse but serve very different purposes:
 
-The right arrow acceptance is valuable when the beginning of a suggestion is right but you want to deviate partway through.
+- **`/clear`** — wipes everything. Fresh start. Use this when you're done with a task and moving on to something unrelated. Claude retains nothing from the previous session.
+- **`/compact`** — trims the conversation while keeping the useful parts. Use this mid-task when the session is getting long but you still need the context. Claude summarizes what's happened and continues with a lighter footprint.
 
-## VS Code Shortcuts That Carry Over
+When in doubt: if you're continuing the same task, use `/compact`. If you're starting something new, use `/clear`.
 
-These are inherited from VS Code and work identically:
+## Terminal Keyboard Shortcuts
 
-- `Cmd+/` — toggle comment on selected lines
-- `Cmd+D` — select next occurrence of selected text
-- `Cmd+Shift+P` — command palette (access any action)
-- `Opt+Up/Down` — move current line up or down
-- `Cmd+Z` — undo (works on AI edits too)
+Claude Code runs in your standard terminal, so these shell shortcuts apply everywhere:
 
-## Customizing Shortcuts
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl+C` | Cancel current operation or interrupt Claude mid-response |
+| `Ctrl+L` | Clear the terminal screen (keeps session active) |
+| `Up arrow` | Cycle through previous prompts |
+| `Ctrl+R` | Reverse-search your prompt history |
+| `Ctrl+A` | Jump to beginning of current line |
+| `Ctrl+E` | Jump to end of current line |
+| `Ctrl+W` | Delete the last word typed |
+| `Ctrl+U` | Clear the entire current line |
 
-In Cursor → Preferences → Keyboard Shortcuts (same as VS Code). If you have muscle memory from VS Code keybindings for specific actions, keep them — Cursor won't override them.
+The `Up arrow` history cycling is underused. When you find a prompt pattern that works well — a debugging prompt, a refactor prompt, a review prompt — you can recall and reuse it quickly.
+
+## Shell Aliases That Save Time
+
+Add these to your `.zshrc` or `.bashrc`:
+
+```bash
+# Launch Claude in the current project
+alias cc="claude"
+
+# Launch Claude with a quick one-off prompt
+alias cq="claude -p"
+
+# Start a fresh session explicitly
+alias cclear="claude --no-continue"
+
+# Common workflow starters
+alias cdebug='claude -p "Review recent changes and identify any bugs or issues"'
+alias creview='claude -p "Review my staged changes and give feedback before I commit"'
+alias cdocs='claude -p "Generate documentation for the functions I just wrote"'
+```
+
+Run `source ~/.zshrc` after adding these, or open a new terminal.
+
+## Multi-line Prompts in the Terminal
+
+For longer prompts, use a heredoc so you don't have to cram everything onto one line:
+
+```bash
+claude << 'EOF'
+I need to refactor the authentication module.
+Current state: JWT tokens stored in localStorage.
+Goal: Move to httpOnly cookies with refresh token rotation.
+Constraints: Don't break the existing session for logged-in users.
+EOF
+```
+
+This is much easier to read and edit than trying to stuff a complex prompt onto a single line.
 
 <Callout type="info">
-The most important shortcut habit to build is Cmd+K. Every time you catch yourself manually editing a function, stop, select the function, press Cmd+K, and give an instruction. This single habit shift produces more time savings than any other change in your workflow.
+The most important habit to build is reaching for `/compact` before a session gets unwieldy. Long sessions with too much context start producing worse output — the model has to attend to too many things. A clean, compact context with a clear current state almost always outperforms a bloated one.
 </Callout>
 
 ## The Workflow Triggers
 
-Build these keyboard patterns into muscle memory:
+Build these patterns into muscle memory:
 
-- Stuck on what something does → `Cmd+L`, ask Chat
-- Need to change existing code → Select, `Cmd+K`, describe change
-- Building something new → `Cmd+Shift+I`, write spec prompt
-- Saw a good suggestion → `Tab` to accept
-- Suggestion is wrong → `Escape` to dismiss
+- Task is done, moving on → `/clear`
+- Session getting long but still working → `/compact`
+- Need to change models → `/model`
+- Wondering what this is costing → `/cost`
+- Forgot a command → `/help`
+- Want to update project context → `/memory`
 
-<KeyPoint>10 shortcuts used 100 times a day beats 50 shortcuts used occasionally. Cmd+K for edits, Cmd+L for questions, Cmd+Shift+I for generation — start there and let the rest follow naturally.</KeyPoint>
+## Piping and Shell Integration
+
+Claude Code integrates with standard Unix piping, which opens up powerful one-liners:
+
+```bash
+# Pipe a file's contents into Claude
+cat src/auth.ts | claude -p "Find any security issues in this code"
+
+# Pipe git diff into Claude for a commit message
+git diff --staged | claude -p "Write a concise commit message for these changes"
+
+# Pipe test output to get debugging help
+npm test 2>&1 | claude -p "These tests are failing. What's wrong?"
+```
+
+This makes Claude Code feel native to the Unix environment rather than a separate tool you have to switch to.
+
+<KeyPoint>A handful of slash commands used consistently beats memorizing everything at once. Start with /compact and /clear to manage context, build your shell aliases for common workflows, and let the rest follow naturally as you develop your own patterns.</KeyPoint>

@@ -1,6 +1,6 @@
 ---
-title: "Build a Micro-SaaS"
-description: "Pick a niche, build a product in a weekend, and set up recurring revenue — the complete playbook."
+title: "Build a Micro-SaaS with Claude Code"
+description: "Pick a niche, build end-to-end with Claude Code, launch lean, and get your first paying customers — the complete playbook."
 order: 2
 duration: "12 min"
 videoUrl: "https://www.youtube.com/watch?v=GJLuTFAyMts"
@@ -14,7 +14,7 @@ quiz:
     answer: 1
 ---
 
-Micro-SaaS is the highest-leverage income model for a solo developer with Cursor. Small products solving specific problems for niche audiences. Recurring revenue. No VC funding required.
+Micro-SaaS is the highest-leverage income model for a solo developer with Claude Code. Small products solving specific problems for niche audiences. Recurring revenue. No VC funding required.
 
 ## The Micro-SaaS Formula
 
@@ -43,9 +43,36 @@ High-signal niches to explore:
 
 The narrower the niche, the less competition, and the more you can charge relative to your audience size.
 
+## Setting Up the Project with Claude Code
+
+Before you write a single line of code, set up your `CLAUDE.md` with the product context:
+
+```markdown
+# Project: [Product Name]
+# Stack: Next.js 14, TypeScript, Supabase, Stripe, Tailwind CSS
+
+## What This Is
+A SaaS tool for [target user] that solves [specific problem].
+Users [describe the core workflow].
+
+## MVP Scope
+Phase 1 (launch):
+- [Feature 1 — the core thing]
+- Auth and user accounts
+- Stripe billing
+
+Not in phase 1:
+- [Everything else]
+
+## Conventions
+[Your standard conventions]
+```
+
+The "Not in phase 1" section in your `CLAUDE.md` is important. It tells Claude not to suggest or add features that are out of scope. This keeps the MVP focused.
+
 ## The Weekend Build
 
-With Cursor, the MVP of a focused micro-SaaS can be built in a weekend:
+With Claude Code, the MVP of a focused micro-SaaS can be built in a weekend:
 
 **Saturday:**
 - Scaffold the project (Next.js + Supabase + Stripe)
@@ -61,6 +88,18 @@ With Cursor, the MVP of a focused micro-SaaS can be built in a weekend:
 <Callout type="warning">
 Don't add features before getting your first paying customer. The MVP should do the core thing and nothing else. Every additional feature before validation is a bet that delays the moment you find out whether the core idea is worth pursuing. Ship lean, validate fast.
 </Callout>
+
+## Using Claude Code Across the Build
+
+Claude Code accelerates every part of a micro-SaaS build:
+
+**Schema design** — start with "Here's the business process: [describe]. Design the database schema that supports this." Get the data model right before writing application code.
+
+**Boilerplate elimination** — auth flows, Stripe webhooks, email sending, and CRUD operations are all patterns Claude Code handles well. Don't write these from scratch.
+
+**Edge case handling** — after the happy path works, ask: "What edge cases does this feature not handle? What should happen when [X]?" Systematic edge case coverage before launch.
+
+**Marketing copy** — ask Claude to write your landing page copy based on the problem you're solving and the specific users you're targeting. It's faster than starting from a blank page.
 
 ## Pricing for MRR
 
@@ -80,6 +119,6 @@ Don't wait for SEO. Go find customers:
 3. Mention the product naturally: "I actually built something for this — here's the link if you want to try it"
 4. DM directly: "I saw you mentioned this problem in [community]. I built a tool that solves exactly that. Want to try it free for a month?"
 
-The first 10 customers almost always come from direct outreach, not discovery.
+The first 10 customers almost always come from direct outreach, not discovery. Don't build a marketing funnel until you have customers. Find people manually, learn from them, then build the funnel.
 
-<KeyPoint>A $29/month tool with 50 customers is $1,450/month. You don't need viral scale or a huge audience. You need 50 people with a specific problem who value a specific solution. Cursor makes the build fast enough that you can test multiple niches if the first one doesn't gain traction.</KeyPoint>
+<KeyPoint>A $29/month tool with 50 customers is $1,450/month. You don't need viral scale or a huge audience. You need 50 people with a specific problem who value a specific solution. Claude Code makes the build fast enough that you can test multiple niches until one gains traction.</KeyPoint>
