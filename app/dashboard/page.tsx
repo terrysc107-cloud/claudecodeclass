@@ -35,7 +35,7 @@ export default async function DashboardPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <Link href="/dashboard" className="flex items-center gap-2 text-white font-bold">
             <Zap className="w-5 h-5 text-brand-400" />
-            Build With Cursor
+            Claude Code Class
           </Link>
           <SignOutButton />
         </div>
@@ -48,7 +48,7 @@ export default async function DashboardPage() {
           <p className="text-slate-400">
             {completedCount === 0
               ? "Welcome! Start with Lesson 1 to begin your Claude Code journey."
-              : `You've completed ${completedCount} of ${totalLessons} lessons. Keep going!`}
+              : `You've completed ${completedCount} of ${totalLessons} lessons — keep shipping!`}
           </p>
         </div>
 

@@ -89,7 +89,7 @@ export default function LessonLayout({ sidebar, children }: LessonLayoutProps) {
             </button>
             <Link href="/dashboard" className="flex items-center gap-2 text-white font-semibold text-sm truncate">
               <Zap className="w-4 h-4 text-brand-400 shrink-0" />
-              <span className="hidden sm:inline">Build With Cursor</span>
+              <span className="hidden sm:inline">Claude Code Class</span>
             </Link>
           </div>
           <SignOutButton />
