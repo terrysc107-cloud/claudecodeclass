@@ -60,12 +60,24 @@ export default async function LessonPage({ params }: PageProps) {
 
         {/* Video embed */}
         {lesson.frontmatter.videoUrl && (
-          <div className="mb-8 rounded-xl overflow-hidden aspect-video bg-slate-800">
-            <iframe
-              src={lesson.frontmatter.videoUrl.replace("watch?v=", "embed/")}
-              className="w-full h-full"
-              allowFullScreen
-            />
+          <div className="mb-8">
+            <div className="rounded-xl overflow-hidden aspect-video bg-slate-800">
+              <iframe
+                src={lesson.frontmatter.videoUrl.replace("watch?v=", "embed/")}
+                title={lesson.frontmatter.title}
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
+            <a
+              href={lesson.frontmatter.videoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 mt-2 text-xs text-slate-500 hover:text-brand-400 transition-colors"
+            >
+              ▶ Watch on YouTube
+            </a>
           </div>
         )}
 

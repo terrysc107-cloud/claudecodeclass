@@ -17,7 +17,7 @@ interface LessonQuizProps {
 interface QuizResult {
   score: number;
   passed: boolean;
-  correct: boolean[];
+  error?: string;
 }
 
 export default function LessonQuiz({
@@ -59,19 +59,27 @@ export default function LessonQuiz({
     if (selected.some((s) => s === null)) return;
     setSubmitting(true);
 
-    const res = await fetch("/api/quiz", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ moduleSlug, lessonSlug, answers: selected }),
-    });
+    try {
+      const res = await fetch("/api/quiz", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ moduleSlug, lessonSlug, answers: selected }),
+      });
 
-    const data = await res.json();
-    setResult(data);
-    setAttempts((a) => a + 1);
-    setSubmitting(false);
+      if (!res.ok) throw new Error(`Server error: ${res.status}`);
 
-    if (data.passed) {
-      router.refresh(); // update sidebar checkmarks
+      const data = await res.json();
+      setResult(data);
+      setAttempts((a) => a + 1);
+
+      if (data.passed) {
+        router.refresh();
+      }
+    } catch (err) {
+      console.error("Quiz submit error:", err);
+      setResult({ score: 0, passed: false, error: "Network error — please try again." });
+    } finally {
+      setSubmitting(false);
     }
   }
 
@@ -100,8 +108,8 @@ export default function LessonQuiz({
               <div className="space-y-2">
                 {q.options.map((opt, oi) => {
                   const isSelected = selected[qi] === oi;
-                  const isCorrect = result?.correct[qi] !== undefined && q.answer === oi;
-                  const isWrong = result && isSelected && !result.correct[qi];
+                  const isCorrect = !!result && q.answer === oi;
+                  const isWrong = !!result && isSelected && q.answer !== oi;
 
                   return (
                     <button
@@ -158,29 +166,37 @@ export default function LessonQuiz({
           <div
             className={cn(
               "mt-6 rounded-xl p-5 border",
-              result.passed
+              result.error
+                ? "border-slate-700 bg-slate-800/50"
+                : result.passed
                 ? "border-green-700/50 bg-green-900/20"
                 : "border-red-700/50 bg-red-900/20"
             )}
           >
             <div className="flex items-center justify-between">
               <div>
-                <p
-                  className={cn(
-                    "text-lg font-bold",
-                    result.passed ? "text-green-300" : "text-red-300"
-                  )}
-                >
-                  {result.passed ? "Passed!" : "Not quite."}{" "}
-                  <span className="font-normal text-base">{result.score}% correct</span>
-                </p>
-                <p className="text-sm text-slate-400 mt-1">
-                  {result.passed
-                    ? "Lesson complete. You can move on to the next lesson."
-                    : attempts >= 2
-                    ? "Review the highlighted answers above and try again."
-                    : "Keep going — you need 70% to pass."}
-                </p>
+                {result.error ? (
+                  <p className="text-amber-300 text-sm font-medium">{result.error}</p>
+                ) : (
+                  <>
+                    <p
+                      className={cn(
+                        "text-lg font-bold",
+                        result.passed ? "text-green-300" : "text-red-300"
+                      )}
+                    >
+                      {result.passed ? "Passed!" : "Not quite."}{" "}
+                      <span className="font-normal text-base">{result.score}% correct</span>
+                    </p>
+                    <p className="text-sm text-slate-400 mt-1">
+                      {result.passed
+                        ? "Lesson complete. You can move on to the next lesson."
+                        : attempts >= 2
+                        ? "Review the highlighted answers above and try again."
+                        : "Keep going — you need 70% to pass."}
+                    </p>
+                  </>
+                )}
               </div>
               {result.passed && nextLesson ? (
                 <button
