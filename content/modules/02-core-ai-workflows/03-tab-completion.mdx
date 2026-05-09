@@ -1,64 +1,102 @@
 ---
-title: "Tab Completion"
-description: "How Cursor's Tab completion works, why it's smarter than Copilot, and how to use it to write code at full speed."
+title: "File Editing and Code Generation"
+description: "How Claude Code reads and writes files, how to ask for targeted code changes, and how to iterate on generated output."
 order: 3
 duration: "7 min"
 videoUrl: "https://www.youtube.com/watch?v=dKSNSCl0KgU"
 coverImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&auto=format&fit=crop&q=80"
 quiz:
-  - question: "What makes Cursor's Tab completion different from basic autocomplete?"
-    options: ["It only suggests single words", "It predicts multi-line completions based on full file context", "It requires an internet connection", "It only works in JavaScript"]
+  - question: "How does Claude Code write changes to your files?"
+    options: ["It suggests changes you must copy-paste", "It writes directly to disk using the file edit tool", "It requires you to open a diff viewer first", "It only works in the terminal, not on real files"]
     answer: 1
-  - question: "How do you accept only part of a Tab suggestion?"
-    options: ["Press Enter", "Press Tab", "Press the right arrow key", "Press Escape then Tab"]
-    answer: 2
+  - question: "What's the best way to get a targeted edit to a specific function?"
+    options: ["Ask vaguely and let Claude decide", "Name the file and function and describe exactly what you want changed", "Paste the whole codebase", "Use a template command"]
+    answer: 1
 ---
 
-Tab completion in Cursor isn't autocomplete. It's next-edit prediction — Cursor reads the full context of your file and predicts what you're about to write, often several lines ahead.
+Claude Code's file editing capability is direct — it reads files, reasons about them, and writes changes to disk. There's no copy-paste step, no diff to manually apply. You describe what you want, it makes the change, and you verify the result.
 
-## How It Works
+## How File Editing Works
 
-As you type, Cursor continuously analyzes:
+When you ask Claude Code to change a file, it uses its file editing tool to:
 
-- The current file content
-- Your recent edits
-- Any context you've added via `@mentions`
-- The patterns established earlier in the file
+1. Read the current contents of the file
+2. Reason about the change needed in context
+3. Write the updated version back to disk
 
-When it has a high-confidence prediction, it shows the suggestion in grey text. Press Tab to accept the whole thing. Press Escape to dismiss it.
+The change is visible immediately in your editor. Claude Code describes what it changed and why as part of its response, giving you the information you need to decide whether to keep or revert.
 
-## Multi-Line Predictions
+```
+> Add a rate limiting check to the POST /api/messages endpoint in
+  routes/messages.ts. Use the existing rateLimiter middleware from
+  middleware/rate-limit.ts.
+```
 
-Tab completions in Cursor are often multi-line. If you type a function signature, Cursor may predict the entire body. If you write the first item in an array, it may predict the rest based on the pattern.
+Claude Code reads both files, understands how the existing middleware is applied elsewhere, and adds the check consistently with the existing pattern.
 
-This is where the time savings compound. You write the intent, Cursor writes the implementation, you read and accept.
+## Targeted Edits vs. Full Rewrites
+
+For most changes, you want targeted edits — changes confined to the relevant function or section, leaving everything else intact.
+
+Be specific about the scope:
+
+**Too broad:** "Improve the authentication module"
+
+**Targeted:** "In middleware/auth.ts, update the verifyToken function to return a specific error code for expired tokens versus invalid tokens, rather than a generic 401 for both."
+
+Targeted instructions produce cleaner diffs that are easier to verify. They also reduce the chance of unintended changes to code you didn't mean to touch.
 
 <Callout type="tip">
-To accept only part of a suggestion, press the right arrow key instead of Tab. This accepts the suggestion word by word, letting you stop wherever you want. Useful when the beginning of a suggestion is right but the end isn't.
+Before asking for a change, read the function yourself first. Even a 30-second scan gives you the context to write a more specific instruction — and to quickly verify that what came back is correct.
 </Callout>
 
-## Next-Edit Suggestions
+## Generating New Code
 
-Cursor also predicts your next edit based on what you just changed. If you rename a variable in one place, it may suggest the same rename in the next usage. If you update a function signature, it may suggest updating the call sites.
+For new files or new functions, describe what you want in terms of the surrounding context:
 
-These "next cursor" suggestions appear as a subtle highlight. Press Tab to accept, move on.
+```
+> Create a new file at lib/email/templates.ts that exports a function
+  renderPasswordReset(email: string, resetUrl: string): string.
+  It should return an HTML string. Follow the same pattern as the
+  existing templates in lib/email/.
+```
 
-## Context Makes Completions Better
+Pointing Claude Code at existing patterns in your codebase ensures the generated code looks like it belongs — same formatting conventions, same import style, same naming patterns.
 
-The completions improve as Cursor learns the patterns in your file:
+## Reviewing the Output
 
-- Add a comment describing what a function should do before writing it
-- Keep related functions in the same file so patterns are consistent
-- Use `@mentions` in Chat to build shared context before starting a new section
+After any file edit or generation, review the actual code before moving on. Open the file in your editor and read what was written.
+
+Check for:
+- Is the logic correct for your use case?
+- Does it handle edge cases and error states?
+- Is it consistent with the surrounding code?
+- Did it change anything you didn't ask about?
 
 <Callout type="info">
-Tab completion is not always right. It's a prediction, not a guarantee. Read the suggestion before accepting, especially for anything involving business logic, data transformation, or security. Fast code that's wrong is worse than slower code that's correct.
+Claude Code sometimes makes small opportunistic improvements while making the change you asked for — cleaning up a type annotation, removing an unused import. These are usually fine, but worth a quick check to make sure nothing important was removed along the way.
 </Callout>
 
-## The Speed Gain
+## Iterating
 
-Once you're comfortable with Tab completion, your typing rhythm changes. You write less and read more. You write the high-signal parts — the intent, the shape of the solution — and let Cursor fill in the implementation details.
+If the first pass isn't exactly right, iterate directly:
 
-That shift in rhythm is where the 10× productivity claims come from. It's real, but it takes a few days of deliberate practice to internalize.
+```
+> Good, but the error for expired tokens should use a 401 status code,
+  not 403. Update that and also add a specific error message string.
+```
 
-<KeyPoint>Tab is your fastest feedback loop — the more context in the file, the better the predictions get. Write the intent, let Cursor fill in the implementation, read before you accept.</KeyPoint>
+Claude Code re-reads the file in its current state — including the change it just made — and applies the correction. Each iteration is grounded in the actual current state of the code, not a stale version in memory.
+
+## The Speed Pattern
+
+Once this becomes natural, your editing rhythm shifts:
+
+- You describe the intent and constraints
+- Claude Code handles the implementation details
+- You read and verify the result
+- You iterate on specifics, not structure
+
+You write the high-signal parts — what the code should do, what patterns to follow, what edge cases to handle — and let Claude Code handle the mechanical implementation. That shift is where the time savings compound.
+
+<KeyPoint>Name the file, describe the change precisely, and review the output before moving on. Specific instructions plus careful review is the combination that produces reliable, clean output from Claude Code.</KeyPoint>

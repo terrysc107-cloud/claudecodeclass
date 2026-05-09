@@ -1,67 +1,98 @@
 ---
-title: "Composer Mode"
-description: "Generate entire features across multiple files in one prompt — the workflow that changes everything."
+title: "Agentic Mode and Multi-Step Tasks"
+description: "Let Claude Code chain tool calls, edit multiple files, and complete entire features autonomously — the workflow that changes everything."
 order: 2
 duration: "10 min"
 videoUrl: "https://www.youtube.com/watch?v=GJLuTFAyMts"
 coverImage: "https://images.unsplash.com/photo-1522542550221-31fd19575a2d?w=1200&auto=format&fit=crop&q=80"
 quiz:
-  - question: "What shortcut opens Composer?"
-    options: ["Cmd+L", "Cmd+K", "Cmd+Shift+I", "Cmd+P"]
-    answer: 2
-  - question: "What does Composer show you before making changes?"
-    options: ["A preview window", "A diff of proposed changes", "A list of affected files", "A confirmation dialog"]
+  - question: "What makes Claude Code's agentic mode different from a single-turn chat?"
+    options: ["It uses a different AI model", "It chains multiple tool calls and file edits to complete a task end-to-end", "It only works on JavaScript files", "It requires a special API key"]
+    answer: 1
+  - question: "What does Claude Code show you during an agentic run?"
+    options: ["A preview window", "Each tool call and file edit as it happens", "A list of affected files only at the end", "A confirmation dialog before every action"]
     answer: 1
 ---
 
-Composer is the workflow that separates Cursor from every other AI coding tool. Where Chat answers questions and Cmd+K edits a single block, Composer builds across your entire project — multiple files, new routes, updated types, all from a single prompt.
+Agentic mode is the workflow that separates Claude Code from every other AI coding tool. Where a single conversation turn answers a question or makes one change, agentic mode lets Claude Code work through a multi-step task end-to-end — reading files, running commands, editing code, checking results, and iterating — all from a single prompt.
 
-## Opening Composer
+## How Agentic Mode Works
 
-Press Cmd+Shift+I. Composer opens as a full panel. Unlike Chat, it expects you to describe something you want built, not just ask a question.
+Claude Code has access to a set of tools: reading files, writing files, running bash commands, searching the codebase, and fetching web content. In agentic mode, it chains these tools together to complete a task without you having to direct every step.
 
-## Writing an Effective Composer Prompt
+When you give it a task that requires multiple actions, it will:
 
-The best Composer prompts read like a spec:
+1. Read the relevant files to understand the current state
+2. Plan the changes needed
+3. Write the changes across whatever files are involved
+4. Run tests or commands to verify the result
+5. Fix any issues that surface and repeat
+
+You see each tool call as it happens — nothing runs invisibly in the background.
+
+## Triggering Agentic Behavior
+
+You don't switch modes explicitly. Agentic behavior is triggered by the scope of the task you describe. A narrow question gets a conversational answer. A broader task description triggers Claude Code to start chaining tool calls:
+
+```
+> Add a password reset flow to the auth system. It should:
+  - Accept an email via POST /api/auth/reset-request
+  - Generate a time-limited token and store it
+  - Send an email via the existing sendEmail utility
+  - Accept the token + new password via POST /api/auth/reset-confirm
+  - Invalidate the token after use
+  Use the patterns already in place for the login and register routes.
+```
+
+That's a task, not a question. Claude Code will explore the existing auth code, understand the patterns, and implement across however many files it needs to.
+
+<Callout type="info">
+Before writing a big agentic prompt, do a quick conversational turn first: "What patterns are already in place for auth routes in this project?" Then reference those patterns in your task description. This dramatically improves output quality and reduces cleanup.
+</Callout>
+
+## Reviewing as It Works
+
+Claude Code shows every file it reads and writes during an agentic run. You can watch the sequence of tool calls and interrupt at any point if it's going in the wrong direction:
+
+```
+> Stop — you created a new token table but we already have a tokens table
+  in the schema. Use that instead and continue.
+```
+
+Interrupting mid-task is not a problem. Claude Code incorporates the correction and continues from where it was.
+
+## Writing an Effective Agentic Prompt
+
+The best agentic prompts read like a spec:
 
 **Weak:** "Add a settings page"
 
 **Strong:** "Create a settings page at `/settings` that lets users update their name, email, and notification preferences. Use the existing `UserForm` component pattern from `/components/forms/`. Update the nav to include a link to settings. Store changes via a PATCH request to `/api/users/[id]`."
 
-The more specific you are about the existing patterns, file locations, and expected behavior, the better Composer's output will be.
-
-<Callout type="info">
-Before writing a Composer prompt, do a quick Chat session first: "What components and patterns already exist for forms in this project?" Then reference those patterns in your Composer prompt. This dramatically reduces the amount of cleanup you need to do on the generated code.
-</Callout>
-
-## Reviewing the Diff
-
-After Composer runs, it shows you a diff for every file it wants to touch. You can:
-
-- Accept all changes at once
-- Accept individual files
-- Reject specific files and ask Composer to try a different approach
-- Ask follow-up questions in the same Composer session
-
-Take the time to read the diff. Don't bulk-accept without reviewing — Composer is good but it can miss context that you have.
+Specificity about existing patterns, file locations, and expected behavior produces far better output and less cleanup.
 
 <Callout type="warning">
-If your Composer prompt is too broad, the output becomes too hard to review and too risky to accept. Start with a focused scope: one feature, one route, one refactor. You can run Composer again for the next piece. This also makes it easier to reject and retry if one part comes back wrong.
+If your task description is too broad, the output becomes too hard to review and too risky to accept. Start with a focused scope: one feature, one route, one refactor. You can run another agentic task for the next piece. Smaller, reviewable tasks are safer than one massive run you can't fully audit.
 </Callout>
 
-## Iterating in the Same Session
+## Iterating After the Run
 
-If the first pass isn't right, don't start over. Follow up in the same Composer session:
+If the first pass isn't complete or has issues, follow up directly:
 
-"The form validation is missing — add Zod schema validation for all fields."
+```
+> The form validation is missing — add Zod schema validation for all fields.
+```
 
-"You created a new Button component but we already have one at `/components/ui/Button`. Use that instead."
+```
+> You created a new Button component but we already have one at
+  /components/ui/Button. Refactor to use that instead.
+```
 
-Composer maintains context from the previous generation and refines its output.
+Claude Code reads the current state of the files — including what it just wrote — and makes the requested adjustments.
 
-## When to Use Composer vs. Cmd+K
+## When to Use Agentic Mode vs. Conversational
 
-- **Composer**: building something new, refactoring across multiple files, adding a full feature
-- **Cmd+K**: editing a specific function or block, targeted changes within a single file
+- **Agentic**: building something new, refactoring across multiple files, adding a full feature, running and fixing a test suite
+- **Conversational**: understanding existing code, asking questions, exploring options before committing to an approach
 
-<KeyPoint>Composer is for building, Chat is for understanding. When you have something to create, open Composer and write a spec — not a vague request. The quality of your output is directly proportional to the specificity of your prompt.</KeyPoint>
+<KeyPoint>Agentic mode is for building. When you have something to create, write a spec-style prompt — not a vague request. The quality of your output is directly proportional to the specificity of your task description.</KeyPoint>
