@@ -19,11 +19,7 @@ const MODULES = [
   { num: "08", title: "Make Money With Claude Code", desc: "Freelance playbook, micro-SaaS, sellable templates, internal tools, and productizing your workflow.", lessons: 5, highlight: true },
 ];
 
-const TESTIMONIALS = [
-  { name: "Alex R.", role: "Freelance Developer", text: "I landed two freelance clients in the first week after finishing this course. Claude Code changed how I pitch and deliver." },
-  { name: "Maya T.", role: "Founder", text: "Built and launched my first micro-SaaS in 4 days. I couldn't have done it without the agent workflows they teach here." },
-  { name: "Jordan K.", role: "Agency Owner", text: "I was skeptical AI tools were worth it. Module 3 alone saved me 6 hours on a client project." },
-];
+// TODO: Replace with real student testimonials before launch
 
 function UpgradeScroller() {
   const searchParams = useSearchParams();
@@ -195,26 +191,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="max-w-6xl mx-auto px-6 py-16">
-        <h2 className="text-3xl font-bold text-white text-center mb-10">What students say</h2>
-        <div className="grid sm:grid-cols-3 gap-6">
-          {TESTIMONIALS.map((t) => (
-            <div key={t.name} className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-              <div className="flex gap-0.5 mb-4" aria-label="5 out of 5 stars">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 text-brand-400 fill-brand-400" aria-hidden="true" />
-                ))}
-              </div>
-              <p className="text-slate-300 text-sm leading-relaxed mb-4">&ldquo;{t.text}&rdquo;</p>
-              <div>
-                <p className="text-white font-medium text-sm">{t.name}</p>
-                <p className="text-slate-500 text-xs">{t.role}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* Social proof — add real student testimonials here before launch */}
 
       {/* Who it's for */}
       <section className="max-w-6xl mx-auto px-6 py-16">
