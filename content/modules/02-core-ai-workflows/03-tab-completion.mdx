@@ -1,0 +1,64 @@
+---
+title: "Tab Completion"
+description: "How Cursor's Tab completion works, why it's smarter than Copilot, and how to use it to write code at full speed."
+order: 3
+duration: "7 min"
+videoUrl: "https://www.youtube.com/watch?v=dKSNSCl0KgU"
+coverImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What makes Cursor's Tab completion different from basic autocomplete?"
+    options: ["It only suggests single words", "It predicts multi-line completions based on full file context", "It requires an internet connection", "It only works in JavaScript"]
+    answer: 1
+  - question: "How do you accept only part of a Tab suggestion?"
+    options: ["Press Enter", "Press Tab", "Press the right arrow key", "Press Escape then Tab"]
+    answer: 2
+---
+
+Tab completion in Cursor isn't autocomplete. It's next-edit prediction — Cursor reads the full context of your file and predicts what you're about to write, often several lines ahead.
+
+## How It Works
+
+As you type, Cursor continuously analyzes:
+
+- The current file content
+- Your recent edits
+- Any context you've added via `@mentions`
+- The patterns established earlier in the file
+
+When it has a high-confidence prediction, it shows the suggestion in grey text. Press Tab to accept the whole thing. Press Escape to dismiss it.
+
+## Multi-Line Predictions
+
+Tab completions in Cursor are often multi-line. If you type a function signature, Cursor may predict the entire body. If you write the first item in an array, it may predict the rest based on the pattern.
+
+This is where the time savings compound. You write the intent, Cursor writes the implementation, you read and accept.
+
+<Callout type="tip">
+To accept only part of a suggestion, press the right arrow key instead of Tab. This accepts the suggestion word by word, letting you stop wherever you want. Useful when the beginning of a suggestion is right but the end isn't.
+</Callout>
+
+## Next-Edit Suggestions
+
+Cursor also predicts your next edit based on what you just changed. If you rename a variable in one place, it may suggest the same rename in the next usage. If you update a function signature, it may suggest updating the call sites.
+
+These "next cursor" suggestions appear as a subtle highlight. Press Tab to accept, move on.
+
+## Context Makes Completions Better
+
+The completions improve as Cursor learns the patterns in your file:
+
+- Add a comment describing what a function should do before writing it
+- Keep related functions in the same file so patterns are consistent
+- Use `@mentions` in Chat to build shared context before starting a new section
+
+<Callout type="info">
+Tab completion is not always right. It's a prediction, not a guarantee. Read the suggestion before accepting, especially for anything involving business logic, data transformation, or security. Fast code that's wrong is worse than slower code that's correct.
+</Callout>
+
+## The Speed Gain
+
+Once you're comfortable with Tab completion, your typing rhythm changes. You write less and read more. You write the high-signal parts — the intent, the shape of the solution — and let Cursor fill in the implementation details.
+
+That shift in rhythm is where the 10× productivity claims come from. It's real, but it takes a few days of deliberate practice to internalize.
+
+<KeyPoint>Tab is your fastest feedback loop — the more context in the file, the better the predictions get. Write the intent, let Cursor fill in the implementation, read before you accept.</KeyPoint>

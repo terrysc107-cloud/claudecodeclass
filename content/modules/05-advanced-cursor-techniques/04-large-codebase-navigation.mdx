@@ -1,0 +1,99 @@
+---
+title: "Large Codebase Navigation"
+description: "Stay productive in enterprise-scale or complex client codebases using Cursor's indexing and context tools."
+order: 4
+duration: "8 min"
+videoUrl: "https://www.youtube.com/watch?v=i6FdGFNVGgc"
+coverImage: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What does .cursorignore do?"
+    options: ["Hides files from the editor", "Excludes files from Cursor's index", "Prevents AI edits on certain files", "Disables syntax highlighting"]
+    answer: 1
+  - question: "As a codebase grows larger, how does Cursor's value change?"
+    options: ["Decreases — less context available", "Stays the same", "Increases — more complexity for AI to help with", "Depends on the programming language"]
+    answer: 2
+---
+
+The larger the codebase, the more valuable Cursor becomes. Understanding a 200-file project manually takes days. With Cursor, you can be productive in hours.
+
+## Indexing for Large Projects
+
+When you open a large project, let Cursor index completely before starting work. You can check index status in the bottom status bar. For very large projects (100k+ lines), indexing may take 5–10 minutes.
+
+After indexing, the `@codebase` command becomes your map of the entire project.
+
+## Create a .cursorignore File
+
+Large projects often have directories that create noise: generated code, build outputs, vendor files, test fixtures. Exclude them:
+
+```
+# .cursorignore
+node_modules/
+.next/
+dist/
+build/
+coverage/
+generated/
+prisma/migrations/
+*.test.ts.snap
+public/static/
+```
+
+This keeps the index focused on meaningful source code and significantly improves response relevance.
+
+<Callout type="tip">
+Think of `.cursorignore` like `.gitignore` for AI context. You want Cursor focused on the code that matters — your source files, your components, your business logic. Generated code, dependencies, and build artifacts are noise that dilutes the index quality.
+</Callout>
+
+## Navigation Patterns for Large Projects
+
+**Module-level orientation:**
+```
+@src/modules/billing Explain the billing module.
+What are the main files and what does each one do?
+```
+
+**Dependency tracing:**
+```
+@src/models/User.ts What else in the codebase imports
+or depends on the User model?
+```
+
+**Change impact analysis:**
+```
+@src/lib/database.ts If I change the query() interface here,
+what else would need to be updated?
+```
+
+**Finding patterns:**
+```
+@codebase How is pagination implemented across different
+list views in this app? Are the patterns consistent?
+```
+
+## The "Expert in a Day" Pattern
+
+For client onboarding or taking over a legacy project, use this sequence:
+
+1. Open the project, let it index
+2. Ask Chat for a high-level architecture overview (`@codebase Explain this project`)
+3. Ask for the riskiest or most complex areas (`@codebase What parts of this codebase look fragile or inconsistent?`)
+4. Ask for the data model (`@codebase Explain the main data entities and their relationships`)
+5. Ask for the authentication flow (`@codebase Trace how auth works from sign-in to authorized API request`)
+
+<Callout type="info">
+This sequence takes 20–30 minutes. At the end of it, you'll have more context about the project than most developers who've been on it for weeks. That's the leverage. You can walk into a client kickoff or a new job with an understanding that normally takes months to develop organically.
+</Callout>
+
+## Symbol and File Search
+
+For targeted navigation:
+- **Cmd+P** — fuzzy file search
+- **Cmd+Shift+F** — global text search across all files
+- **Cmd+Shift+O** — symbol search within the current file
+- **F12** — go to definition
+- **Shift+F12** — find all references
+
+These are inherited from VS Code and work identically. Use them when you know exactly what you're looking for; use `@codebase` when you don't.
+
+<KeyPoint>Cursor's value scales with codebase size. The more complex the project, the more time it saves. Large codebases that take weeks to understand manually can be mapped in hours — and that accelerated understanding is what you charge premium rates for.</KeyPoint>

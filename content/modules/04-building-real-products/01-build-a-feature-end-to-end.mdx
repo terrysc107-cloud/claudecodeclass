@@ -1,0 +1,90 @@
+---
+title: "Build a Feature End-to-End"
+description: "Go from a written spec to working, deployed code in a single Cursor session."
+order: 1
+duration: "12 min"
+videoUrl: "https://www.youtube.com/watch?v=GJLuTFAyMts"
+coverImage: "https://images.unsplash.com/photo-1537884944318-390069bb8665?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What is the first step in the spec-first workflow?"
+    options: ["Open Composer", "Write a detailed spec comment", "Run the existing tests", "Create a new branch"]
+    answer: 1
+  - question: "Why should you commit after Composer completes?''"
+    options: ["To share the code", "To create a restore point before continuing", "Because Cursor requires it", "To trigger CI"]
+    answer: 1
+---
+
+The spec-first workflow is the highest-leverage pattern in Cursor. Instead of writing code and asking Cursor to help, you write a detailed spec and let Cursor implement it. You review and refine.
+
+## Step 1: Write the Spec
+
+Before opening Composer, write a spec in a comment or in a Chat session. This forces clarity and becomes the foundation of your Composer prompt:
+
+```
+// FEATURE: User email notifications
+// - Users can opt in/out of three notification types: 
+//   marketing, product updates, security alerts
+// - Preferences stored in user_preferences table
+//   (already exists, just needs new columns)
+// - Settings accessible from account page
+// - API: PATCH /api/users/[id]/notifications
+// - Email sent via existing Resend integration at lib/email.ts
+// - Follow the same form pattern as the profile settings page
+```
+
+<Callout type="tip">
+Write the spec before touching Composer. This does two things: it forces you to think through the feature completely before implementation, and it gives Composer the context it needs to produce coherent output. Vague prompts produce code you'll spend an hour cleaning up.
+</Callout>
+
+## Step 2: Orient with Chat
+
+Before running Composer, do a quick Chat session:
+
+```
+@lib/email.ts How does the email integration work?
+@app/settings/page.tsx What form pattern is used here that I should follow?
+```
+
+Use the answers to refine your Composer prompt.
+
+## Step 3: Run Composer
+
+Open Composer (Cmd+Shift+I), paste your spec as the prompt. Reference the key files. Let it run.
+
+Review the diff. Start with the database/type changes, then the API, then the UI. Accept file by file. Follow up on anything that's off.
+
+## Step 4: Commit a Checkpoint
+
+After accepting the initial Composer output, commit:
+
+```
+git add -A && git commit -m "feat: add notification preferences (WIP)"
+```
+
+This is your restore point. If subsequent edits go sideways, you can return here.
+
+<Callout type="info">
+Committing after each significant Composer session is one of the most underrated habits in AI-assisted development. You get clean, reviewable history. You also get a safe bailout point — which matters more when you're moving fast.
+</Callout>
+
+## Step 5: Polish and Test
+
+After the Composer pass, switch to Cmd+K for targeted fixes:
+
+- Edge cases the spec didn't cover
+- Styling tweaks
+- Error messages that need improvement
+- Validation rules that need tightening
+
+Then run the tests. Fix failures with Chat + Cmd+K. When everything passes, you're done.
+
+## Step 6: Final Review
+
+Before calling it complete, ask Chat to review the feature:
+
+```
+@feature-files Review this notification preferences implementation.
+What edge cases might I have missed? Are there any security concerns?
+```
+
+<KeyPoint>The best Composer prompt is a spec — describe the outcome and the constraints, not the implementation. A spec-first approach produces better code, clearer git history, and features you can explain to clients and teammates.</KeyPoint>

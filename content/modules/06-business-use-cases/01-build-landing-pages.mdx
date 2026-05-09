@@ -1,0 +1,94 @@
+---
+title: "Build Landing Pages in 30 Minutes"
+description: "Ship a conversion-optimized landing page with Cursor — then charge $500–$2,000 for it."
+order: 1
+duration: "11 min"
+videoUrl: "https://www.youtube.com/watch?v=1CC88QGQiEA"
+coverImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "A landing page you built in 30 minutes — what should you charge for it?"
+    options: ["Whatever it took in time ($15/hr)", "Based on the value it delivers to the client", "Nothing — it was too fast", "The same as a page that took 4 hours"]
+    answer: 1
+  - question: "What should a .cursorrules file for a landing page project include?"
+    options: ["Only the tech stack", "Tech stack, conversion best practices, and component patterns", "Just the color codes", "The client's budget"]
+    answer: 1
+---
+
+A well-built landing page can generate thousands of dollars a month for a client. Your 30 minutes of work doesn't diminish that value — it makes your time investment and your skill more impressive, not less.
+
+## The Landing Page .cursorrules
+
+Start every landing page project by setting up `.cursorrules`:
+
+```
+You are building a conversion-optimized landing page.
+
+## Tech Stack
+- Next.js App Router with TypeScript
+- Tailwind CSS for all styling
+- Vercel for deployment
+
+## Landing Page Best Practices
+- Hero section: clear headline + subheadline + single CTA above the fold
+- Social proof near the top (testimonials, logos, stats)
+- Feature/benefit sections: lead with the benefit, then the feature
+- Single CTA repeated throughout: don't confuse visitors with multiple offers
+- Mobile-first: all sections must look great on a phone
+
+## Component Conventions
+- Sections as separate components in /components/sections/
+- Reusable UI in /components/ui/
+- All text content in constants at the top of each section file for easy editing
+```
+
+<Callout type="tip">
+Store all client-specific copy (headlines, features, testimonials, pricing) in a constants file at the top of the page or in a separate `content.ts` file. When the client wants to change copy — and they will — you can update one file instead of hunting through components.
+</Callout>
+
+## The Build Workflow
+
+**Step 1:** Ask Chat to analyze what makes the client's product compelling:
+```
+Here's the product: [description]. What are the 3-5 most compelling
+benefits I should highlight? What objections would potential customers have?
+```
+
+**Step 2:** Use Composer to scaffold all sections at once:
+```
+Build a landing page for [product description] with these sections:
+- Hero: headline "[headline]", subhead "[subhead]", CTA "Get Started Free"
+- Stats: 3 proof points (numbers that show scale/traction)
+- Features: 3 benefit-led cards
+- Testimonials: 3 quote cards
+- Pricing: single plan at $X
+- Footer with logo and copyright
+```
+
+**Step 3:** Use Cmd+K to polish each section — spacing, colors, mobile layout.
+
+**Step 4:** Deploy to Vercel.
+
+## What to Charge
+
+A landing page that converts well is worth far more than the time it took. Relevant pricing anchors:
+
+- Basic landing page: $500–$1,000
+- Landing page + email capture setup: $1,000–$2,000
+- Landing page + A/B test variant: $2,000+
+- Monthly retainer for copy updates and optimization: $300–$500/mo
+
+Price based on value delivered, not hours spent.
+
+<Callout type="info">
+When a client asks how long a landing page takes, the honest answer is "less than a day." Some clients will try to negotiate based on that. The response: "My rate is based on the outcome — a page that converts visitors into customers — not the hours. A page that generates $10,000/mo in new business is worth $1,500 regardless of how long it took to build."
+</Callout>
+
+## Reusable Landing Page Starter
+
+After your second or third landing page, extract the pattern into a reusable starter template. Then you can:
+
+- Start every new project from a working base
+- Sell the starter to other developers ($49–$197)
+- Use it as a portfolio piece that shows range
+
+<KeyPoint>A landing page that took 30 minutes is still worth $500–$2,000 to the client. Price based on the outcome it delivers, not the time it cost. Your speed is a skill, not a discount reason.</KeyPoint>

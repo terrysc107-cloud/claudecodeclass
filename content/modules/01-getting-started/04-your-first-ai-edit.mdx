@@ -1,0 +1,61 @@
+---
+title: "Your First AI Edit"
+description: "Make your first Tab completion and Cmd+K edit — and understand exactly what happened."
+order: 4
+duration: "7 min"
+videoUrl: "https://www.youtube.com/watch?v=Bs3gO5IuMIU"
+coverImage: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What key accepts a Tab completion suggestion?"
+    options: ["Enter", "Tab", "Space", "Right arrow"]
+    answer: 1
+  - question: "What should you always do before accepting an AI-generated edit?"
+    options: ["Save the file", "Run the tests", "Read the diff", "Open a new tab"]
+    answer: 2
+---
+
+The fastest way to understand Cursor is to use it. Open any JavaScript or TypeScript file and follow along.
+
+## Tab Completion
+
+Start typing a function. After a line or two, Cursor will show a greyed-out suggestion continuing your code. Press Tab to accept it.
+
+That's Tab completion. It's not autocomplete in the old sense — it's predicting what you're about to write based on the full file context, not just the current word.
+
+A few things to notice:
+
+- Suggestions can span multiple lines
+- They adapt to the patterns already in your file
+- You can accept partial suggestions with the right arrow key
+
+<Callout type="tip">
+The more context in your file, the better Tab completions get. If you're starting a new file, add a comment at the top describing what it does — Cursor uses it to ground its suggestions.
+</Callout>
+
+## Inline Edit with Cmd+K
+
+Now select a function — the whole thing, from signature to closing brace. Press Cmd+K. A small input bar appears at the top of the selection.
+
+Type an instruction: "add input validation and return an error if any field is empty."
+
+Cursor will rewrite the selected block and show you the diff: red for removed lines, green for added. Review it. If it looks right, press Accept. If not, press Escape and try a more specific instruction.
+
+<Callout type="warning">
+Don't accept edits without reading them. This is the most important habit to build early. AI-generated code can be subtly wrong — it might add validation but use the wrong field names, or handle one case but miss another. Read every diff before accepting.
+</Callout>
+
+## What Just Happened
+
+Cursor read your entire file, understood the context, and made a targeted edit based on your instruction. It didn't just find-and-replace — it reasoned about the code.
+
+This is the core interaction: you describe the outcome, Cursor implements it, you review and decide.
+
+## Your Turn
+
+Open a real file in a project you're working on. Find a function that could use improvement — better error handling, cleaner variable names, a missing edge case. Select it, press Cmd+K, and describe what you want.
+
+Review the diff. Accept if it's right. Reject and refine if it's not.
+
+That loop — describe, review, decide — is the foundation of everything in this course.
+
+<KeyPoint>Always read the diff before accepting. AI is fast but you're still the decision-maker. The habit of reviewing before accepting is what separates developers who get great results from those who introduce subtle bugs.</KeyPoint>

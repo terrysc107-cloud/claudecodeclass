@@ -1,0 +1,72 @@
+---
+title: "Inline Editing with Cmd+K"
+description: "Rewrite, refactor, or improve any block of code without switching to a chat window."
+order: 4
+duration: "7 min"
+videoUrl: "https://www.youtube.com/watch?v=mFBiCo10lOw"
+coverImage: "https://images.unsplash.com/photo-1604539679695-65fea3ca3f24?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What shortcut activates inline editing in Cursor?"
+    options: ["Cmd+L", "Cmd+I", "Cmd+K", "Cmd+E"]
+    answer: 2
+  - question: "What makes a good Cmd+K instruction?"
+    options: ["Being vague so Cursor has freedom", "Being specific about what you want changed", "Writing it in code instead of English", "Using technical jargon"]
+    answer: 1
+---
+
+Cmd+K is the fastest way to change existing code in Cursor. Select a block, give an instruction, review the diff, accept or reject. The whole interaction takes seconds.
+
+## The Basic Flow
+
+1. Select code — a function, a block, a few lines, or even just position your cursor
+2. Press Cmd+K
+3. A small input bar appears above your selection
+4. Type your instruction in plain English
+5. Cursor rewrites the selected code and shows a diff
+6. Press Accept to apply or Escape to discard
+
+No chat panel. No context-switching. Just a quick edit and move on.
+
+## Writing Good Instructions
+
+The quality of your instruction directly determines the quality of the output:
+
+**Too vague:** "make this better"
+
+**Specific and actionable:**
+- "Add error handling and throw with a descriptive message if `userId` is undefined"
+- "Make this function async and await the database call"
+- "Simplify this by using Array.reduce instead of the for loop"
+- "Add JSDoc comments for all parameters and the return value"
+
+<Callout type="tip">
+Be specific about the outcome, not the technique. "Add input validation" is good. "Use Zod to validate that email is a valid email format and name is a non-empty string" is better. The more specific you are, the less cleanup you'll need afterward.
+</Callout>
+
+## Without Selection
+
+If you press Cmd+K without selecting anything, the instruction bar still appears. In this mode, you can ask Cursor to generate new code at the cursor position, add a function below the current one, or insert a block before the next section.
+
+This is useful for adding things (a new function, an import, a comment block) without having to type them from scratch.
+
+## Reviewing the Diff
+
+Cursor shows the before/after diff inline in the editor. Changed lines are highlighted. Read the entire diff before accepting — don't just check that the new lines look right, also verify that nothing important was removed.
+
+<Callout type="warning">
+One common mistake: accepting an edit because the new lines look correct without noticing that something was deleted. Cursor sometimes removes code it judges as redundant. That judgment is usually right, but occasionally it removes something you need. Always read both sides of the diff.
+</Callout>
+
+## Cmd+K vs. Composer
+
+Use Cmd+K when:
+- You're editing a specific, bounded block of code
+- The change is confined to one function or section
+- You want to stay in the flow of the current file
+
+Use Composer when:
+- The change touches multiple files
+- You're building something new from scratch
+- You want to reference patterns from across the codebase
+
+<KeyPoint>Cmd+K is the fastest way to change existing code — use it far more than you think you should. If you find yourself rewriting a function manually, stop and reach for Cmd+K instead.</KeyPoint>

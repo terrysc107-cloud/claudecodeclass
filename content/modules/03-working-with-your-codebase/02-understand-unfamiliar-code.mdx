@@ -1,0 +1,95 @@
+---
+title: "Understanding Unfamiliar Code"
+description: "Use Cursor to understand any codebase quickly — the skill that makes you valuable on client projects."
+order: 2
+duration: "8 min"
+videoUrl: "https://www.youtube.com/watch?v=KhJSKpHxFoU"
+coverImage: "https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "What should you ask before making a change in unfamiliar code?"
+    options: ["Nothing, just start editing", "What would break if I changed this?", "How long will this take?", "What language is this?"]
+    answer: 1
+  - question: "Which @mention searches across the entire repository?"
+    options: ["@file", "@project", "@codebase", "@all"]
+    answer: 2
+---
+
+Understanding code you didn't write is one of the most time-consuming parts of development. With Cursor, it's also one of the most leveraged — a few well-chosen questions can replace hours of manual reading.
+
+## Start at the Top Level
+
+Open Chat and ask for a structural overview:
+
+```
+@src/api Explain the overall structure of this API folder.
+What pattern is used for routing? How is authentication applied?
+```
+
+Then drill down:
+
+```
+@src/api/users/route.ts Walk me through this file.
+What does each function do and when is it called?
+```
+
+Go from general to specific. Don't start at the line level — start at the architecture level.
+
+## Map the Data Flow
+
+For most codebases, understanding the data flow is the key:
+
+```
+@codebase Trace the data flow for creating a new order.
+From the API request to the database write — what files are involved?
+```
+
+```
+@codebase How does the session token get from the auth response
+to being available in API route handlers?
+```
+
+<Callout type="tip">
+Ask Cursor to draw a mental map of the flow in plain language. "What touches what" is often more valuable than understanding any individual file. Once you see the flow, individual files make sense in context.
+</Callout>
+
+## Identify the Risky Parts
+
+Before making changes, understand the blast radius:
+
+```
+@src/lib/payments.ts What would break if I changed the
+charge() function signature?
+```
+
+```
+@codebase Which parts of the app depend on this shared
+utility function?
+```
+
+This prevents the "I changed one thing and broke three others" problem that plagues work on unfamiliar codebases.
+
+## Understand the Patterns
+
+Every codebase has conventions: how errors are handled, how data is validated, how components receive props. Learn them before you write a single line:
+
+```
+@codebase How are form validation errors handled and displayed
+throughout this app?
+```
+
+```
+@src/components What pattern is used for loading and error states
+in async data fetching components?
+```
+
+<Callout type="info">
+When you follow existing patterns, your code looks like it belongs. When you don't, you create inconsistencies that the next developer (or you in six months) will have to resolve. Cursor makes it trivially easy to understand the patterns — there's no excuse for ignoring them.
+</Callout>
+
+## On Client Projects
+
+This skill is what makes you dangerous on client work. You can take on a complex existing codebase, orient quickly, and make changes confidently — instead of spending days reading before you can do anything.
+
+A client won't see the difference between you spending 3 days understanding their codebase manually and spending 3 hours with Cursor. But your invoice will reflect the difference.
+
+<KeyPoint>Understanding before editing saves hours of debugging. Ask Cursor "what would break if I changed this?" before touching anything in an unfamiliar codebase. It's the question that prevents expensive mistakes.</KeyPoint>

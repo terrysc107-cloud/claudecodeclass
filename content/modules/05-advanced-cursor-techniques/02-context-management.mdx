@@ -1,0 +1,86 @@
+---
+title: "Context Management"
+description: "Control what Cursor sees so you get better, more accurate responses every time."
+order: 2
+duration: "9 min"
+videoUrl: "https://www.youtube.com/watch?v=kJ96MBiMtCg"
+coverImage: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&auto=format&fit=crop&q=80"
+quiz:
+  - question: "Why should you clear Chat context when switching to a new task?"
+    options: ["It uses less tokens", "Old context can confuse responses for the new task", "It loads faster", "Cursor requires it"]
+    answer: 1
+  - question: "What is the most precise way to give Cursor context?"
+    options: ["@codebase", "Opening many files", "@specific-filename", "Describing the code in words"]
+    answer: 2
+---
+
+The quality of Cursor's output is directly proportional to the quality of the context you give it. Most developers who get mediocre results from AI tools are giving it poor context — not because they're doing anything wrong, just because they haven't thought deliberately about what Cursor actually needs to see.
+
+## How Context Works
+
+When you make a request in Chat or Composer, Cursor reads:
+
+1. Your `.cursorrules` file (always)
+2. The currently open file (always)
+3. Any files you explicitly @-mentioned
+4. The conversation history in the current session
+5. Indexed codebase results if you used `@codebase`
+
+The model doesn't automatically know about files you haven't mentioned. If the auth logic is in `lib/auth.ts` and you ask "why is my login failing?", Cursor won't look at `lib/auth.ts` unless you tell it to.
+
+## Precise Context Beats Broad Context
+
+Be explicit:
+
+```
+@lib/auth.ts @app/api/auth/route.ts
+Why would a user with a valid password get a 401 response?
+```
+
+This is better than:
+
+```
+@codebase Why would a user get a 401?
+```
+
+The first gives Cursor exactly what it needs. The second triggers a broad search that may or may not surface the relevant files.
+
+<Callout type="tip">
+When you're stuck and don't know which files are relevant, use `@codebase` to find out. Then note which files Cursor surfaced, start a new Chat session, and reference those specific files. You get better answers with explicit references than with repeated broad searches.
+</Callout>
+
+## Session Context
+
+Chat maintains conversation history within a session. Early messages provide context for later messages. This is powerful when you're working through a problem step by step.
+
+But old context can also become noise. If you've been debugging a specific function and now want to build something new, start a fresh Chat session. Stale context leads to answers that are subtly colored by the previous task.
+
+```
+Cmd+L → [New Chat button] → start fresh
+```
+
+## What to Include in a Context-Rich Request
+
+For best results, include:
+
+- **What you're trying to do** (the outcome)
+- **What you've already tried** (if debugging)
+- **The relevant files** (via @mentions)
+- **Any constraints** ("without changing the database schema" / "must work in Node 18")
+- **The error or unexpected behavior** (exact text, not paraphrase)
+
+<Callout type="warning">
+Don't paste entire files as text into Chat. Use @mentions instead — they're more efficient and Cursor knows how to navigate the file structure. When you paste large amounts of code into the message, you push out other context and the response quality drops.
+</Callout>
+
+## Context for Composer
+
+For Composer specifically, include enough context that it can maintain consistency:
+
+- Reference the files that define your patterns
+- Mention which utilities already exist
+- Note what you explicitly don't want it to create (if it's already there)
+
+Composer with good context produces code that looks like it was always there. Composer without context produces code you spend 30 minutes retrofitting.
+
+<KeyPoint>The quality of your output is proportional to the quality of your context. Be deliberate: reference specific files, describe constraints, and clear context when switching tasks. This is the single highest-leverage habit in Cursor.</KeyPoint>
