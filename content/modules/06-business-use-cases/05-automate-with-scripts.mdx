@@ -1,5 +1,5 @@
 ---
-title: "Automate With Scripts"
+title: "Automate with Scripts and Claude Code"
 description: "Build Python and Node scripts that solve real business problems — and charge for them as standalone deliverables."
 order: 5
 duration: "9 min"
@@ -33,6 +33,7 @@ Build a Python script that:
 
 Use environment variables for all API keys.
 Include a requirements.txt.
+Add comprehensive error handling and logging — this runs unattended.
 ```
 
 <Callout type="tip">
@@ -61,16 +62,37 @@ The most valuable automations are the ones that touch spreadsheets, emails, and 
 - Merge multiple spreadsheets on a schedule
 - Auto-calculate formulas and update a master sheet
 
-## Cursor's Script Workflow
+## Claude Code's Script Workflow
 
-1. **Describe the input and output** in your Composer prompt (what does the script read? what does it produce?)
-2. **Reference any existing API docs** via `@web` or by pasting in key documentation
+1. **Describe the input and output** in your prompt (what does the script read? what does it produce?)
+2. **Ask Claude to include error handling and logging** explicitly — don't assume it will
 3. **Review the generated script** — read every line, especially the API calls and error handling
 4. **Test with real data** — small sample first, full dataset after
+5. **Ask Claude to add a dry-run mode** so you can verify behavior without side effects
+
+For scripts that call external APIs, ask Claude to also write a brief README with setup instructions — clients need to know how to configure credentials and run it.
 
 <Callout type="info">
-Ask Cursor to include comprehensive error handling and logging in every script. Scripts that run on a schedule at 2am without anyone watching need to fail loudly: write to a log file, send a failure email, or both. A silent failure in an automation is worse than no automation at all.
+Ask Claude Code to include comprehensive error handling and logging in every script. Scripts that run on a schedule at 2am without anyone watching need to fail loudly: write to a log file, send a failure email, or both. A silent failure in an automation is worse than no automation at all.
 </Callout>
+
+## Building CLI Tools
+
+Claude Code is also well-suited to building CLI tools — scripts with flags and subcommands that developers or power users run manually:
+
+```
+Build a Node.js CLI tool that:
+- Takes a CSV file path as input
+- Validates each row against a schema (email format, required fields)
+- Outputs a report of validation errors with row numbers
+- Has a --fix flag that attempts to clean common issues (trim whitespace,
+  normalize phone numbers)
+- Exits with code 1 if there are unfixable errors, 0 if clean
+
+Use commander.js for argument parsing. Include a bin entry in package.json.
+```
+
+Claude Code can generate the argument parsing, help text, error messages, and exit codes — the boilerplate that makes CLI tools feel polished.
 
 ## Pricing Scripts
 
@@ -88,6 +110,6 @@ After delivery, offer a support/maintenance package:
 - $100–$300/month to keep the script running, handle API changes, and make small adjustments
 - Position it as "we monitor and maintain so you don't have to"
 
-One automation with a maintenance retainer is $1,200–$3,600/year of recurring revenue.
+One automation with a maintenance retainer is $1,200–$3,600/year of recurring revenue. Claude Code makes the maintenance fast enough that it's nearly pure margin.
 
 <KeyPoint>A 50-line script that saves a client 5 hours/week is worth $500–$2,000. Price on ROI, not time spent. Then offer a maintenance retainer and turn a one-time project into recurring income.</KeyPoint>

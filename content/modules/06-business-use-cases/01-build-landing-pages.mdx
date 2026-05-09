@@ -1,6 +1,6 @@
 ---
-title: "Build Landing Pages in 30 Minutes"
-description: "Ship a conversion-optimized landing page with Cursor — then charge $500–$2,000 for it."
+title: "Build Landing Pages Fast with Claude Code"
+description: "Ship a conversion-optimized landing page with Claude Code — then charge $500–$2,000 for it."
 order: 1
 duration: "11 min"
 videoUrl: "https://www.youtube.com/watch?v=1CC88QGQiEA"
@@ -9,16 +9,16 @@ quiz:
   - question: "A landing page you built in 30 minutes — what should you charge for it?"
     options: ["Whatever it took in time ($15/hr)", "Based on the value it delivers to the client", "Nothing — it was too fast", "The same as a page that took 4 hours"]
     answer: 1
-  - question: "What should a .cursorrules file for a landing page project include?"
+  - question: "What should a CLAUDE.md file for a landing page project include?"
     options: ["Only the tech stack", "Tech stack, conversion best practices, and component patterns", "Just the color codes", "The client's budget"]
     answer: 1
 ---
 
 A well-built landing page can generate thousands of dollars a month for a client. Your 30 minutes of work doesn't diminish that value — it makes your time investment and your skill more impressive, not less.
 
-## The Landing Page .cursorrules
+## The Landing Page CLAUDE.md
 
-Start every landing page project by setting up `.cursorrules`:
+Start every landing page project by setting up `CLAUDE.md`:
 
 ```
 You are building a conversion-optimized landing page.
@@ -47,13 +47,13 @@ Store all client-specific copy (headlines, features, testimonials, pricing) in a
 
 ## The Build Workflow
 
-**Step 1:** Ask Chat to analyze what makes the client's product compelling:
+**Step 1:** Ask Claude to analyze what makes the client's product compelling:
 ```
 Here's the product: [description]. What are the 3-5 most compelling
 benefits I should highlight? What objections would potential customers have?
 ```
 
-**Step 2:** Use Composer to scaffold all sections at once:
+**Step 2:** Ask Claude to scaffold all sections at once:
 ```
 Build a landing page for [product description] with these sections:
 - Hero: headline "[headline]", subhead "[subhead]", CTA "Get Started Free"
@@ -62,11 +62,31 @@ Build a landing page for [product description] with these sections:
 - Testimonials: 3 quote cards
 - Pricing: single plan at $X
 - Footer with logo and copyright
+
+Use the conventions in CLAUDE.md. Put all copy in a content.ts file.
 ```
 
-**Step 3:** Use Cmd+K to polish each section — spacing, colors, mobile layout.
+**Step 3:** Iterate section by section — ask Claude to refine spacing, colors, and mobile layout for each component.
 
 **Step 4:** Deploy to Vercel.
+
+## Iterating on Copy and Layout
+
+Claude Code excels at rapid iteration. Once the initial scaffold is in place, you can refine quickly:
+
+```
+The hero headline feels generic. The product is [description] and
+the target customer is [audience]. Rewrite the headline and subheadline
+to be more specific and outcome-focused.
+```
+
+```
+The features section looks too text-heavy on mobile. Read
+components/sections/Features.tsx and adjust the layout so each
+card stacks cleanly on small screens.
+```
+
+Each iteration is fast because Claude has the full component in context and understands the conventions from `CLAUDE.md`.
 
 ## What to Charge
 
@@ -90,5 +110,7 @@ After your second or third landing page, extract the pattern into a reusable sta
 - Start every new project from a working base
 - Sell the starter to other developers ($49–$197)
 - Use it as a portfolio piece that shows range
+
+The `CLAUDE.md` from your first project becomes the base instructions for all future landing page work — it already has the conventions, the component structure, and the best practices baked in.
 
 <KeyPoint>A landing page that took 30 minutes is still worth $500–$2,000 to the client. Price based on the outcome it delivers, not the time it cost. Your speed is a skill, not a discount reason.</KeyPoint>
