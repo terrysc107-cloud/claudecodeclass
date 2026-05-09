@@ -1,73 +1,108 @@
 ---
-title: "Cost Management"
-description: "Understand Cursor Pro vs. free, API costs, and how to keep your AI spend under control."
+title: "Managing Claude Code Costs and Subscriptions"
+description: "Understand API pricing vs. subscription plans, how to use /compact to reduce token spend, and cost-effective patterns for heavy users."
 order: 4
 duration: "7 min"
 videoUrl: "https://www.youtube.com/watch?v=1CC88QGQiEA"
 coverImage: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&auto=format&fit=crop&q=80"
 quiz:
-  - question: "When does it make sense to bring your own API key (BYOK) instead of using Cursor's managed access?"
-    options: ["Always — it's always cheaper", "Never — Cursor's pricing is always better", "When your usage is very high and you can get better rates directly", "When you need a specific model version"]
+  - question: "When does it make sense to use the Anthropic Max subscription instead of paying per-token via API?"
+    options: ["Never — API is always cheaper", "Always — subscriptions are always better value", "When you use Claude Code heavily every day and want predictable monthly costs", "Only for teams, not solo developers"]
     answer: 2
-  - question: "Which model tier should you use for routine tasks like writing comments or simple refactors?"
-    options: ["The most powerful model available", "A faster, cheaper model", "No model — do it manually", "A different tool entirely"]
+  - question: "What is the most effective way to reduce token costs mid-session without losing your work?"
+    options: ["Start a new session", "Use /compact to summarize the conversation and trim token usage", "Switch to a cheaper model", "Close Claude Code and reopen it"]
     answer: 1
 ---
 
-AI tools have real costs. Understanding the pricing structure lets you get maximum value without overspending.
+Claude Code has real costs, and understanding the pricing structure lets you get maximum value without surprises on your API bill. The good news: the economics almost always favor using it more, not less.
 
-## Cursor Pro: What You Get
+## Two Ways to Pay
 
-Cursor Pro at $20/month includes:
+**Anthropic API (pay per token)**
+You pay for exactly what you use. No monthly fee, but costs scale directly with usage. Best for:
+- Occasional or irregular use
+- Experimenting to see how much you actually use it
+- Teams that want usage tracked per project
 
-- Unlimited fast completions (Tab)
-- 500 fast premium requests/month (GPT-4o, Claude Sonnet)
-- Unlimited slow premium requests
-- Full Composer access
+**Claude.ai Pro or Max subscription**
+A monthly flat fee that includes Claude Code usage. Best for:
+- Daily heavy users who want predictable costs
+- Developers using Claude Code as a primary tool, not an occasional one
+- Anyone who gets frustrated mentally tracking token spend
 
-For most developers building client projects and side projects, Pro covers everything. You'll rarely hit the fast request limit in a normal workday.
-
-## When to Go BYOK
-
-BYOK (Bring Your Own Key) lets you connect your own Anthropic or OpenAI API key to Cursor. This makes sense when:
-
-- You're doing very high-volume work (agency, heavy Composer sessions daily)
-- You want to use a specific model version not offered in the managed plan
-- Your organization has negotiated enterprise pricing with Anthropic or OpenAI
-
-For most solo developers: stick with the managed plan. The economics don't favor BYOK until you're doing significant volume.
+**Anthropic Max plan** is the tier designed specifically for heavy Claude Code users. If you're running long multi-file sessions regularly, doing daily coding work, or building production software full-time with Claude Code, Max gives you the high usage limits you need without per-token anxiety.
 
 <Callout type="tip">
-Track your monthly API usage in the Cursor dashboard if you're on BYOK. Set a budget alert. AI API costs can surprise you — a few days of heavy Composer sessions can add up quickly. The managed Cursor plan is essentially a cost ceiling, which has real value.
+If you're just starting out, begin with API access and run it for two weeks. Look at your actual usage. If your monthly API cost is approaching or exceeding the Pro subscription price, switch to Pro. If it's approaching Max levels, go Max. Let your actual usage pattern determine the right tier — don't guess.
+</Callout>
+
+## How Tokens Actually Add Up
+
+Understanding what costs the most helps you be intentional about usage:
+
+| Operation | Token impact | Notes |
+|-----------|-------------|-------|
+| Short back-and-forth questions | Low | A few hundred tokens per exchange |
+| Long session with file context | Medium | Accumulates over the conversation |
+| Large file included in context | Medium-high | Each file read adds tokens |
+| Long debugging session | High | Many rounds of back-and-forth |
+| Multi-file refactor session | High | Large input + large output |
+
+The expensive operations are long sessions where Claude holds a lot of context simultaneously. The fix is proactive context management — not avoiding Claude Code.
+
+## /compact: Your Cost Control Tool
+
+The single most effective way to manage cost mid-session is `/compact`. When a session has been running long:
+
+```
+/compact
+```
+
+Claude summarizes the conversation into a compact representation, preserving the decisions made, the current state of the work, and the relevant context — while shedding the verbose back-and-forth that no longer matters. Token count drops significantly. You continue in the same session.
+
+Use `/compact` before you need it, not after you've hit a wall. A good rule: if you've had more than 15–20 exchanges in a session, consider compacting.
+
+<Callout type="info">
+Think of /compact like saving a checkpoint in a video game. You don't wait until you're about to die. You save when things are going well so you have a clean state to continue from. Compact your session when it's productive, not when it's already struggling under the weight of too much context.
 </Callout>
 
 ## Model Selection
 
-Not every task needs the most powerful model:
+Claude Code gives you access to different Claude models. Not every task needs the most powerful (and most expensive) one:
 
-| Task | Appropriate Model |
-|------|------------------|
-| Simple refactor, add a comment | Fast model (GPT-4o mini, Haiku) |
-| Debugging, understanding code | Standard model (GPT-4o, Sonnet) |
-| Complex Composer sessions, architecture | Powerful model (o1, Sonnet 3.7) |
+| Task | Appropriate model |
+|------|-----------------|
+| Quick questions, simple refactors, generating comments | Haiku (fastest, cheapest) |
+| Debugging, code review, moderate complexity | Sonnet (balanced) |
+| Complex architecture, multi-file refactors, hard problems | Opus (most capable) |
 
-In Cursor's model dropdown, select based on the task. Using a $0.01/request model for tasks that only need a $0.001/request model adds up over a month.
+Switch models with `/model` during a session. Starting a session in Haiku for exploration and switching to Opus for the hard part is a legitimate cost-optimization strategy.
 
-## What Actually Costs Money
+## Write Focused Prompts
 
-- **Tab completions**: essentially free (managed plan covers this)
-- **Chat requests**: moderate — a few cents each at most
-- **Composer sessions**: more expensive, especially long multi-file generations
-- **@codebase searches**: moderate — searches the index, then generates a response
+Vague prompts produce longer back-and-forth, which costs more. Specific prompts produce better output on the first try, which costs less:
 
-The expensive operations are long Composer sessions with many files. Keep Composer prompts focused and you'll stay well within the managed plan limits.
+**Vague (expensive):**
+```
+fix my auth
+```
 
-<Callout type="info">
-The ROI math always works in favor of Cursor Pro. $20/month in AI subscription cost vs. the value of even a single hour of developer time at a reasonable freelance rate — it's not a close comparison. Don't optimize for AI tool costs; optimize for billable output.
-</Callout>
+**Specific (efficient):**
+```
+The login endpoint returns 401 when the token is valid but expired.
+Refresh token logic is in /lib/auth.ts. The issue is in the token
+validation on line 47 — it's not calling refreshToken() when
+shouldRefresh() returns true. Fix the validation flow.
+```
 
-## Team Pricing
+The specific prompt costs more tokens to write, but the session is likely to be 3–5 exchanges shorter because Claude has enough context to get it right immediately.
 
-Cursor for Teams is $40/user/month. For a small agency with 3–5 developers all using Cursor, this is almost always worth it compared to BYOK setup complexity. The managed plan also means you don't have to manage API keys and billing separately for each team member.
+## The ROI Calculation
 
-<KeyPoint>Cursor Pro pays for itself the first time it saves you a billable hour. Don't optimize for AI tool costs — optimize for the output they enable. Use faster models for simple tasks and save the powerful models for complex generation.</KeyPoint>
+The right way to think about Claude Code costs is not "how do I minimize spend" but "what is the return on this spend."
+
+A developer billing $100/hour who avoids one hour of manual work with a $2 Claude session has a 50x ROI on that session. The question is never whether to use Claude Code — it's whether you're using it in ways that actually produce that ROI.
+
+Use it heavily on work that creates value. Be thoughtful about long exploratory sessions that don't produce concrete output.
+
+<KeyPoint>The Max subscription exists for developers who use Claude Code seriously every day. Start with API billing to understand your actual usage, then choose the plan that matches your patterns. Use /compact aggressively to manage session costs, and match model choice to task complexity.</KeyPoint>

@@ -1,20 +1,20 @@
 ---
-title: "Debug With Cursor"
+title: "Debug Faster with Claude Code"
 description: "Paste an error, get a fix, understand why — the debugging workflow that cuts resolution time in half."
 order: 2
 duration: "8 min"
-videoUrl: "https://www.youtube.com/watch?v=kJ96MBiMtCg"
+videoUrl: "https://www.youtube.com/watch?v=kJ96MBiCo10lOw"
 coverImage: "https://images.unsplash.com/photo-1516110833967-0b5716ca1387?w=1200&auto=format&fit=crop&q=80"
 quiz:
   - question: "What should you always ask before applying a bug fix?"
     options: ["How long will this take?", "What is causing this bug and why?", "Is there a simpler workaround?", "Should I refactor this?"]
     answer: 1
-  - question: "What is the risk of applying a fix without understanding it?"
-    options: ["None, fixes are always correct", "The fix may solve the symptom but not the cause", "It will break other tests", "Cursor will refuse to continue helping"]
+  - question: "What is the advantage of Claude Code running your tests directly versus you pasting error output?"
+    options: ["None, both approaches are equivalent", "Claude can run tests in a loop and iterate on fixes until they pass", "Claude can only run tests", "Pasting output is always more accurate"]
     answer: 1
 ---
 
-Debugging is where developers lose the most time. A 30-second fix takes 45 minutes because finding the root cause is hard. With Cursor, the root cause analysis is instant — and the fix comes with an explanation.
+Debugging is where developers lose the most time. A 30-second fix takes 45 minutes because finding the root cause is hard. With Claude Code, root cause analysis is fast — and the fix comes with an explanation so you understand what went wrong.
 
 ## The Debugging Workflow
 
@@ -22,7 +22,7 @@ Debugging is where developers lose the most time. A 30-second fix takes 45 minut
 
 Copy the full error message and stack trace from your terminal, browser console, or test output.
 
-**Step 2: Paste into Chat**
+**Step 2: Paste into Claude Code**
 
 ```
 I'm getting this error when submitting the checkout form:
@@ -31,10 +31,11 @@ TypeError: Cannot read properties of undefined (reading 'id')
     at processPayment (lib/stripe.ts:47:28)
     at POST (app/api/checkout/route.ts:23:18)
 
-@lib/stripe.ts @app/api/checkout/route.ts
+Read lib/stripe.ts and app/api/checkout/route.ts and tell me
+what's causing this error.
 ```
 
-**Step 3: Ask for the root cause**
+**Step 3: Ask for the root cause first**
 
 ```
 What is causing this error? What is undefined and why?
@@ -52,46 +53,86 @@ What's the correct fix?
 Don't skip the "understand" step. Applying a fix you don't understand is how technical debt accumulates and how bugs get fixed in one place only to reappear in another. The explanation takes 30 seconds to read. That's not optional.
 </Callout>
 
-## For Runtime Errors
+## Let Claude Run the Tests Directly
 
-Include the stack trace, the relevant files, and any relevant state or request data:
+The most powerful debugging workflow in Claude Code is letting it run your tests and iterate:
 
 ```
-@lib/payments.ts This error occurs when a user with no
-saved payment method tries to resubscribe. The error is:
-[paste error]. The `subscription` object at the point of
-the error has shape: [paste relevant object].
+Run `npm test` and fix any failures. Explain what each failure
+was caused by before applying the fix.
+```
+
+Claude runs the tests, reads the failure output, traces the problem to the relevant source code, fixes it, and runs the tests again. It repeats this loop until the suite is green — or until it hits something that needs your input.
+
+This is faster than copying error output back and forth manually.
+
+## For Runtime Errors
+
+Include the stack trace and any relevant state:
+
+```
+This error occurs when a user with no saved payment method
+tries to resubscribe. Read lib/payments.ts.
+
+The error is:
+[paste error]
+
+The `subscription` object at the point of the error looks like:
+[paste relevant object or describe it]
 ```
 
 The more context you give, the more accurate the diagnosis.
 
+<Callout type="tip">
+If you're not sure which files are involved, tell Claude what you were doing when the error occurred and let it search. "I got this error when creating an order — find the relevant files and diagnose it" is a valid prompt.
+</Callout>
+
 ## For Test Failures
 
-Paste the failing test output and the relevant source files:
+Paste the failing test output and reference the relevant files:
 
 ```
-@app/api/users/__tests__/users.test.ts This test is failing.
-@app/api/users/route.ts Here's the route being tested.
-The error is: [paste output]. What's wrong?
+This test is failing. Read tests/users.test.ts and
+app/api/users/route.ts. Here's the error output:
+
+[paste output]
+
+What's wrong?
 ```
 
 <Callout type="tip">
-When a test fails after a Composer session, don't assume the test is wrong. More often, the implementation missed something the test was designed to catch. Ask Chat to explain what the test is checking before deciding whether to fix the code or update the test.
+When a test fails after an implementation session, don't assume the test is wrong. More often, the implementation missed something the test was designed to catch. Ask Claude to explain what the test is checking before deciding whether to fix the code or update the test.
 </Callout>
 
-## For Type Errors
+## For TypeScript Errors
 
-TypeScript errors are often verbose and hard to parse. Paste the full error and let Chat decode it:
+TypeScript errors are often verbose and hard to parse. Paste the full error and ask Claude to decode it:
 
 ```
-@types/api.ts @app/api/orders/route.ts
+Read types/api.ts and app/api/orders/route.ts.
 I'm getting this TypeScript error and I don't understand
-what it's telling me: [paste error]. What does it mean
-and how do I fix it?
+what it's telling me:
+
+[paste error]
+
+What does it mean and how do I fix it?
 ```
+
+## Iterating to Resolution
+
+Claude Code works best for debugging when you treat it as an interactive loop rather than a single question. If the first fix doesn't fully resolve the issue:
+
+```
+The fix resolved the original error but now I'm seeing this:
+[new error]
+
+Keep going.
+```
+
+Claude maintains context across the session and can keep iterating until the problem is resolved.
 
 ## The Speed Gain
 
-Most developers spend the majority of debugging time in diagnosis. With Cursor, diagnosis is near-instant. Implementation of the fix is fast too. The time investment shifts almost entirely to understanding and verification — which is exactly where your attention should be.
+Most developers spend the majority of debugging time in diagnosis. With Claude Code, diagnosis is near-instant because Claude reads the actual source files rather than working from your description of them. The time investment shifts almost entirely to understanding and verification — which is exactly where your attention should be.
 
-<KeyPoint>Always ask Cursor to explain the bug before applying the fix. Understanding what was wrong makes you a better developer and prevents the same pattern from appearing elsewhere in your code.</KeyPoint>
+<KeyPoint>Always ask Claude to explain the bug before applying the fix. Understanding what was wrong makes you a better developer and prevents the same pattern from appearing elsewhere in your code. Better yet, let Claude run your tests directly and iterate to a green suite.</KeyPoint>

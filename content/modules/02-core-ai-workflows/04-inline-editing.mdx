@@ -1,72 +1,112 @@
 ---
-title: "Inline Editing with Cmd+K"
-description: "Rewrite, refactor, or improve any block of code without switching to a chat window."
+title: "Bash Tool and Terminal Integration"
+description: "How Claude Code runs terminal commands, executes scripts and tests, and what safety guardrails govern what it can do."
 order: 4
 duration: "7 min"
 videoUrl: "https://www.youtube.com/watch?v=mFBiCo10lOw"
 coverImage: "https://images.unsplash.com/photo-1604539679695-65fea3ca3f24?w=1200&auto=format&fit=crop&q=80"
 quiz:
-  - question: "What shortcut activates inline editing in Cursor?"
-    options: ["Cmd+L", "Cmd+I", "Cmd+K", "Cmd+E"]
-    answer: 2
-  - question: "What makes a good Cmd+K instruction?"
-    options: ["Being vague so Cursor has freedom", "Being specific about what you want changed", "Writing it in code instead of English", "Using technical jargon"]
+  - question: "How does Claude Code execute terminal commands?"
+    options: ["It pastes commands into your terminal for you to run", "It uses the bash tool to run commands directly in a shell", "It sends commands to a remote server", "It generates shell scripts you must execute manually"]
+    answer: 1
+  - question: "What happens when Claude Code wants to run a potentially destructive command?"
+    options: ["It runs it immediately without warning", "It asks for your confirmation before proceeding", "It refuses entirely", "It only logs the command without running it"]
     answer: 1
 ---
 
-Cmd+K is the fastest way to change existing code in Cursor. Select a block, give an instruction, review the diff, accept or reject. The whole interaction takes seconds.
+Claude Code has direct access to a bash shell. It can run commands, execute scripts, read output, and take follow-up actions based on results — all as part of a conversation. This is one of its most powerful capabilities and one that deserves a clear mental model.
 
-## The Basic Flow
+## How the Bash Tool Works
 
-1. Select code — a function, a block, a few lines, or even just position your cursor
-2. Press Cmd+K
-3. A small input bar appears above your selection
-4. Type your instruction in plain English
-5. Cursor rewrites the selected code and shows a diff
-6. Press Accept to apply or Escape to discard
+When a task requires running a command, Claude Code uses its bash tool to execute it in a shell in your project directory. The output — stdout, stderr, exit codes — comes back to Claude Code, which can then reason about it and decide what to do next.
 
-No chat panel. No context-switching. Just a quick edit and move on.
+This is not simulated. Commands actually run on your machine. A `git commit` commits. An `npm install` installs packages. A `rm` deletes files.
 
-## Writing Good Instructions
+```
+> Run the test suite and tell me which tests are failing.
+```
 
-The quality of your instruction directly determines the quality of the output:
+Claude Code runs `npm test` (or whatever your test command is), reads the output, identifies the failing tests, and reports back — often with an explanation of why they're failing based on the code it has already read.
 
-**Too vague:** "make this better"
+## What It Can Do
 
-**Specific and actionable:**
-- "Add error handling and throw with a descriptive message if `userId` is undefined"
-- "Make this function async and await the database call"
-- "Simplify this by using Array.reduce instead of the for loop"
-- "Add JSDoc comments for all parameters and the return value"
+Common and useful bash tool uses:
+
+- Running test suites and interpreting results
+- Installing dependencies after modifying package.json
+- Running linters and auto-fixers
+- Checking git status and diff before committing
+- Running database migrations
+- Starting a dev server and checking for startup errors
+- Searching for patterns with `grep` or `find`
+- Running build commands and diagnosing output
+
+```
+> Install the zod package and add it to package.json, then update the
+  user validation in lib/validation.ts to use it.
+```
+
+Claude Code runs `npm install zod`, confirms the install succeeded, then makes the code changes.
 
 <Callout type="tip">
-Be specific about the outcome, not the technique. "Add input validation" is good. "Use Zod to validate that email is a valid email format and name is a non-empty string" is better. The more specific you are, the less cleanup you'll need afterward.
+You can ask Claude Code to run commands you'd otherwise have to look up. "Run the linter and fix the auto-fixable issues" or "Check if there are any TypeScript errors and explain what's causing them" are faster than running the commands yourself and reading the output manually.
 </Callout>
 
-## Without Selection
+## Safety Guardrails
 
-If you press Cmd+K without selecting anything, the instruction bar still appears. In this mode, you can ask Cursor to generate new code at the cursor position, add a function below the current one, or insert a block before the next section.
+Claude Code is designed to be cautious with consequential actions. Before running commands that could cause data loss, make permanent changes, or affect production systems, it will describe what it's about to do and ask for confirmation.
 
-This is useful for adding things (a new function, an import, a comment block) without having to type them from scratch.
+Specifically, it will pause before:
 
-## Reviewing the Diff
+- Deleting files or directories
+- Running commands with `--force` or similar override flags
+- Operations that affect git history (rebase, reset)
+- Anything involving production environment variables or credentials
+- Network requests that write to external services
 
-Cursor shows the before/after diff inline in the editor. Changed lines are highlighted. Read the entire diff before accepting — don't just check that the new lines look right, also verify that nothing important was removed.
+For routine development tasks — running tests, installing packages, running builds — it proceeds without interruption.
 
 <Callout type="warning">
-One common mistake: accepting an edit because the new lines look correct without noticing that something was deleted. Cursor sometimes removes code it judges as redundant. That judgment is usually right, but occasionally it removes something you need. Always read both sides of the diff.
+Claude Code runs with the same permissions as your terminal session. It can do anything you can do. Treat it accordingly: don't run it as root, be thoughtful about what environment variables are in scope, and don't use it to handle credentials you wouldn't want exposed in a shell history.
 </Callout>
 
-## Cmd+K vs. Composer
+## Interpreting Command Output
 
-Use Cmd+K when:
-- You're editing a specific, bounded block of code
-- The change is confined to one function or section
-- You want to stay in the flow of the current file
+One of the most useful patterns is asking Claude Code to interpret complex output for you:
 
-Use Composer when:
-- The change touches multiple files
-- You're building something new from scratch
-- You want to reference patterns from across the codebase
+```
+> Run `npm audit` and explain which vulnerabilities are actually
+  exploitable given how we use these packages, and which ones I
+  can safely ignore.
+```
 
-<KeyPoint>Cmd+K is the fastest way to change existing code — use it far more than you think you should. If you find yourself rewriting a function manually, stop and reach for Cmd+K instead.</KeyPoint>
+```
+> Run the build and explain what these TypeScript errors mean and
+  what I need to change to fix them.
+```
+
+Claude Code doesn't just relay output — it reasons about it in the context of your specific codebase and gives you actionable guidance.
+
+## Combining Bash and File Edits
+
+The real power is when bash commands and file edits work together in a single task:
+
+```
+> Run the tests. For each failing test, find the relevant source code
+  and fix whatever is causing the failure. Then run the tests again
+  to confirm they pass.
+```
+
+Claude Code runs tests, reads the failures, opens the relevant files, makes targeted edits, runs tests again, and iterates until everything passes — or until it hits something that requires a judgment call from you.
+
+## Scripting and Automation
+
+Claude Code also works in non-interactive mode, making it useful for automation:
+
+```bash
+claude -p "Run the test suite and output a JSON summary of pass/fail counts"
+```
+
+This makes it composable with CI pipelines, pre-commit hooks, and shell scripts that need AI-assisted analysis or generation as a step.
+
+<KeyPoint>The bash tool makes Claude Code an active participant in your development process, not just a code suggester. It runs commands, reads results, and takes follow-up action — with safety checks for anything consequential.</KeyPoint>
