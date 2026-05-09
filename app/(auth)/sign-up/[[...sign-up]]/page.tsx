@@ -65,10 +65,10 @@ export default function SignUpPage() {
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 text-white font-bold text-lg mb-6">
             <Zap className="w-5 h-5 text-brand-400" />
-            Build With Cursor
+            Claude Code Class
           </Link>
           <h1 className="text-2xl font-bold text-white">Create your account</h1>
-          <p className="text-slate-400 mt-1 text-sm">Start building with Cursor today</p>
+          <p className="text-slate-400 mt-1 text-sm">Start building with Claude Code today</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -78,26 +78,30 @@ export default function SignUpPage() {
             </div>
           )}
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-1.5">Email</label>
             <input
+              id="email"
               type="email"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors"
+              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
               placeholder="you@example.com"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">Password</label>
+            <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-1.5">Password</label>
             <input
+              id="password"
               type="password"
+              autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              minLength={6}
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors"
-              placeholder="Min. 6 characters"
+              minLength={8}
+              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
+              placeholder="Min. 8 characters"
             />
           </div>
           <button

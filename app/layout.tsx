@@ -5,21 +5,21 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Build With Cursor — Ship Products With AI",
+  title: "Claude Code Class — Ship Products With AI",
   description:
-    "The business builder's guide to Cursor AI. Ship products, land clients, and build income streams with AI-first development.",
-  metadataBase: new URL("https://buildwithcursor.com"),
+    "The business builder's guide to Claude Code. Ship products, land clients, and build income streams with AI-first development.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://claudecodeclass.com"),
   openGraph: {
-    title: "Build With Cursor — Ship Products With AI",
-    description: "The business builder's guide to Cursor AI. Ship products, land clients, and build income streams with AI-first development.",
-    url: "https://buildwithcursor.com",
-    siteName: "Build With Cursor",
+    title: "Claude Code Class — Ship Products With AI",
+    description: "The business builder's guide to Claude Code. Ship products, land clients, and build income streams with AI-first development.",
+    url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://claudecodeclass.com",
+    siteName: "Claude Code Class",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Build With Cursor",
-    description: "The business builder's guide to Cursor AI. Ship products, land clients, and build income streams with AI-first development.",
+    title: "Claude Code Class",
+    description: "The business builder's guide to Claude Code. Ship products, land clients, and build income streams with AI-first development.",
   },
 };
 
