@@ -1,59 +1,70 @@
 ---
-title: "Git and Deployment"
-description: "Use Cursor to write commit messages, PR descriptions, and deployment scripts — ship cleaner and faster."
+title: "Git Workflows and Deployment with Claude Code"
+description: "Use Claude Code to write commit messages, create PRs, and help with deployment scripts — ship cleaner and faster."
 order: 4
 duration: "8 min"
 videoUrl: "https://www.youtube.com/watch?v=mFBiCo10lOw"
 coverImage: "https://images.unsplash.com/photo-1556075798-4825dfaaf498?w=1200&auto=format&fit=crop&q=80"
 quiz:
-  - question: "What makes a good AI-generated commit message prompt?"
-    options: ["Just saying 'write a commit message'", "Providing the diff and asking for a semantic, specific message", "Asking for a long detailed message", "Using a template you fill in manually"]
+  - question: "What makes a good Claude Code commit message prompt?"
+    options: ["Just saying 'write a commit message'", "Asking Claude to run git diff and generate a semantic, specific message", "Asking for a long detailed message", "Using a template you fill in manually"]
     answer: 1
   - question: "What convention prefix indicates a new feature in a commit message?"
     options: ["add:", "new:", "feat:", "feature:"]
     answer: 2
 ---
 
-Git hygiene matters more when you're working with clients, collaborating with a team, or building a codebase you'll return to. Cursor makes the tedious parts of git — commit messages, PR descriptions, release notes — instant.
+Git hygiene matters more when you're working with clients, collaborating with a team, or building a codebase you'll return to. Claude Code handles the tedious parts of git — commit messages, PR descriptions, release notes — through the same bash tool it uses for everything else.
 
 ## Generating Commit Messages
 
-After staging your changes, instead of writing a vague "update stuff" message, do this in Chat:
+Claude Code can run `git diff` directly and generate a commit message from the actual diff:
 
 ```
-Write a concise, semantic commit message for these changes:
-[paste git diff or describe what changed]
-
-Use conventional commits format (feat:, fix:, refactor:, etc.)
-Keep the summary line under 72 characters.
+Run `git diff --staged` and write a concise, semantic commit
+message for these changes. Use conventional commits format
+(feat:, fix:, refactor:, etc.) Keep the summary line under
+72 characters.
 ```
 
-The output will be specific, professional, and accurate. Much better than "fixed bug."
+The output will be specific, professional, and accurate — because Claude read the real diff rather than your description of it.
 
 <Callout type="tip">
 Conventional commit prefixes: `feat:` for new features, `fix:` for bug fixes, `refactor:` for non-breaking code improvements, `docs:` for documentation, `test:` for test additions, `chore:` for maintenance. Using these consistently makes your git history scannable and helps automated tooling generate changelogs.
 </Callout>
 
+## Committing Directly
+
+You can ask Claude Code to handle the entire commit:
+
+```
+Stage all the changes we made and commit them with an
+appropriate conventional commit message.
+```
+
+Claude will run `git add`, generate a message based on what changed, and create the commit. Review the message before confirming if you want, or let it run and check with `git log` afterward.
+
 ## PR Descriptions
 
-When creating a pull request, generate the description from your commit history:
+When creating a pull request, ask Claude to generate the description from the branch history:
 
 ```
-Write a pull request description for a branch that:
-- Adds notification preferences to user accounts
-- Creates a PATCH API endpoint for updating preferences
-- Updates the settings UI with a new preferences form
-- Adds tests for the new endpoint
-
-Include: what changed, why, how to test it, and any
-migration steps needed.
+Run `git log main..HEAD --oneline` to see the commits on this
+branch. Then write a pull request description that covers:
+- What changed and why
+- How to test it
+- Any migration steps needed
 ```
 
-A clear PR description is professional and makes code review faster.
+A clear PR description is a professional signal and makes code review faster for everyone involved.
+
+<Callout type="info">
+Claude Code can also create the PR directly using the GitHub CLI if `gh` is installed. Ask it to run `gh pr create` with the generated description. The entire PR creation workflow — branch, commits, description, and PR — can happen without leaving the terminal.
+</Callout>
 
 ## Deployment Scripts
 
-Ask Cursor to write the deployment steps as a script:
+Ask Claude to write the deployment steps as a shell script:
 
 ```
 Write a shell script that:
@@ -62,31 +73,53 @@ Write a shell script that:
 3. Deploys to Vercel via the Vercel CLI
 4. Runs a smoke test against the production URL
 5. Sends a Slack notification on success or failure
+
+Save it as deploy.sh and make it executable.
 ```
 
-You can run this script as part of a CI pipeline or just save it as `deploy.sh` for manual deploys.
+Claude writes the script, saves it, and makes it executable. You can run it as part of a CI pipeline or as a manual deploy step.
+
+## Running Git Operations
+
+Claude Code can run any git operation via the bash tool:
+
+```
+Show me the last 10 commits with their messages and authors.
+```
+
+```
+Create a new branch called feature/notification-preferences
+and switch to it.
+```
+
+```
+Run `git stash` to save my current changes, then switch to
+main and pull the latest.
+```
+
+This is useful for the mechanical parts of git that interrupt your flow — Claude handles them while you stay focused on the work.
 
 ## Release Notes
 
 When shipping a new version to clients or users:
 
 ```
-Write user-friendly release notes for version 1.2.0.
-These changes were made: [list commits or describe changes].
-Audience: non-technical business owners. Keep it brief,
-focus on what changed from the user's perspective.
+Run `git log v1.1.0..v1.2.0 --oneline` to see what changed
+in this release. Then write user-friendly release notes for
+version 1.2.0. Audience: non-technical business owners.
+Keep it brief and focus on what changed from the user's perspective.
 ```
 
 Client-facing release notes should be in plain language, not technical jargon.
 
 <Callout type="info">
-A client who receives clear, professional release notes with each deployment feels confident about the work being done. This small habit — 2 minutes per release — builds trust and reduces the "what did you actually change?" conversations.
+A client who receives clear, professional release notes with each deployment feels confident about the work being done. This small habit — two minutes per release — builds trust and reduces the "what did you actually change?" conversations.
 </Callout>
 
 ## The Professional Signal
 
 Clean commit history, clear PR descriptions, and documented deployments are signals of professional work. Most freelancers and junior developers neglect them. Most senior developers and agencies don't.
 
-With Cursor, there's no time cost to doing it right.
+With Claude Code running your git commands and writing your messages from the actual diff, there's no time cost to doing it right.
 
-<KeyPoint>Cursor turns messy commits into professional git history. Clients notice clean documentation. Make AI-generated commit messages and PR descriptions a standard part of every deployment.</KeyPoint>
+<KeyPoint>Claude Code can run git commands directly and write commit messages from the actual diff — not your description of it. Make AI-generated commit messages and PR descriptions a standard part of every deployment. Clients notice clean documentation.</KeyPoint>

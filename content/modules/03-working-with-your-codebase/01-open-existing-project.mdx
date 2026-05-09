@@ -1,39 +1,46 @@
 ---
-title: "Opening an Existing Project"
-description: "How to open any codebase in Cursor and get oriented in under 5 minutes."
+title: "Opening and Understanding an Existing Project"
+description: "How to start Claude Code in any codebase and get oriented in under 5 minutes."
 order: 1
 duration: "7 min"
 videoUrl: "https://www.youtube.com/watch?v=i6FdGFNVGgc"
 coverImage: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&auto=format&fit=crop&q=80"
 quiz:
-  - question: "What does Cursor do when you first open a project?"
-    options: ["Automatically edits files", "Indexes the codebase for context", "Runs tests", "Creates a backup"]
+  - question: "How do you start a Claude Code session in a project?"
+    options: ["Open a GUI application", "Run `claude` in the terminal from the project directory", "Import the project via a menu", "Double-click a config file"]
     answer: 1
-  - question: "What is the best first thing to do after opening a project in Cursor?"
-    options: ["Start editing immediately", "Ask Chat to explain the project structure", "Run the build", "Install extensions"]
-    answer: 1
+  - question: "What file can you create to give Claude persistent context about your project?"
+    options: ["PROJECT.md", "CONTEXT.md", "CLAUDE.md", "README.md"]
+    answer: 2
 ---
 
-The first time you open a project in Cursor, it does something VS Code doesn't: it indexes your entire codebase. That index is what allows Chat to answer questions about code it hasn't seen in your current session.
+The first time you drop into a project with Claude Code, you have a guide that can read the entire codebase with you. Rather than spending hours tracing files manually, you can ask Claude to explain the architecture, map the data flow, and flag inconsistencies — before you write a single line.
 
-## Opening the Project
+## Starting a Session
 
-File → Open Folder, or drag the folder onto the Cursor icon. Same as VS Code.
+Navigate to the project root in your terminal and run:
 
-On first open, Cursor starts indexing in the background. You'll see a progress indicator in the status bar. For most projects this takes under a minute. For large monorepos it can take a few minutes.
+```bash
+cd my-project
+claude
+```
 
-Let it finish before doing heavy Chat work. The index is what makes `@codebase` questions accurate.
+That's it. Claude Code starts an interactive session in your current directory. It can read any file, run bash commands, and make edits — all through natural language.
 
-## Get Oriented First
+<Callout type="info">
+Claude Code operates on your actual filesystem. It can read every file in your project directory, run your test suite, and check git history. You're not copying code into a chat window — you're working directly inside the project.
+</Callout>
 
-Resist the urge to start editing immediately. Spend the first few minutes with Chat:
+## Get Oriented Before You Edit
+
+Resist the urge to start making changes immediately. Start with a few orientation questions:
 
 ```
-@codebase Give me a high-level overview of this project.
+Give me a high-level overview of this project.
 What are the main modules and how do they relate to each other?
 ```
 
-Then follow up:
+Then drill into specific areas:
 
 ```
 Where is the authentication logic handled?
@@ -41,30 +48,48 @@ How does data flow from the API to the UI?
 What's the database schema for user accounts?
 ```
 
-<Callout type="info">
-This orientation step takes 5 minutes and saves hours. Developers who skip it often make changes in the wrong place, miss existing utilities, or duplicate logic that already exists. Cursor can map a codebase faster than any manual exploration.
-</Callout>
+Claude will read the relevant files and explain them in plain language. This orientation step takes five minutes and saves hours of confused exploration.
 
 ## Finding What Already Exists
 
 Before adding anything, ask what's already there:
 
 ```
-@codebase Is there already a utility for formatting currency?
-@codebase What components exist for displaying error states?
-@codebase How are API errors handled across the app?
+Is there already a utility for formatting currency?
+What components exist for displaying error states?
+How are API errors handled across the app?
 ```
 
-You'll avoid creating duplicates and your new code will integrate cleanly with the existing patterns.
+You'll avoid creating duplicates, and your new code will integrate cleanly with the existing patterns rather than working against them.
+
+## Setting Up CLAUDE.md
+
+For any project you work in regularly, create a `CLAUDE.md` file at the root. Claude reads this automatically at the start of every session:
+
+```markdown
+# Project Context
+
+This is a Next.js app with a Supabase backend.
+
+## Commands
+- `npm run dev` — start local server
+- `npm test` — run Vitest tests
+- `npm run build` — production build
+
+## Conventions
+- API routes live in `app/api/`
+- Shared types are in `types/`
+- Use the existing `lib/supabase/server.ts` for all database access
+```
+
+This replaces the need to re-orient Claude at the start of every session.
+
+<Callout type="tip">
+When taking on a client project, run through these questions before your first call with the client: "What are the riskiest parts of this codebase?" and "What patterns are used inconsistently?" You'll show up with insight that would normally take a week to develop.
+</Callout>
 
 ## Client Projects
 
-This is especially valuable on client codebases. You can orient yourself in minutes instead of days. Ask Cursor to explain the architecture, identify the main data flows, and flag any areas that look fragile or inconsistent.
+This workflow is especially valuable on client codebases. You can orient yourself in minutes instead of days. Ask Claude to explain the architecture, identify the main data flows, and flag any areas that look fragile or inconsistent — then walk into the engagement with a clear picture of what you're working with.
 
-<Callout type="tip">
-When taking on a client project, run through these questions in Chat before your first call with the client: "What are the riskiest parts of this codebase?" and "What patterns are used inconsistently?" You'll show up with insight that would normally take a week to develop.
-</Callout>
-
-You're not learning a codebase the slow way anymore. You have a guide.
-
-<KeyPoint>Let Cursor index and then ask Chat to explain the project before you start editing. The 5-minute orientation saves hours of confused exploration and prevents changes in the wrong place.</KeyPoint>
+<KeyPoint>Run `claude` from your project directory and ask for a high-level overview before you start editing. The 5-minute orientation saves hours of confused exploration and prevents changes in the wrong place. Add a CLAUDE.md to make that context permanent.</KeyPoint>
