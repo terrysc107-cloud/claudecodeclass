@@ -1,29 +1,25 @@
 "use client";
 
-import { useEffect, Suspense } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
   Zap, CheckCircle2, BookOpen, DollarSign, Code2, Briefcase,
-  ChevronRight, Star, Lock, Clock, Trophy
+  ChevronRight, Star, Lock, Clock, Trophy, Loader2
 } from "lucide-react";
 
 const MODULES = [
-  { num: "01", title: "Getting Started With Cursor", desc: "Install Cursor, understand the interface, make your first AI edit, and see the ROI from day one.", lessons: 4 },
-  { num: "02", title: "Core AI Workflows", desc: "Master Chat, Composer, Tab completion, and inline editing — the four workflows that drive everything.", lessons: 4 },
+  { num: "01", title: "Getting Started With Claude Code", desc: "Install the CLI, authenticate, run your first command, and see the ROI from day one.", lessons: 4 },
+  { num: "02", title: "Core Claude Code Workflows", desc: "Master conversations, agentic mode, file editing, and bash tool — the four workflows that drive everything.", lessons: 4 },
   { num: "03", title: "Working With Your Codebase", desc: "Open real projects, understand unfamiliar code, make multi-file edits, and navigate large repos.", lessons: 4 },
   { num: "04", title: "Building Real Products", desc: "Build features end-to-end, debug with AI, write tests automatically, and ship with clean git history.", lessons: 4 },
-  { num: "05", title: "Advanced Cursor Techniques", desc: ".cursorrules setup, context management, multi-agent workflows, and large codebase navigation.", lessons: 4 },
+  { num: "05", title: "Advanced Claude Code Techniques", desc: "CLAUDE.md setup, context management, multi-agent workflows, and large codebase navigation.", lessons: 4 },
   { num: "06", title: "Business Use Cases", desc: "Landing pages, SaaS products, Stripe integration, client work, and automation scripts that pay.", lessons: 5 },
-  { num: "07", title: "Speed and Efficiency", desc: "Daily workflow systems, keyboard shortcuts, reusable templates, cost control, and team setup.", lessons: 5 },
-  { num: "08", title: "Make Money With Cursor", desc: "Freelance playbook, micro-SaaS, sellable templates, internal tools, and productizing your workflow.", lessons: 5, highlight: true },
+  { num: "07", title: "Speed and Efficiency", desc: "Daily workflow systems, slash commands, reusable templates, cost control, and team setup.", lessons: 5 },
+  { num: "08", title: "Make Money With Claude Code", desc: "Freelance playbook, micro-SaaS, sellable templates, internal tools, and productizing your workflow.", lessons: 5, highlight: true },
 ];
 
-const TESTIMONIALS = [
-  { name: "Alex R.", role: "Freelance Developer", text: "I landed two freelance clients in the first week after finishing this course. Cursor changed how I pitch and deliver." },
-  { name: "Maya T.", role: "Founder", text: "Built and launched my first micro-SaaS in 4 days. I couldn't have done it without the business workflow they teach here." },
-  { name: "Jordan K.", role: "Agency Owner", text: "I was skeptical AI tools were worth it. Module 3 alone saved me 6 hours on a client project." },
-];
+// TODO: Replace with real student testimonials before launch
 
 function UpgradeScroller() {
   const searchParams = useSearchParams();
@@ -37,14 +33,24 @@ function UpgradeScroller() {
 }
 
 export default function LandingPage() {
+  const [buying, setBuying] = useState(false);
+  const [buyError, setBuyError] = useState("");
+
   async function handleBuyNow() {
-    const res = await fetch("/api/stripe/checkout", { method: "POST" });
-    if (res.status === 401) {
-      window.location.href = "/sign-up";
-      return;
+    setBuying(true);
+    setBuyError("");
+    try {
+      const res = await fetch("/api/stripe/checkout", { method: "POST" });
+      if (res.status === 401) {
+        window.location.href = "/sign-up";
+        return;
+      }
+      const { url } = await res.json();
+      if (url) window.location.href = url;
+    } catch {
+      setBuyError("Something went wrong. Please try again.");
+      setBuying(false);
     }
-    const { url } = await res.json();
-    if (url) window.location.href = url;
   }
 
   return (
@@ -52,11 +58,11 @@ export default function LandingPage() {
       <Suspense fallback={null}><UpgradeScroller /></Suspense>
 
       {/* Nav */}
-      <nav className="border-b border-slate-800/50 sticky top-0 z-10 bg-slate-950/80 backdrop-blur">
+      <nav aria-label="Main navigation" className="border-b border-slate-800/50 sticky top-0 z-10 bg-slate-950/80 backdrop-blur">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2 font-bold text-lg">
-            <Zap className="w-5 h-5 text-brand-400" />
-            Build With Cursor
+            <Zap className="w-5 h-5 text-brand-400" aria-hidden="true" />
+            Claude Code Class
           </div>
           <div className="flex items-center gap-4">
             <Link href="/sign-in" className="text-slate-400 hover:text-white text-sm transition-colors">
@@ -64,8 +70,10 @@ export default function LandingPage() {
             </Link>
             <button
               onClick={handleBuyNow}
-              className="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
+              disabled={buying}
+              className="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors disabled:opacity-60 disabled:cursor-not-allowed inline-flex items-center gap-2"
             >
+              {buying && <Loader2 className="w-3.5 h-3.5 animate-spin" aria-hidden="true" />}
               Get Access — $97
             </button>
           </div>
@@ -75,23 +83,28 @@ export default function LandingPage() {
       {/* Hero */}
       <section className="max-w-6xl mx-auto px-6 pt-20 pb-16 text-center">
         <div className="inline-flex items-center gap-2 bg-brand-900/40 text-brand-300 text-sm px-4 py-1.5 rounded-full border border-brand-800/50 mb-6">
-          <Star className="w-3.5 h-3.5" />
+          <Star className="w-3.5 h-3.5" aria-hidden="true" />
           Built for entrepreneurs who ship
         </div>
         <h1 className="text-5xl sm:text-6xl font-extrabold text-white leading-tight mb-6">
           Ship Products Faster With{" "}
-          <span className="text-brand-400">Cursor AI</span>
+          <span className="text-brand-400">Claude Code</span>
         </h1>
         <p className="text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-          Skip the learning curve. Go from idea to deployed product with the AI editor
-          that writes, edits, and explains code alongside you.
+          Skip the learning curve. Go from idea to deployed product with the AI CLI
+          that writes, edits, runs commands, and ships code alongside you.
         </p>
+        {buyError && (
+          <p className="text-red-400 text-sm mt-2 mb-4">{buyError}</p>
+        )}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button
             onClick={handleBuyNow}
-            className="inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-xl text-lg font-bold transition-colors"
+            disabled={buying}
+            className="inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-xl text-lg font-bold transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Start Building — $97 <ChevronRight className="w-5 h-5" />
+            {buying ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" /> : null}
+            Start Building — $97 <ChevronRight className="w-5 h-5" aria-hidden="true" />
           </button>
           <Link
             href="#curriculum"
@@ -100,17 +113,17 @@ export default function LandingPage() {
             See the Curriculum
           </Link>
         </div>
-        <p className="text-slate-600 text-sm mt-4">One-time payment · Lifetime access · No subscription</p>
+        <p className="text-slate-500 text-sm mt-4">One-time payment · Lifetime access · No subscription</p>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-6 max-w-xl mx-auto mt-14">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-xl mx-auto mt-14">
           {[
             { icon: BookOpen, val: "35+", label: "Lessons" },
             { icon: Clock, val: "8", label: "Modules" },
             { icon: Trophy, val: "Lifetime", label: "Access" },
           ].map(({ icon: Icon, val, label }) => (
             <div key={label} className="bg-slate-900 rounded-xl p-4 border border-slate-800">
-              <Icon className="w-5 h-5 text-brand-400 mx-auto mb-2" />
+              <Icon className="w-5 h-5 text-brand-400 mx-auto mb-2" aria-hidden="true" />
               <p className="text-2xl font-bold text-white">{val}</p>
               <p className="text-slate-500 text-xs mt-0.5">{label}</p>
             </div>
@@ -124,17 +137,17 @@ export default function LandingPage() {
         <p className="text-slate-400 text-center mb-10">Every lesson ties back to a real business or income outcome.</p>
         <div className="grid sm:grid-cols-2 gap-4">
           {[
-            "Build and deploy full products using Cursor in a single session",
+            "Build and deploy full products using Claude Code in a single session",
             "Land freelance clients and deliver work 3× faster than before",
-            "Write, debug, and refactor code with an AI pair programmer",
-            "Configure Cursor for any project with .cursorrules files",
+            "Write, debug, and refactor code with an AI pair programmer in your terminal",
+            "Configure Claude Code for any project with CLAUDE.md files",
             "Build micro-SaaS products and charge recurring fees",
-            "Create reusable templates and project starters to sell",
+            "Create reusable CLAUDE.md templates and project starters to sell",
             "Automate client deliverables with scripts and internal tools",
             "Turn AI coding skills into productized, repeatable income",
           ].map((item) => (
             <div key={item} className="flex items-start gap-3 text-sm text-slate-300">
-              <CheckCircle2 className="w-4 h-4 text-green-400 mt-0.5 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-green-400 mt-0.5 shrink-0" aria-hidden="true" />
               {item}
             </div>
           ))}
@@ -170,7 +183,7 @@ export default function LandingPage() {
                 <p className="text-slate-400 text-sm mt-0.5">{mod.desc}</p>
               </div>
               <div className="flex items-center gap-1.5 text-slate-500 text-sm shrink-0">
-                <BookOpen className="w-4 h-4" />
+                <BookOpen className="w-4 h-4" aria-hidden="true" />
                 {mod.lessons} lessons
               </div>
             </div>
@@ -178,39 +191,20 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="max-w-6xl mx-auto px-6 py-16">
-        <h2 className="text-3xl font-bold text-white text-center mb-10">What students say</h2>
-        <div className="grid sm:grid-cols-3 gap-6">
-          {TESTIMONIALS.map((t) => (
-            <div key={t.name} className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-              <div className="flex gap-0.5 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 text-brand-400 fill-brand-400" />
-                ))}
-              </div>
-              <p className="text-slate-300 text-sm leading-relaxed mb-4">&ldquo;{t.text}&rdquo;</p>
-              <div>
-                <p className="text-white font-medium text-sm">{t.name}</p>
-                <p className="text-slate-500 text-xs">{t.role}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* Social proof — add real student testimonials here before launch */}
 
       {/* Who it's for */}
       <section className="max-w-6xl mx-auto px-6 py-16">
         <h2 className="text-3xl font-bold text-white text-center mb-10">Who this is for</h2>
         <div className="grid sm:grid-cols-3 gap-6">
           {[
-            { icon: Code2, title: "Developers", desc: "Ship faster, write cleaner code, and charge more. Cursor compresses hours of work into minutes." },
+            { icon: Code2, title: "Developers", desc: "Ship faster, write cleaner code, and charge more. Claude Code compresses hours of work into minutes." },
             { icon: DollarSign, title: "Entrepreneurs", desc: "Build products without a full dev team. Go from idea to launched in days, not months." },
-            { icon: Briefcase, title: "Freelancers", desc: "Deliver more, work less. Module 8 alone will show you how to turn Cursor into recurring income." },
+            { icon: Briefcase, title: "Freelancers", desc: "Deliver more, work less. Module 8 alone will show you how to turn Claude Code into recurring income." },
           ].map(({ icon: Icon, title, desc }) => (
             <div key={title} className="bg-slate-900 border border-slate-800 rounded-xl p-6 text-center">
               <div className="w-12 h-12 bg-brand-900/30 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Icon className="w-6 h-6 text-brand-400" />
+                <Icon className="w-6 h-6 text-brand-400" aria-hidden="true" />
               </div>
               <h3 className="text-white font-semibold mb-2">{title}</h3>
               <p className="text-slate-400 text-sm leading-relaxed">{desc}</p>
@@ -237,34 +231,35 @@ export default function LandingPage() {
             {[
               "8 modules, 35+ lessons",
               "Business-first angle on every topic",
-              "Module 8: Make Money With Cursor",
+              "Module 8: Make Money With Claude Code",
               "Lifetime access + future updates",
               "Works on any device",
             ].map((item) => (
               <li key={item} className="flex items-center gap-3 text-sm text-slate-300">
-                <CheckCircle2 className="w-4 h-4 text-green-400 shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-green-400 shrink-0" aria-hidden="true" />
                 {item}
               </li>
             ))}
           </ul>
           <button
             onClick={handleBuyNow}
-            className="w-full bg-brand-600 hover:bg-brand-700 text-white py-4 rounded-xl text-lg font-bold transition-colors flex items-center justify-center gap-2"
+            disabled={buying}
+            className="w-full bg-brand-600 hover:bg-brand-700 text-white py-4 rounded-xl text-lg font-bold transition-colors flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            <Lock className="w-5 h-5" />
-            Get Instant Access
+            {buying ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" /> : <Lock className="w-5 h-5" aria-hidden="true" />}
+            {buying ? "Redirecting to checkout…" : "Get Instant Access"}
           </button>
-          <p className="text-slate-600 text-xs mt-4">Secure checkout powered by Stripe</p>
+          <p className="text-slate-500 text-xs mt-4">Secure checkout powered by Stripe · 30-day money-back guarantee</p>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800 py-8 text-center text-slate-600 text-sm">
+      <footer className="border-t border-slate-800 py-8 text-center text-slate-500 text-sm">
         <div className="flex items-center justify-center gap-2 mb-2">
-          <Zap className="w-4 h-4 text-brand-400" />
-          <span className="text-white font-semibold">Build With Cursor</span>
+          <Zap className="w-4 h-4 text-brand-400" aria-hidden="true" />
+          <span className="text-white font-semibold">Claude Code Class</span>
         </div>
-        <p>© {new Date().getFullYear()} Build With Cursor · All rights reserved</p>
+        <p>© {new Date().getFullYear()} Claude Code Class · All rights reserved</p>
       </footer>
     </div>
   );
