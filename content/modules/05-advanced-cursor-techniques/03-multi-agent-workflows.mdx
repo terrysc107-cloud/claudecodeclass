@@ -1,71 +1,103 @@
 ---
-title: "Multi-Agent Workflows"
-description: "Run parallel Composer sessions to build faster — the advanced pattern for shipping full products."
+title: "Multi-Agent Workflows with Claude Code"
+description: "Spawn sub-agents for parallel tasks and build faster — the advanced pattern for shipping full products."
 order: 3
 duration: "9 min"
 videoUrl: "https://www.youtube.com/watch?v=GJLuTFAyMts"
 coverImage: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=1200&auto=format&fit=crop&q=80"
 quiz:
-  - question: "What is the key requirement for running parallel Composer sessions successfully?"
-    options: ["Fast internet", "Multiple monitors", "Tasks that are independent of each other", "A paid Cursor plan"]
+  - question: "What is the key requirement for running parallel sub-agents successfully?"
+    options: ["Fast internet", "Multiple monitors", "Tasks that are independent of each other", "A paid Claude plan"]
     answer: 2
-  - question: "What should you do before merging parallel Composer outputs?"
-    options: ["Run tests", "Ask Chat to check for conflicts", "Review the diffs from each session", "Commit each session separately first"]
-    answer: 2
+  - question: "In an orchestrator pattern, what is the role of the main Claude session?"
+    options: ["Writing all the code itself", "Coordinating sub-agents and reviewing their outputs", "Running tests only", "Managing git commits"]
+    answer: 1
 ---
 
-Once you're comfortable with Cursor's core workflows, you can start running multiple Composer sessions in parallel — one for the backend, one for the frontend, one for documentation. This is how you move at a pace that would otherwise require a small team.
+Once you're comfortable with Claude Code's core workflows, you can start using it as an orchestrator that spawns sub-agents for parallel work — one for the backend, one for the frontend, one for tests. This is how you move at a pace that would otherwise require a small team.
 
-## The Setup
+## How Claude Code Agents Work
 
-Cursor supports multiple windows. Each window can have its own active Composer session:
+Claude Code can spawn sub-agents using the Agent SDK. Each sub-agent runs as an independent Claude session with its own context window and tool access. The orchestrating session assigns tasks, the sub-agents execute them, and the orchestrator reviews and integrates the results.
 
-1. Open a new Cursor window (Cmd+Shift+N on Mac / Ctrl+Shift+N on Windows)
-2. Open the same project in the new window
-3. Each window runs its own Composer session with independent context
+This is not just running multiple terminal windows manually — it's a programmable coordination layer where the main Claude session reasons about which tasks can run in parallel and manages the flow.
 
-You become the orchestrator, reviewing and accepting output from multiple parallel streams.
+```
+You are an orchestrator. I need to build a Stripe integration.
+Spawn two agents:
+- Agent 1: Build POST /api/checkout/route.ts — creates a Stripe
+  checkout session. Reference the pattern in app/api/payments/route.ts.
+- Agent 2: Build the PricingCard component at components/PricingCard.tsx
+  that calls /api/checkout on click. Match button styles in components/ui/.
+
+Run them in parallel. Report back when both are complete with a summary
+of what each agent built and any integration points to review.
+```
 
 <Callout type="tip">
-This workflow shines when you have genuinely independent work to do. "Build the API route" and "build the UI component" can happen in parallel because they don't share in-progress state. "Build the data model" and "build the API that uses it" can't — do those sequentially.
+This workflow shines when you have genuinely independent work. "Build the API route" and "build the UI component" can happen in parallel because they don't share in-progress state. "Build the data model" and "build the API that uses it" cannot — do those sequentially.
 </Callout>
 
 ## Choosing What to Parallelize
 
 Work is parallelizable when:
-- The two tasks don't share in-progress state (both can be based on the current committed code)
+- The two tasks don't share in-progress state (both can start from current committed code)
 - A failure in one task doesn't require changes in the other
-- Each task has a clear, independent spec
+- Each task has a clear, independent specification
 
 Work must be sequential when:
 - Task B depends on the output of Task A
-- Both tasks touch the same files
+- Both tasks modify the same files
 - You need to review Task A before you can write the spec for Task B
 
-## A Practical Example
+## The Orchestrator Pattern
 
-You're building a Stripe integration for a SaaS:
+The most effective multi-agent setup has a clear hierarchy:
 
-**Session 1:** "Build the Stripe checkout API route at `app/api/checkout/route.ts` using the pattern in `app/api/payments/route.ts`. Create a session for a one-time $97 payment."
+**Orchestrator session:** Holds the high-level plan, assigns tasks, reviews outputs, handles integration. This is where you interact.
 
-**Session 2:** "Build the `PricingCard` component for the landing page that calls `/api/checkout` on click. Match the button style in the existing CTA components."
+**Worker agents:** Each receives a focused, self-contained task. They don't need to know about each other — only about the code they're touching and the interfaces they must conform to.
 
-These are independent. Session 1 builds the backend. Session 2 builds the frontend. You review both diffs, accept them, and connect them in a third step.
+The orchestrator is also responsible for writing the interface contracts before spawning workers:
+
+```
+Before spawning agents, define the API contract:
+- POST /api/checkout accepts: { priceId: string }
+- Returns: { url: string } on success, { error: string } on failure
+- Auth: requires active session, returns 401 if not authenticated
+
+Now spawn Agent 1 to implement the route and Agent 2 to implement
+the UI — both working to this contract.
+```
 
 <Callout type="info">
-Your role in multi-agent workflows isn't just accepting output — it's ensuring coherence. After accepting parallel sessions, do a Chat review: "I just added two features. Are there any inconsistencies or integration issues I should be aware of?" Cursor will spot things you might miss when reviewing diffs in isolation.
+Your role in multi-agent workflows is not just reviewing output — it's ensuring coherence. After sub-agents complete their tasks, have the orchestrator run an integration check: "Agent 1 built the API, Agent 2 built the component. Are they consistent? Do the request shapes and response handling match?" This catches integration assumptions before they ship.
 </Callout>
 
-## Integration Review
+## Single Session vs. Multi-Agent
 
-After merging parallel sessions, always run a coherence check:
+Use a single session when:
+- The task is linear and each step depends on the last
+- The total work fits comfortably in one context window
+- You want maximum coherence and minimal coordination overhead
+
+Use multi-agent when:
+- You have clearly independent parallel tasks
+- The work is large enough that a single session would hit context limits
+- You want to specialize each agent (one agent focused on backend patterns, one on frontend)
+- You're running a structured process like a full feature build across several files
+
+## After Parallel Work: Integration Review
+
+After merging parallel agent outputs, always run a coherence check in the orchestrator session:
 
 ```
-@newly-changed-files I just ran two parallel Composer sessions.
-One built the checkout API, one built the PricingCard component.
-Are they consistent? Do the data shapes and endpoint paths match?
+I just ran two parallel agents.
+One built the checkout API route, one built the PricingCard component.
+Read both files and tell me: are they consistent?
+Do the data shapes, endpoint paths, and error handling match?
 ```
 
-Then run tests. Parallel development creates integration assumptions — this review catches them before they ship.
+Then run tests. Parallel development creates integration assumptions — this review catches them before they become bugs.
 
-<KeyPoint>Parallelizing AI sessions is the new parallelizing developers — you're the orchestrator. The key is keeping tasks genuinely independent. One failed assumption in a parallel session is easier to fix than a tangled multi-file conflict.</KeyPoint>
+<KeyPoint>Multi-agent orchestration with Claude Code lets you run parallel workstreams on independent tasks. The orchestrator defines contracts, assigns work, and verifies coherence. Keep tasks genuinely independent and always do an integration review after merging parallel outputs.</KeyPoint>

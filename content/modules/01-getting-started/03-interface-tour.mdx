@@ -1,59 +1,102 @@
 ---
-title: "Cursor Interface Tour"
-description: "A focused walkthrough of every panel, mode, and key area you'll use every day."
+title: "Claude Code Interface Tour"
+description: "A focused walkthrough of the terminal interface, slash commands, and every interaction mode you'll use every day."
 order: 3
 duration: "6 min"
 videoUrl: "https://www.youtube.com/watch?v=gqUQbjsYZLQ"
 coverImage: "https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?w=1200&auto=format&fit=crop&q=80"
 quiz:
-  - question: "Which shortcut opens Cursor Chat?"
-    options: ["Cmd+K", "Cmd+L", "Cmd+Shift+I", "Cmd+P"]
+  - question: "How do you start a Claude Code session?"
+    options: ["Double-click an icon", "Run `claude` in your terminal", "Open a browser tab", "Press Cmd+Shift+C"]
     answer: 1
-  - question: "What is Composer used for?"
-    options: ["Asking questions about code", "Generating code across multiple files", "Running terminal commands", "Managing git branches"]
+  - question: "What file configures project-level context for Claude Code?"
+    options: [".env", "CLAUDE.md", ".clauderc", "claude.config.json"]
     answer: 1
 ---
 
-Cursor's interface is nearly identical to VS Code. The only new elements are the three AI panels. Learn those three, and you know the whole tool.
+Claude Code's interface is a terminal REPL. There are no panels to click through, no toolbars, and no mouse required. Once you understand the interaction model and the key slash commands, you know the whole tool.
 
-## The Three AI Panels
+## Starting a Session
 
-**Chat (Cmd+L)**
+Navigate to your project root and run:
 
-Opens a conversation panel on the right side. Use Chat for questions: "What does this function do?", "Why is this test failing?", "How would I add pagination here?" Chat reads the files you point it to but doesn't make changes.
+```bash
+claude
+```
 
-**Composer (Cmd+Shift+I)**
+You land in an interactive prompt. Claude Code reads your working directory immediately — it knows your file structure, package.json, README, and any CLAUDE.md context file before you type your first message.
 
-Opens a full-screen generation mode. Use Composer for building: "Create a settings page with these fields", "Add Stripe checkout to this route", "Refactor this module to use the repository pattern." Composer proposes changes across multiple files and shows you a diff before applying anything.
+## The REPL
 
-**Inline Edit (Cmd+K)**
+The REPL (Read-Eval-Print Loop) is where all interaction happens. You type a message, Claude responds, and the conversation continues. Unlike a one-shot CLI tool, Claude Code maintains full context across turns in a session — you can refer back to earlier exchanges, ask follow-up questions, and iteratively refine.
 
-Activates at your cursor position. Select some code, press Cmd+K, type an instruction. Cursor rewrites just that block — and shows you what changed before you accept.
+```
+> Add a validation function for email addresses to utils/validation.ts
+> Now add a test for it in the corresponding test file
+> Make the regex stricter — it should reject addresses without a TLD
+```
+
+Each message builds on the last. Claude Code tracks what it has read and written during the session.
 
 <Callout type="tip">
-The mental model: Chat is for understanding, Composer is for building, Cmd+K is for editing. Once that distinction is clear, you'll instinctively reach for the right tool without thinking about it.
+The mental model: this is a conversation with a developer who has read your entire codebase and has terminal access to your machine. Talk to it accordingly — give it the same context you'd give a senior engineer joining your project.
 </Callout>
 
-## The Editor Pane
+## Slash Commands
 
-Standard VS Code: tabs, split views, the minimap. The only addition is a thin AI status bar at the bottom showing which model is active. You can click it to switch models mid-session.
+Slash commands control the session itself. The most useful ones:
 
-## The Sidebar
+- `/help` — list all available commands
+- `/clear` — clear the conversation history and start fresh
+- `/compact` — compress the conversation to save context window space on long sessions
+- `/model` — switch the active Claude model mid-session
+- `/cost` — show token usage and estimated cost for the current session
+- `/quit` — exit Claude Code
 
-File explorer, search, git, and extensions — exactly as in VS Code. You can also use the sidebar to add files to your Chat context by right-clicking and selecting "Add to Chat."
+Type `/help` at any point to see the full list. These commands are consistent across every project.
 
-## The Terminal
+## CLAUDE.md — Your Project Context File
 
-Same integrated terminal as VS Code. Cursor doesn't add anything here — you run your dev server, tests, and CLI tools the same way.
+CLAUDE.md is a Markdown file you place at your project root (or in subdirectories). Claude Code reads it automatically at session start. Use it to establish:
+
+- Project description and tech stack
+- Coding conventions and style rules
+- Commands to run tests or lint
+- Architectural decisions and constraints
+- Things Claude should never do (e.g., "never edit generated files in /dist")
+
+```markdown
+# My Project
+
+Next.js 14 app with a Supabase backend.
+
+## Commands
+- `npm run dev` — start dev server
+- `npm test` — run Jest suite
+
+## Conventions
+- Use server components by default
+- Never edit files in /generated
+```
 
 <Callout type="info">
-Cursor can read your terminal output. If a build error appears in the terminal, you can reference it in Chat by asking "why is this build failing?" — Cursor picks up the context automatically.
+CLAUDE.md is the Claude Code equivalent of a .cursorrules or .editorconfig file. The more specific it is, the less you need to repeat yourself in conversation. Write it once, benefit every session.
 </Callout>
 
-## The Status Bar
+## Context Window Awareness
 
-At the very bottom: active branch, line/column position, language mode, and the Cursor model indicator. The model indicator is useful — it tells you whether you're using a fast model (good for quick edits) or a more capable one (better for complex generation).
+Claude Code has a large but finite context window. On very long sessions with many files touched, the context can fill up. The `/compact` command compresses the conversation history to a summary, freeing up space while preserving the key decisions made so far.
 
-That's the whole interface. Nothing to memorize beyond the three shortcuts: Cmd+L, Cmd+Shift+I, Cmd+K.
+For most sessions — a feature, a debugging run, a refactor — you'll never need to think about context limits. But for very long agentic sessions spanning dozens of files, keep `/compact` in mind.
 
-<KeyPoint>Learn Chat for questions, Composer for generation, and Cmd+K for targeted edits. Those three tools cover 95% of everything you'll do in Cursor.</KeyPoint>
+## Non-Interactive Mode
+
+Claude Code also works without the REPL for scripting:
+
+```bash
+claude -p "What does the auth module do?" --output-format json
+```
+
+The `-p` flag runs a single prompt and exits — useful for CI pipelines, shell scripts, or tooling that wraps Claude Code.
+
+<KeyPoint>Learn the REPL, the slash commands, and CLAUDE.md. Those three things cover everything you'll do in Claude Code. The interface is intentionally minimal — power comes from how you write your prompts and configure your project context.</KeyPoint>

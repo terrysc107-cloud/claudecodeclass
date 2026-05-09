@@ -1,29 +1,35 @@
 ---
-title: "Your Daily Cursor Workflow"
-description: "How to structure every dev day with Cursor to maximize output and minimize context-switching."
+title: "Your Daily Claude Code Workflow"
+description: "How to structure every dev day with Claude Code to maximize output and minimize context-switching."
 order: 1
 duration: "8 min"
 videoUrl: "https://www.youtube.com/watch?v=1CC88QGQiEA"
 coverImage: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1200&auto=format&fit=crop&q=80"
 quiz:
-  - question: "What is the value of a morning warmup session with Chat?"
-    options: ["It warms up the Cursor server", "It rebuilds context from yesterday and surfaces things you might have missed", "It generates the day's tasks automatically", "It syncs with your calendar"]
+  - question: "What is the purpose of a morning warmup session with Claude Code?"
+    options: ["It pre-loads the codebase index", "It rebuilds context from yesterday and surfaces things you might have missed", "It generates the day's tasks automatically", "It syncs your CLAUDE.md with the cloud"]
     answer: 1
-  - question: "What's the best way to pick up where you left off the next day?"
-    options: ["Read your git log", "Ask Chat to review your recent changes and summarize what's incomplete", "Check your task manager", "Re-read your code manually"]
+  - question: "What's the most effective way to pick up where you left off the next day?"
+    options: ["Read your git log", "Ask Claude to review recent changes and summarize what's incomplete", "Check your task manager", "Re-read your code manually"]
     answer: 1
 ---
 
-The developers who get the most out of Cursor are the ones with a consistent daily system. Without a system, you're using AI reactively — reaching for it when you're stuck instead of building it into every part of how you work.
+The developers who get the most out of Claude Code are the ones with a consistent daily system. Without a system, you're using AI reactively — reaching for it when you're stuck instead of building it into every part of how you work.
 
 ## Morning Warmup (10 minutes)
 
-Start every dev session with a brief Chat session to rebuild context:
+Start every dev session by launching Claude Code in your project directory and rebuilding context:
+
+```bash
+cd my-project
+claude
+```
+
+Then give Claude a brief orientation prompt:
 
 ```
-@yesterday-changed-files I'm picking up where I left off.
-Here's what I was working on: [brief description].
-Review these recent changes and tell me:
+I'm picking up where I left off. Here's what I was working on: [brief description].
+Review my recent git changes and tell me:
 1. What's done and what's still incomplete?
 2. Are there any issues or inconsistencies I should address?
 3. What should I tackle first today?
@@ -32,40 +38,52 @@ Review these recent changes and tell me:
 This gets you oriented faster than reading your own code and often surfaces things you forgot about.
 
 <Callout type="tip">
-At the end of each day, leave a breadcrumb comment at your stopping point: `// TODO: next session — add validation for the edge case where user has no payment method`. When you pick up the next morning, your warmup prompt can reference this comment and Cursor will immediately understand the context.
+At the end of each day, leave a breadcrumb comment at your stopping point: `// TODO: next session — add validation for the edge case where user has no payment method`. When you pick up the next morning, your warmup prompt can reference this comment and Claude will immediately understand the context.
 </Callout>
+
+## Keep Your CLAUDE.md Current
+
+Your `CLAUDE.md` file is the persistent memory of your project. It should reflect the current state of things, not just the initial setup. Update it whenever:
+
+- You make a significant architectural decision
+- The tech stack changes
+- New conventions are established
+- Gotchas or constraints emerge that Claude should know about
+
+A stale `CLAUDE.md` is worse than no `CLAUDE.md` — it gives Claude confidently wrong context. Treat updating it as part of closing out any major task.
 
 ## Task Batching
 
 Group your work by type, not by project:
 
-- **Composer sessions** for new feature work (requires deep focus)
-- **Chat + Cmd+K** for debugging and small fixes (can be interrupted)
-- **Review cycles** for reading diffs and accepting changes (can be interrupted)
+- **Long-context sessions** for new feature work (requires deep focus and a clear prompt)
+- **Quick back-and-forth** for debugging and small fixes (can be interrupted)
+- **Review cycles** for reading diffs and integrating Claude's suggestions (can be interrupted)
 
-Don't mix deep Composer work with interruptions. Set aside focused blocks.
+Don't mix deep generative work with interruptions. Set aside focused blocks. Use `/compact` when a session grows long to trim tokens without losing the thread.
 
 ## The Decision Rhythm
 
-AI gives you more decisions to make, not fewer. You're reviewing diffs, accepting or rejecting, following up. Build a rhythm:
+AI gives you more decisions to make, not fewer. You're reviewing output, accepting or rejecting suggestions, following up. Build a rhythm:
 
-1. Write prompt / start session
-2. Let it run (don't hover — do something else for 30 seconds)
-3. Review output completely
-4. Accept what's right, reject what isn't
+1. Write prompt and start the session
+2. Let it run — don't hover, do something else for 30 seconds
+3. Review the output completely
+4. Accept what's right, reject what isn't, and explain why
 5. Follow up in the same session if needed
-6. Commit checkpoint
+6. Commit a checkpoint
 
-Resist the urge to stop and read the diff line-by-line as it streams. Let it finish, then review the whole thing.
+Resist the urge to interrupt mid-generation. Let Claude finish, then review the whole thing.
 
 ## End-of-Day Commit Ritual
 
 Before you close the laptop:
 
 1. Commit anything meaningful (even if it's WIP)
-2. Run `git diff HEAD` and ask Chat to summarize it
-3. Leave your breadcrumb comment for tomorrow
-4. Close all Composer sessions (stale context isn't helpful the next day)
+2. Run `git diff HEAD` and ask Claude to summarize it
+3. Update your `CLAUDE.md` if anything changed
+4. Leave your breadcrumb comment for tomorrow
+5. Type `/clear` to close the session (stale context isn't helpful the next day)
 
 <Callout type="info">
 A committed WIP is better than uncommitted work. You can always amend or reset, but you can't recover code that wasn't saved. And the commit message — even if it's "WIP: settings page scaffolding" — gives you a useful anchor for the morning warmup.
@@ -73,13 +91,28 @@ A committed WIP is better than uncommitted work. You can always amend or reset, 
 
 ## Handling Interruptions
 
-When you get pulled away mid-Composer session:
+When you get pulled away mid-session:
 
 1. Finish the current step (don't abandon mid-generation)
 2. Add a comment explaining where you stopped
 3. Commit if there's something worth saving
-4. When you return, start with a brief Chat warmup before resuming
+4. When you return, start with a brief warmup before resuming
 
 The biggest productivity killer is resuming a session cold, trying to remember where you were, and spinning for 20 minutes. The warmup eliminates this.
 
-<KeyPoint>Developers who get the most from AI have a consistent daily system. A morning warmup that rebuilds context and an evening commit ritual that preserves it are the two habits that compound the fastest.</KeyPoint>
+## Project Switching
+
+When switching between projects, don't try to carry context across sessions. Claude Code is designed to start fresh per project:
+
+```bash
+# Leave project A
+/clear
+
+# Move to project B
+cd ~/projects/project-b
+claude
+```
+
+Each project's `CLAUDE.md` does the heavy lifting of re-establishing context. This is why keeping it current matters — it's the fastest possible onramp each time you open a project.
+
+<KeyPoint>Developers who get the most from Claude Code have a consistent daily system. A morning warmup that rebuilds context, a live CLAUDE.md that captures decisions, and an evening commit ritual that preserves progress — these are the three habits that compound the fastest.</KeyPoint>

@@ -1,24 +1,24 @@
 ---
-title: "Set Up .cursorrules"
-description: "Write a .cursorrules file that makes Cursor behave exactly the way you want for any project."
+title: "CLAUDE.md Setup and Project Configuration"
+description: "Write a CLAUDE.md file that makes Claude Code behave exactly the way you want for any project."
 order: 1
 duration: "10 min"
 videoUrl: "https://www.youtube.com/watch?v=LSFpASs8aSI"
 coverImage: "https://images.unsplash.com/photo-1517842645767-c639042777db?w=1200&auto=format&fit=crop&q=80"
 quiz:
-  - question: "Where does the .cursorrules file live?"
-    options: ["In your home directory", "In the project root", "In the src folder", "In .cursor/config"]
+  - question: "Where does the CLAUDE.md file live?"
+    options: ["In your home directory", "In the project root", "In the src folder", "In .claude/config"]
     answer: 1
-  - question: "What is the most important thing to include in .cursorrules?"
+  - question: "What is the most important thing to include in CLAUDE.md?"
     options: ["Your name", "The tech stack and existing conventions", "Your billing preferences", "API keys"]
     answer: 1
 ---
 
-`.cursorrules` is a plain text file in your project root that tells Cursor how to behave for that specific project. It's the difference between Cursor writing generic code and Cursor writing code that matches your stack, your conventions, and your client's requirements.
+`CLAUDE.md` is a plain text file in your project root that tells Claude Code how to behave for that specific project. It's the difference between Claude writing generic code and Claude writing code that matches your stack, your conventions, and your client's requirements. Claude reads this file automatically at the start of every session.
 
-## What Goes in .cursorrules
+## What Goes in CLAUDE.md
 
-The file is a set of instructions in plain language. Cursor reads it before every Chat and Composer session:
+The file is a set of instructions in plain language. Claude reads it before responding to any request in that project:
 
 ```
 You are an expert Next.js developer working on a SaaS application.
@@ -50,12 +50,12 @@ You are an expert Next.js developer working on a SaaS application.
 ```
 
 <Callout type="tip">
-Start your `.cursorrules` with a brief description of what the project is and who the user is. Context about the business problem helps Cursor make better judgment calls about tradeoffs. "This is a B2B invoicing SaaS for small contractors" leads to different decisions than "this is a consumer entertainment app."
+Start your `CLAUDE.md` with a brief description of what the project is and who the user is. Context about the business problem helps Claude make better judgment calls about tradeoffs. "This is a B2B invoicing SaaS for small contractors" leads to different decisions than "this is a consumer entertainment app."
 </Callout>
 
 ## Per-Client Rules
 
-For freelance or agency work, customize `.cursorrules` per client project:
+For freelance or agency work, customize `CLAUDE.md` per client project:
 
 ```
 ## Client Context
@@ -67,9 +67,9 @@ Prefer verbose clarity over brevity.
 
 This produces code that the client's team can actually maintain after you're done — which is a quality signal that wins referrals.
 
-## Global vs. Project Rules
+## Project-Level vs. Global Instructions
 
-Cursor also supports global rules (in Settings → Rules for AI) that apply to every project. Use global rules for your personal preferences:
+Claude Code supports global instructions in `~/.claude/CLAUDE.md` that apply to every project. Use global instructions for your personal preferences:
 
 ```
 Always explain what you changed and why at the end of each response.
@@ -77,14 +77,24 @@ Prefer functional patterns where appropriate.
 Never use var — always const or let.
 ```
 
-Project-level `.cursorrules` override global rules for specific projects.
+Project-level `CLAUDE.md` files are read in addition to your global instructions, and their more specific rules take precedence when there is any conflict.
 
 <Callout type="info">
-Build a library of `.cursorrules` files — one per stack you work with regularly. A Next.js + Supabase rules file, a Python FastAPI rules file, a React Native rules file. When you start a new project, copy in the relevant base rules and customize. This saves setup time and ensures consistency.
+Build a library of `CLAUDE.md` files — one per stack you work with regularly. A Next.js + Supabase instructions file, a Python FastAPI instructions file, a React Native instructions file. When you start a new project, copy in the relevant base instructions and customize. This saves setup time and ensures consistency across projects.
 </Callout>
 
-## Iterating the Rules
+## Iterating the Instructions
 
-Add to `.cursorrules` whenever you catch Cursor making a mistake you've corrected before. If you keep telling it "don't do X" in chat, add "Do not X" to the rules file. Over time, your rules file becomes a tuned configuration for how you work.
+Add to `CLAUDE.md` whenever you catch Claude making a mistake you've corrected before. If you keep telling it "don't do X" in conversation, add "Do not X" to the instructions file. Over time, your `CLAUDE.md` becomes a tuned configuration for how you work — a precise record of every lesson learned on that project.
 
-<KeyPoint>.cursorrules is the difference between a generic AI and one that knows your stack. A well-written rules file eliminates the need to repeat yourself, reduces cleanup time, and makes your output consistent across an entire project.</KeyPoint>
+You can also include project-specific commands to run for testing, linting, and building. Claude will use these automatically when it needs to verify its work:
+
+```
+## Commands
+- Run tests: npm test
+- Lint: npm run lint
+- Build: npm run build
+- Dev server: npm run dev
+```
+
+<KeyPoint>CLAUDE.md is the difference between a generic AI and one that knows your stack. A well-written instructions file eliminates the need to repeat yourself, reduces cleanup time, and makes your output consistent across an entire project.</KeyPoint>
